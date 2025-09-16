@@ -1,0 +1,123 @@
+/* ==== Reset / base ==== */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #ced4c3;
+    margin: 0;
+    padding: 0;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+h1, h2, h3 {
+    color: #2c3e50;
+    margin: 15px 0;
+}
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* ==== Navbar ==== */
+nav {
+    background: #2c3e50;
+    padding: 10px 20px;
+    display: flex;
+    gap: 15px;
+}
+nav a {
+    color: #ecf0f1;
+    font-weight: 500;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* ==== Tables ==== */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    background: white;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+table th {
+    background: #3498db;
+    color: white;
+}
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+tr.low-stock {
+    background: #ffe6e6 !important;
+}
+
+/* ==== Forms ==== */
+form {
+    margin: 10px 0;
+}
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+}
+input, select, textarea, button {
+    padding: 8px 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+button {
+    background: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+button:hover {
+    background: #2980b9;
+}
+
+/* ==== Cards & Dashboard ==== */
+.card {
+    background: white;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+.stat-box {
+    background: #3498db;
+    color: white;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 1.1em;
+}
+.stat-box span {
+    display: block;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+/* ==== Messages ==== */
+.alert {
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+.alert-success { background: #2ecc71; color: white; }
+.alert-error   { background: #e74c3c; color: white; }
