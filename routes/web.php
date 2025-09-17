@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     SupplierController,
     ApiController
 };
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function(){ return redirect('/login'); });
 
@@ -18,6 +19,8 @@ Route::get('/', function(){ return redirect('/login'); });
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 Route::get('/logout', [AuthController::class,'logout'])->name('logout');
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
 
 // Protected routes
 Route::middleware(['web'])->group(function(){

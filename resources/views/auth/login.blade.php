@@ -8,4 +8,5 @@
     <div><button type="submit">Ingresar</button></div>
     @if($errors->any()) <div style="color:red">{{$errors->first()}}</div> @endif
 </form>
+<a href="{{ route('register') }}" class="btn btn-link">¿No tienes cuenta? Regístrate aquí</a>
 @endsection
