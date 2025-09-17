@@ -10,16 +10,17 @@
 </head>
 <body>
     <nav>
-        <a href="{{ url('/dashboard') }}">Dashboard</a>
-        <a href="{{ route('inventory.index') }}">Inventory</a>
-        <a href="{{ route('dishes.index') }}">Dishes</a>
-        <a href="{{ route('orders.index') }}">Orders</a>
-        <a href="{{ route('reports') }}">Reports</a>
-        <a href="{{ route('logout') }}">Logout</a>
+        <a href="{{ url('/dashboard') }}">Dashboards</a>
+        <a href="{{ route('inventory.index') }}">Inventario</a>
+        <a href="{{ route('dishes.index') }}">Platillos</a>
+        <a href="{{ route('orders.index') }}">Pedidos</a>
+        <a href="{{ route('reports') }}">Reportes</a>
+        <a href="{{ route('suppliers.index') }}">Proveedores</a>
+        <a href="{{ route('logout') }}">Salir</a>
     </nav>
     <hr>
     <h1>@yield('title')</h1>
-    @if(session('user_name')) <div>Welcome: {{ session('user_name') }} ({{ session('user_role') }})</div> @endif
+    @if(session('user_name')) <div>Bienvenido: {{ session('user_name') }} ({{ session('user_role') }})</div> @endif
     @yield('content')
 </body>
 </html>

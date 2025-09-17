@@ -45,9 +45,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
 });
 ?>
-<!-- filepath: c:\xampp\htdocs\tlaix\resources\views\home.blade.php -->
-@extends('layouts.app')
-@section('title','Inicio')
-@section('content')
-    <h1>Bienvenido, has iniciado sesión correctamente.</h1>
-@endsection
+

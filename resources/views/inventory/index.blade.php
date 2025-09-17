@@ -7,68 +7,71 @@
     @csrf
     <div class="input-group mb-3">
         <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
-        <input 
-            type="text" 
-            name="name" 
-            class="form-control" 
-            aria-label="Nombre del ingrediente" 
+        <input
+            type="text"
+            name="name"
+            class="form-control"
+            aria-label="Nombre del ingrediente"
             aria-describedby="inputGroup-sizing-default"
             required
         >
     </div>
     <div class="input-group mb-3">
         <span class="input-group-text">Categoría</span>
-        <input 
-            type="text" 
-            name="category" 
-            class="form-control" 
+        <input
+            type="text"
+            name="category"
+            class="form-control"
             aria-label="Categoría"
             required
         >
     </div>
     <div class="input-group mb-3">
         <span class="input-group-text">Stock</span>
-        <input 
-            type="number" 
-            name="stock" 
-            class="form-control" 
+        <input
+            type="number"
+            name="stock"
+            class="form-control"
             aria-label="Stock"
             required
         >
         <span class="input-group-text">Unidad</span>
-        <input 
-            type="text" 
-            name="unit" 
-            class="form-control" 
+        <input
+            type="text"
+            name="unit"
+            class="form-control"
             aria-label="Unidad"
             required
         >
     </div>
     <div class="input-group mb-3">
         <span class="input-group-text">Stock mínimo</span>
-        <input 
-            type="number" 
-            name="min_stock" 
-            class="form-control" 
+        <input
+            type="number"
+            name="min_stock"
+            class="form-control"
             aria-label="Stock mínimo"
             required
         >
     </div>
     <div class="input-group mb-3">
         <span class="input-group-text">Fecha de expiración</span>
-        <input 
-            type="date" 
-            name="expiration_date" 
-            class="form-control" 
+        <input
+            type="text"
+            placeholder="dd/mm/aaaa"
+            onfocus="(this.type='date')"
+            onblur="if(!this.value)this.type='text'"
+            name="expiration_date"
+            class="form-control"
             aria-label="Fecha de expiración"
         >
     </div>
     <button class="btn btn-success" type="submit">Agregar ingrediente</button>
 </form>
 
-<a href="{{ route('inventory.create') }}">Add ingredient</a>
+<a href="{{ route('inventory.create') }}">Agregar ingrediente</a>
 <table border="1" cellpadding="6">
-    <tr><th>Name</th><th>Category</th><th>Stock</th><th>Min</th><th>Expiration</th><th>Actions</th></tr>
+    <tr><th>Nombre</th><th>Categoria</th><th>Stock</th><th>Min</th><th>Caducidad</th><th>Acciones</th></tr>
     @foreach($ingredients as $i)
     <tr @if($i->stock < $i->min_stock) style="background:#ffe6e6" @endif>
         <td>{{ $i->name }}</td>
@@ -77,9 +80,9 @@
         <td>{{ $i->min_stock }}</td>
         <td>{{ $i->expiration_date }}</td>
         <td>
-            <a href="{{ route('inventory.edit',$i->id) }}">Edit</a>
+            <a href="{{ route('inventory.edit',$i->id) }}">Editar</a>
             <form action="{{ route('inventory.destroy',$i->id) }}" method="POST" style="display:inline">
-                @csrf @method('DELETE') <button>Delete</button>
+                @csrf @method('DELETE') <button>Borrar</button>
             </form>
         </td>
     </tr>

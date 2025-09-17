@@ -3,19 +3,19 @@
 @section('title','Order Details')
 @section('content')
 <div class="card">
-    <h2>Order #{{ $order->id }}</h2>
-    <p><strong>Supplier:</strong> {{ $order->supplier->name ?? 'N/A' }}</p>
-    <p><strong>Date:</strong> {{ $order->date }}</p>
-    <p><strong>Status:</strong>
+    <h2>Pedido #{{ $order->id }}</h2>
+    <p><strong>Proveedor:</strong> {{ $order->supplier->name ?? 'N/A' }}</p>
+    <p><strong>Fecha:</strong> {{ $order->date }}</p>
+    <p><strong>Estado:</strong>
         <span style="color: {{ $order->status == 'received' ? 'green' : ($order->status == 'cancelled' ? 'red' : 'orange') }}">
             {{ ucfirst($order->status) }}
         </span>
     </p>
     <p><strong>Total:</strong> ${{ number_format($order->total, 2) }}</p>
 
-    <h3>Order Items</h3>
+    <h3>Productos del pedido</h3>
     <table>
-        <tr><th>Ingredient</th><th>Quantity</th><th>Unit Cost</th><th>Subtotal</th></tr>
+        <tr><th>Ingredientes</th><th>Cantidad</th><th>Costo unitario</th><th>Subtotal</th></tr>
         @foreach($order->items as $item)
         <tr>
             <td>{{ $item->ingredient->name ?? 'N/A' }}</td>
@@ -29,10 +29,10 @@
     @if($order->status == 'pending')
         <form method="POST" action="{{ url('/orders/'.$order->id.'/receive') }}" style="margin-top: 20px;">
             @csrf
-            <button type="submit" style="background: #27ae60;">Mark as Received</button>
+            <button type="submit" style="background: #27ae60;">Marcar como recibido</button>
         </form>
     @endif
 
-    <a href="{{ route('orders.index') }}" style="margin-top: 15px; display: inline-block;">← Back to Orders</a>
+    <a href="{{ route('orders.index') }}" style="margin-top: 15px; display: inline-block;">Volver a pedidos</a>
 </div>
 @endsection

@@ -5,10 +5,10 @@
 <form method="POST" action="{{ route('inventory.store') }}">
     @csrf
     <div class="card">
-        <label>Name *</label>
+        <label>Nombre *</label>
         <input type="text" name="name" required value="{{ old('name') }}">
 
-        <label>Category</label>
+        <label>Categoria</label>
         <select name="category">
             <option value="perecedero">Perecedero</option>
             <option value="no_perecedero">No Perecedero</option>
@@ -16,27 +16,27 @@
             <option value="condimento">Condimento</option>
         </select>
 
-        <label>Expiration Date</label>
+        <label>Fecha de caducidad</label>
         <input type="date" name="expiration_date" value="{{ old('expiration_date') }}">
 
-        <label>Current Stock *</label>
+        <label>Stock actual *</label>
         <input type="number" name="stock" step="0.01" required value="{{ old('stock', 0) }}">
 
-        <label>Minimum Stock *</label>
+        <label>Stock minimo *</label>
         <input type="number" name="min_stock" step="0.01" required value="{{ old('min_stock', 0) }}">
 
-        <label>Unit</label>
+        <label>Unidad</label>
         <select name="unit">
-            <option value="kg">Kilogram</option>
-            <option value="lbs">Pounds</option>
-            <option value="pcs">Pieces</option>
-            <option value="liters">Liters</option>
-            <option value="bottles">Bottles</option>
+            <option value="kg">Kilogramos</option>
+            <option value="lbs">Onzas</option>
+            <option value="pcs">Piezas</option>
+            <option value="liters">Litros</option>
+            <option value="bottles">Botellas</option>
         </select>
 
-        <label>Supplier</label>
+        <label>Proovedor</label>
         <select name="supplier_id">
-            <option value="">Select Supplier</option>
+            <option value="">Elegir Proovedor</option>
             @foreach($suppliers as $supplier)
                 <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
                     {{ $supplier->name }}
@@ -44,11 +44,11 @@
             @endforeach
         </select>
 
-        <label>Cost per Unit</label>
+        <label>Costo por unidad</label>
         <input type="number" name="cost" step="0.01" value="{{ old('cost', 0) }}">
 
-        <button type="submit">Add Ingredient</button>
-        <a href="{{ route('inventory.index') }}" style="margin-left:10px">Cancel</a>
+        <button type="submit">Agregar ingrediente</button>
+        <a href="{{ route('inventory.index') }}" style="margin-left:10px">Cancelar</a>
     </div>
 </form>
 @endsection

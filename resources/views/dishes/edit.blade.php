@@ -6,21 +6,21 @@
     @csrf
     @method('PUT')
     <div class="card">
-        <label>Dish Name *</label>
+        <label>Nombre del platillo *</label>
         <input type="text" name="name" required value="{{ old('name', $dish->name) }}">
 
-        <label>Description</label>
+        <label>Descripcion</label>
         <textarea name="description" rows="3">{{ old('description', $dish->description) }}</textarea>
 
-        <label>Price *</label>
+        <label>Precio *</label>
         <input type="number" name="price" step="0.01" required value="{{ old('price', $dish->price) }}">
 
         <label>
             <input type="checkbox" name="available" value="1" {{ old('available', $dish->available) ? 'checked' : '' }}>
-            Available
+            Disponible
         </label>
 
-        <h3>Ingredients</h3>
+        <h3>Ingredientes</h3>
         <div id="ingredients-section">
             @foreach($ingredients as $ingredient)
             @php
@@ -31,22 +31,22 @@
             <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd;">
                 <label>
                     <input type="checkbox" class="ingredient-checkbox" data-id="{{ $ingredient->id }}" {{ $isSelected ? 'checked' : '' }}>
-                    {{ $ingredient->name }} ({{ $ingredient->stock }} {{ $ingredient->unit }} available)
+                    {{ $ingredient->name }} ({{ $ingredient->stock }} {{ $ingredient->unit }} Disponible)
                 </label>
                 <input type="number"
                        name="ingredients[{{ $ingredient->id }}]"
-                       placeholder="Quantity required"
+                       placeholder="Cantidad requerida"
                        step="0.01"
                        min="0"
                        value="{{ $quantity }}"
-                       style="margin-left: 10px; width: 150px;"
+                       style="margin-left: 10px; width: 180px;"
                        {{ !$isSelected ? 'disabled' : '' }}>
             </div>
             @endforeach
         </div>
 
-        <button type="submit">Update Dish</button>
-        <a href="{{ route('dishes.index') }}" style="margin-left:10px">Cancel</a>
+        <button type="submit">Actualizar platillo</button>
+        <a href="{{ route('dishes.index') }}" style="margin-left:10px">Cancelar</a>
     </div>
 </form>
 

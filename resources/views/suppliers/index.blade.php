@@ -1,14 +1,13 @@
 @extends('layouts.app')
-@section('title','Suppliers')
+@section('title','Administrar Proveedores')
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h2>Supplier Management</h2>
-    <a href="{{ route('suppliers.create') }}" class="btn btn-primary">➕ Add New Supplier</a>
+    <a href="{{ route('suppliers.create') }}" style="color: #f39c12; margin-right: 10px;" class="btn btn-primary">Agregar nuevo Proveedor</a>
 </div>
 
 <div class="card">
     <table>
-        <tr><th>Name</th><th>Contact Person</th><th>Phone</th><th>Email</th><th>Ingredients</th><th>Actions</th></tr>
+        <tr><th>Empresa</th><th>Nombre</th><th>Telefono</th><th>Correo electronico</th><th>Ingredientes</th><th>Acciones</th></tr>
         @forelse($suppliers as $supplier)
         <tr>
             <td><strong>{{ $supplier->name }}</strong></td>
@@ -17,16 +16,16 @@
             <td>{{ $supplier->email ?? 'N/A' }}</td>
             <td>
                 <span style="background: #3498db; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.9em;">
-                    {{ $supplier->ingredients->count() }} items
+                    {{ $supplier->ingredients->count() }} productos
                 </span>
             </td>
             <td>
-                <a href="{{ route('suppliers.edit', $supplier->id) }}" style="color: #f39c12; margin-right: 10px;">✏️ Edit</a>
+                <a href="{{ route('suppliers.edit', $supplier->id) }}" style="color: #f39c12; margin-right: 10px;">Editar</a>
                 <form action="{{ route('suppliers.destroy', $supplier->id) }}" method="POST" style="display:inline">
                     @csrf @method('DELETE')
-                    <button type="submit" onclick="return confirm('Are you sure?')"
-                            style="background: none; border: none; color: #e74c3c; cursor: pointer;">
-                        🗑️ Delete
+                    <button type="submit" onclick="return confirm('Estas seguro?')"
+                            style="background: rgb(239, 115, 115); border: none; color: #FFFFFFFF; cursor: pointer;">
+                        Borrar
                     </button>
                 </form>
             </td>

@@ -5,33 +5,33 @@
 <div class="stats">
     <div class="stat-box">
         <span>{{ $totalIngredients }}</span>
-        Total Ingredients
+        Insumos Totales
     </div>
     <div class="stat-box" style="background: {{ $lowStock > 0 ? '#e74c3c' : '#27ae60' }}">
         <span>{{ $lowStock }}</span>
-        Low Stock Items
+        Insumos bajos
     </div>
     <div class="stat-box" style="background: #f39c12">
         <span>{{ $totalDishes }}</span>
-        Total Dishes
+        Platilos Totales
     </div>
     <div class="stat-box" style="background: #9b59b6">
         <span>{{ $availableDishes }}</span>
-        Available Dishes
+        Platilos Disponibles
     </div>
     <div class="stat-box" style="background: #34495e">
         <span>{{ $pendingOrders }}</span>
-        Pending Orders
+        Pedidos Pendientes
     </div>
 </div>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
     <!-- Critical Stock Items -->
     <div class="card">
-        <h3>⚠️ Critical Stock Levels</h3>
+        <h3>Stock critico</h3>
         @if($lowStockItems->count() > 0)
             <table>
-                <tr><th>Ingredient</th><th>Current</th><th>Minimum</th><th>Status</th></tr>
+                <tr><th>Ingrediente</th><th>Actual</th><th>Minimo</th><th>Estado</th></tr>
                 @foreach($lowStockItems as $item)
                     <tr class="{{ $item->stock < $item->min_stock ? 'low-stock' : '' }}">
                         <td>{{ $item->name }}</td>
@@ -39,7 +39,7 @@
                         <td>{{ $item->min_stock }}</td>
                         <td>
                             @if($item->stock < $item->min_stock)
-                                <span style="color: #e74c3c; font-weight: bold;">CRITICAL</span>
+                                <span style="color: #e74c3c; font-weight: bold;">CRITICO</span>
                             @else
                                 <span style="color: #f39c12;">LOW</span>
                             @endif
@@ -48,30 +48,30 @@
                 @endforeach
             </table>
         @else
-            <p style="color: #27ae60;">✅ All ingredients are well stocked!</p>
+            <p style="color: #27ae60;">Todos los ingredientes cuentan con buen stock</p>
         @endif
     </div>
 
     <!-- Quick Actions -->
     <div class="card">
-        <h3>🚀 Quick Actions</h3>
+        <h3>Acciones rapidas</h3>
         <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="{{ route('inventory.create') }}" class="quick-action-btn">➕ Add New Ingredient</a>
-            <a href="{{ route('dishes.create') }}" class="quick-action-btn">🍽️ Create New Dish</a>
-            <a href="{{ route('orders.index') }}" class="quick-action-btn">📦 View Orders</a>
-            <a href="{{ route('reports') }}" class="quick-action-btn">📊 Generate Reports</a>
+            <a href="{{ route('inventory.create') }}" class="quick-action-btn">Agregar nuevo ingredients</a>
+            <a href="{{ route('dishes.create') }}" class="quick-action-btn">Crear nuevo platilos</a>
+            <a href="{{ route('orders.index') }}" class="quick-action-btn">Consultar pedidos</a>
+            <a href="{{ route('reports') }}" class="quick-action-btn">Generar reportes</a>
         </div>
     </div>
 </div>
 
 <!-- Demand Predictions -->
 <div class="card" style="margin-top: 20px;">
-    <h3>📈 AI Demand Predictions (Next 7 Days)</h3>
+    <h3>Predicciones de Tlaix IA (7 dias)</h3>
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
-        <button onclick="loadPredictions(7)" class="btn btn-primary">7 Days</button>
-        <button onclick="loadPredictions(14)" class="btn">14 Days</button>
-        <button onclick="loadPredictions(30)" class="btn">30 Days</button>
-        <span id="loading" style="display: none; color: #3498db;">🔄 Loading predictions...</span>
+        <button onclick="loadPredictions(7)" class="btn btn-primary">7 dias</button>
+        <button onclick="loadPredictions(14)" class="btn">14 dias</button>
+        <button onclick="loadPredictions(30)" class="btn">30 dias</button>
+        <span id="loading" style="display: none; color: #3498db;">Cargando predicciones...</span>
     </div>
     <canvas id="predictionChart" width="800" height="300"></canvas>
     <div id="predictionData" style="margin-top: 15px;"></div>
@@ -79,28 +79,28 @@
 
 <!-- Recent Activity -->
 <div class="card" style="margin-top: 20px;">
-    <h3>📋 Recent Activity</h3>
+    <h3>Atividad reciente y pendientes</h3>
     <div id="recentActivity">
         @if($pendingOrders > 0)
             <div class="activity-item">
                 <span class="activity-icon">📦</span>
-                <span>{{ $pendingOrders }} pending orders require attention</span>
-                <span class="activity-time">Now</span>
+                <span>{{ $pendingOrders }} Ordenes pendientes</span>
+                <span class="activity-time">Ahora</span>
             </div>
         @endif
 
         @if($lowStock > 0)
             <div class="activity-item">
                 <span class="activity-icon">⚠️</span>
-                <span>{{ $lowStock }} ingredients below minimum stock</span>
-                <span class="activity-time">Now</span>
+                <span>{{ $lowStock }} ingredientes bajo el minimo</span>
+                <span class="activity-time">Ahora</span>
             </div>
         @endif
 
         <div class="activity-item">
             <span class="activity-icon">✅</span>
-            <span>Dashboard loaded successfully</span>
-            <span class="activity-time">Just now</span>
+            <span>Dashboards cargados</span>
+            <span class="activity-time">Justo ahora</span>
         </div>
     </div>
 </div>
@@ -176,7 +176,7 @@ function loadPredictions(days) {
             document.getElementById('loading').style.display = 'none';
             console.error('Error loading predictions:', error);
             document.getElementById('predictionData').innerHTML =
-                '<p style="color: #e74c3c;">Error loading predictions. Please check if Python dependencies are installed.</p>';
+                '<p style="color: #e74c3c;">Error al cargar las predicciones (Revisar dependencias de python).</p>';
         });
 }
 

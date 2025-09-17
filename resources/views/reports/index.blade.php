@@ -7,42 +7,42 @@
 <div class="stats">
     <div class="stat-box" style="background: #27ae60;">
         <span>${{ number_format($totalStockValue, 2) }}</span>
-        Total Inventory Value
+        Valor total del inventario
     </div>
     <div class="stat-box" style="background: {{ count($expired) > 0 ? '#e74c3c' : '#95a5a6' }}">
         <span>{{ count($expired) }}</span>
-        Expired Items
+        Productos caducados
     </div>
     <div class="stat-box" style="background: {{ count($lowStock) > 0 ? '#f39c12' : '#95a5a6' }}">
         <span>{{ count($lowStock) }}</span>
-        Low Stock Items
+        Productods con stock bajo
     </div>
     <div class="stat-box" style="background: #9b59b6">
         <span>{{ $dishAnalysis['available'] }}/{{ $dishAnalysis['total'] }}</span>
-        Available Dishes
+        Platos disponibles
     </div>
 </div>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
     <!-- Inventory Levels Chart -->
     <div class="card">
-        <h3>📈 Current Inventory Levels</h3>
+        <h3>Niveles de inventario</h3>
         <canvas id="inventoryChart" width="400" height="200"></canvas>
         <div style="margin-top: 10px; font-size: 0.9em; color: #7f8c8d;">
-            <span style="color: #e74c3c;">●</span> Below minimum stock
-            <span style="color: #27ae60; margin-left: 15px;">●</span> Normal stock
+            <span style="color: #e74c3c;">●</span> Debajo del stock mínimo
+            <span style="color: #27ae60; margin-left: 15px;">●</span> Stock normal
         </div>
     </div>
 
     <!-- Category Distribution -->
     <div class="card">
-        <h3>📊 Inventory by Category</h3>
+        <h3>Inventario por categoria</h3>
         <canvas id="categoryChart" width="400" height="200"></canvas>
         <div style="margin-top: 15px;">
             @foreach($categoryAnalysis as $category => $data)
             <div style="display: flex; justify-content: space-between; margin: 5px 0;">
                 <span><strong>{{ ucfirst($category) }}:</strong></span>
-                <span>{{ $data['count'] }} items ({{ number_format($data['total_stock'], 1) }} units)</span>
+                <span>{{ $data['count'] }} productos ({{ number_format($data['total_stock'], 1) }} unidades)</span>
             </div>
             @endforeach
         </div>
@@ -52,14 +52,14 @@
 <!-- Critical Alerts -->
 @if(count($expired) > 0 || count($expiringSoon) > 0 || count($lowStock) > 0)
 <div class="card" style="margin-top: 20px; border-left: 5px solid #e74c3c;">
-    <h3>🚨 Critical Alerts</h3>
+    <h3>Alertas</h3>
 
     @if(count($expired) > 0)
     <div class="alert alert-error" style="margin: 10px 0;">
-        <strong>⚠️ {{ count($expired) }} items have expired:</strong>
+        <strong>⚠️ {{ count($expired) }} Productos caducados:</strong>
         @foreach($expired as $item)
             <div style="margin: 5px 0;">
-                • {{ $item->name }} - expired on {{ $item->expiration_date }}
+                • {{ $item->name }} - Caducaron en: {{ $item->expiration_date }}
                 ({{ $item->stock }} {{ $item->unit }} = ${{ number_format($item->stock * ($item->cost ?? 0), 2) }} value)
             </div>
         @endforeach
@@ -68,10 +68,10 @@
 
     @if(count($expiringSoon) > 0)
     <div class="alert" style="background: #f39c12; color: white; margin: 10px 0;">
-        <strong>⏰ {{ count($expiringSoon) }} items expiring within 3 days:</strong>
+        <strong> {{ count($expiringSoon) }} Expiran en los proximos 3 dias:</strong>
         @foreach($expiringSoon as $item)
             <div style="margin: 5px 0;">
-                • {{ $item->name }} - expires {{ $item->expiration_date }} ({{ $item->stock }} {{ $item->unit }})
+                • {{ $item->name }} - caduca: {{ $item->expiration_date }} ({{ $item->stock }} {{ $item->unit }})
             </div>
         @endforeach
     </div>
@@ -79,12 +79,12 @@
 
     @if(count($lowStock) > 0)
     <div class="alert" style="background: #e67e22; color: white; margin: 10px 0;">
-        <strong>📉 {{ count($lowStock) }} items below minimum stock:</strong>
+        <strong> {{ count($lowStock) }} Productos debajo del stock minimo:</strong>
         @foreach($lowStock as $item)
             <div style="margin: 5px 0;">
                 • {{ $item->name }} - {{ $item->stock }}/{{ $item->min_stock }} {{ $item->unit }}
                 @if($item->supplier)
-                    (Supplier: {{ $item->supplier->name }})
+                    (Proveedor: {{ $item->supplier->name }})
                 @endif
             </div>
         @endforeach
@@ -93,17 +93,17 @@
 </div>
 @else
 <div class="card" style="margin-top: 20px; border-left: 5px solid #27ae60;">
-    <h3>✅ All Systems Normal</h3>
-    <p style="color: #27ae60;">No critical alerts at this time. All inventory levels are healthy!</p>
+    <h3>Sistemas funcionando correctamente</h3>
+    <p style="color: #27ae60;">Todo esta correcto :)</p>
 </div>
 @endif
 
 <!-- Recent Orders -->
 <div class="card" style="margin-top: 20px;">
-    <h3>📦 Recent Orders</h3>
+    <h3>Pedidos recientes</h3>
     @if($recentOrders->count() > 0)
     <table>
-        <tr><th>Order ID</th><th>Supplier</th><th>Date</th><th>Status</th><th>Total</th><th>Items</th></tr>
+        <tr><th>Id pedido</th><th>Proveedor</th><th>Fecha</th><th>Estado</th><th>Total</th><th>Productos</th></tr>
         @foreach($recentOrders as $order)
         <tr>
             <td><a href="{{ url('/orders/' . $order->id) }}">#{{ $order->id }}</a></td>
@@ -115,31 +115,31 @@
                 </span>
             </td>
             <td>${{ number_format($order->total, 2) }}</td>
-            <td>{{ $order->items->count() }} items</td>
+            <td>{{ $order->items->count() }} Productos</td>
         </tr>
         @endforeach
     </table>
     @else
-    <p>No recent orders found.</p>
+    <p>No hay pedidos recientes.</p>
     @endif
 </div>
 
 <!-- Waste Analysis -->
 <div class="card" style="margin-top: 20px;">
-    <h3>🗑️ Waste Analysis</h3>
+    <h3>Analisis de desperdicios</h3>
     <div id="wasteAnalysis">
-        <button onclick="loadWasteReport()" class="btn btn-primary">Generate Waste Report</button>
+        <button onclick="loadWasteReport()" class="btn btn-primary">Generar reporte de desperdicios</button>
         <div id="wasteData" style="margin-top: 15px;"></div>
     </div>
 </div>
 
 <!-- Export Options -->
 <div class="card" style="margin-top: 20px;">
-    <h3>📤 Export Options</h3>
+    <h3>Opciones de exportacion</h3>
     <div style="display: flex; gap: 10px;">
-        <button onclick="exportToPDF()" class="btn">📄 Export PDF</button>
-        <button onclick="exportToCSV()" class="btn">📊 Export CSV</button>
-        <button onclick="window.print()" class="btn">🖨️ Print Report</button>
+        <button onclick="exportToPDF()" class="btn"> Exportar como PDF</button>
+        <button onclick="exportToCSV()" class="btn"> Exportar como CSV</button>
+        <button onclick="window.print()" class="btn"> Imprimir reporte</button>
     </div>
 </div>
 
@@ -161,14 +161,14 @@ new Chart(inventoryCtx, {
         labels: inventoryLabels,
         datasets: [
             {
-                label: 'Current Stock',
+                label: 'Stock actual',
                 data: inventoryStock,
                 backgroundColor: inventoryColors,
                 borderColor: inventoryColors,
                 borderWidth: 1
             },
             {
-                label: 'Minimum Stock',
+                label: 'Stock minimo',
                 data: inventoryMinStock,
                 type: 'line',
                 borderColor: '#f39c12',
@@ -183,7 +183,6 @@ new Chart(inventoryCtx, {
         plugins: {
             title: {
                 display: true,
-                text: 'Current vs Minimum Stock Levels'
             },
             legend: {
                 display: true
@@ -194,7 +193,7 @@ new Chart(inventoryCtx, {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: 'Quantity'
+                    text: 'Cantidad'
                 }
             },
             x: {
@@ -228,7 +227,6 @@ new Chart(categoryCtx, {
         plugins: {
             title: {
                 display: true,
-                text: 'Inventory Value by Category'
             },
             legend: {
                 position: 'bottom'
@@ -239,7 +237,7 @@ new Chart(categoryCtx, {
 
 // Waste analysis function
 function loadWasteReport() {
-    document.getElementById('wasteData').innerHTML = '<p>Loading waste analysis...</p>';
+    document.getElementById('wasteData').innerHTML = '<p>Cargando analisis de desperdicios...</p>';
 
     fetch('/api/waste-report')
         .then(response => response.json())
@@ -252,13 +250,13 @@ function loadWasteReport() {
                     </div>
                     <div class="stat-box" style="background: #f39c12;">
                         <span>${data.items_count}</span>
-                        Expired Items
+                        Productos caducados
                     </div>
                 </div>
             `;
 
             if (data.expired_items.length > 0) {
-                wasteHTML += '<h4>Detailed Waste Breakdown:</h4><table><tr><th>Item</th><th>Quantity</th><th>Expired Date</th><th>Waste Value</th></tr>';
+                wasteHTML += '<h4>Detalles:</h4><table><tr><th>Producto</th><th>Cantidad</th><th>Fecha de caducidad</th><th>Valor</th></tr>';
 
                 data.expired_items.forEach(item => {
                     const wasteValue = (item.stock * (item.cost || 0)).toFixed(2);
@@ -274,14 +272,14 @@ function loadWasteReport() {
 
                 wasteHTML += '</table>';
             } else {
-                wasteHTML += '<p style="color: #27ae60;">✅ No waste detected! All items are within their expiration dates.</p>';
+                wasteHTML += '<p style="color: #27ae60;">No se detecto desperdicio.</p>';
             }
 
             document.getElementById('wasteData').innerHTML = wasteHTML;
         })
         .catch(error => {
-            console.error('Error loading waste report:', error);
-            document.getElementById('wasteData').innerHTML = '<p style="color: #e74c3c;">Error loading waste report.</p>';
+            console.error('Error cargando el reporte:', error);
+            document.getElementById('wasteData').innerHTML = '<p style="color: #e74c3c;">Error al cargar el reporte.</p>';
         });
 }
 
