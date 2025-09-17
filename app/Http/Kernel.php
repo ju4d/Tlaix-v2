@@ -14,7 +14,8 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        // ...existing middleware
+        // ...otros middlewares...
         'auth.simple' => \App\Http\Middleware\AuthMiddleware::class,
     ];
 }
+

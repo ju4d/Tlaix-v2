@@ -16,7 +16,7 @@ Route::get('/', function(){ return redirect('/login'); });
 
 // Auth routes
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
-Route::post('/login', [AuthController::class,'login']);
+Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
 Route::get('/logout', [AuthController::class,'logout'])->name('logout');
 
 // Protected routes
@@ -59,5 +59,16 @@ Route::middleware(['web'])->group(function(){
             Route::get('/inventory-status', [ApiController::class, 'inventoryStatus'])->name('api.inventory');
             Route::put('/inventory/{id}/stock', [ApiController::class, 'updateStock'])->name('api.update-stock');
         });
+
+        Route::get('/home', function () {
+            return view('home');
+        })->name('home');
     });
 });
+?>
+<!-- filepath: c:\xampp\htdocs\tlaix\resources\views\home.blade.php -->
+@extends('layouts.app')
+@section('title','Inicio')
+@section('content')
+    <h1>Bienvenido, has iniciado sesión correctamente.</h1>
+@endsection
