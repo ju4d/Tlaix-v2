@@ -35,7 +35,6 @@ class OrderController extends Controller {
     }
 
     public function store(Request $request){
-        // Debug: Log los datos recibidos
         Log::info('Order creation attempt', [
             'all_data' => $request->all(),
             'items' => $request->input('items', [])
@@ -46,9 +45,11 @@ class OrderController extends Controller {
             $validated = $request->validate([
                 'supplier_id' => 'required|exists:suppliers,id',
                 'date' => 'required|date',
-                'status' => 'required|in:pending,received,cancelled',
                 'items' => 'required|array|min:1',
             ]);
+
+            // El status siempre será 'pending' para nuevos pedidos
+            $status = 'pending';
 
             // Validación adicional para items
             foreach($request->input('items', []) as $index => $item) {
@@ -57,6 +58,12 @@ class OrderController extends Controller {
                     "items.{$index}.quantity" => 'required|numeric|min:0.01',
                     "items.{$index}.unit_cost" => 'required|numeric|min:0',
                 ]);
+
+                // Validar que el ingrediente pertenezca al proveedor seleccionado
+                $ingredient = Ingredient::find($item['ingredient_id']);
+                if (!$ingredient || $ingredient->supplier_id != $request->supplier_id) {
+                    throw new \Exception("El ingrediente '{$ingredient->name}' no pertenece al proveedor seleccionado.");
+                }
             }
 
             DB::beginTransaction();
@@ -65,17 +72,16 @@ class OrderController extends Controller {
             $order = Order::create([
                 'supplier_id' => $request->supplier_id,
                 'date' => $request->date,
-                'status' => $request->status,
+                'status' => $status,
                 'total' => 0
             ]);
 
-            Log::info('Order created', ['order_id' => $order->id]);
+            Log::info('Order created', ['order_id' => $order->id, 'status' => $status]);
 
             $total = 0;
             $itemsCreated = 0;
 
             foreach($request->items as $item){
-                // Solo procesar items con datos válidos
                 if (!empty($item['ingredient_id']) &&
                     isset($item['quantity']) && $item['quantity'] > 0 &&
                     isset($item['unit_cost']) && $item['unit_cost'] >= 0) {
@@ -108,18 +114,14 @@ class OrderController extends Controller {
             Log::info('Order completed', [
                 'order_id' => $order->id,
                 'total' => $total,
-                'items_created' => $itemsCreated
+                'items_created' => $itemsCreated,
+                'status' => $status
             ]);
-
-            // Si el pedido se marca como recibido, actualizar inventario
-            if ($request->status === 'received') {
-                $this->updateInventoryFromOrder($order);
-                Log::info('Inventory updated for received order', ['order_id' => $order->id]);
-            }
 
             DB::commit();
 
-            return redirect()->route('orders.index')->with('success', 'Pedido creado exitosamente con ' . $itemsCreated . ' productos');
+            return redirect()->route('orders.index')
+                ->with('success', 'Pedido creado exitosamente con ' . $itemsCreated . ' productos (Estado: Pendiente)');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
@@ -127,7 +129,6 @@ class OrderController extends Controller {
                 'errors' => $e->errors(),
                 'request_data' => $request->all()
             ]);
-
             return back()->withErrors($e->errors())->withInput();
 
         } catch (\Exception $e) {
@@ -137,7 +138,6 @@ class OrderController extends Controller {
                 'trace' => $e->getTraceAsString(),
                 'request_data' => $request->all()
             ]);
-
             return back()->withErrors(['error' => 'Error al crear el pedido: ' . $e->getMessage()])->withInput();
         }
     }

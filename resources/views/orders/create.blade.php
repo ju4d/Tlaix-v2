@@ -43,8 +43,18 @@
             <option value="pending" selected>Pendiente (automático)</option>
         </select>
         <input type="hidden" name="status" value="pending">
+        <small style="color: #666; font-style: italic;">Los pedidos siempre se crean en estado "Pendiente" y pueden ser marcados como "Recibidos" desde la lista de pedidos.</small>
 
         <h3>Productos del Pedido</h3>
+
+        <!-- Panel informativo de ingredientes del proveedor -->
+        <div id="supplierInfo" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 4px; padding: 15px; margin-bottom: 20px; display: none;">
+            <h4 style="margin-top: 0; color: #495057;">📦 Productos disponibles de este proveedor:</h4>
+            <div id="availableIngredients" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px;">
+                <!-- Se llenará dinámicamente -->
+            </div>
+        </div>
+
         <div id="orderItems">
             <div class="order-item" id="item-template" style="display: none;">
                 <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr; gap: 10px; align-items: center; margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 4px;">
@@ -136,6 +146,33 @@ input[readonly] {
 button[type="submit"]:hover {
     background: #2980b9 !important;
 }
+
+/* Estilos para campos deshabilitados */
+select:disabled, input:disabled {
+    background: #f8f9fa !important;
+    color: #6c757d !important;
+    cursor: not-allowed;
+}
+
+/* Animación para el panel de información del proveedor */
+#supplierInfo {
+    transition: all 0.3s ease;
+}
+
+/* Estilos para campos con error */
+.error-field {
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+}
+
+/* Mejorar la apariencia de los select */
+select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+}
 </style>
 
 <script>
@@ -155,6 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener para cambio de proveedor
     document.getElementById('supplierSelect').addEventListener('change', function() {
         updateIngredientsForAllItems();
+        updateSupplierInfo();
     });
 
     // Event listener para agregar items
@@ -424,6 +462,39 @@ function validateForm() {
     }
 
     return true;
+}
+
+function updateSupplierInfo() {
+    const supplierId = document.getElementById('supplierSelect').value;
+    const supplierInfo = document.getElementById('supplierInfo');
+    const availableIngredients = document.getElementById('availableIngredients');
+
+    if (!supplierId) {
+        supplierInfo.style.display = 'none';
+        return;
+    }
+
+    const supplierIngredients = ingredientsData[supplierId] || [];
+
+    if (supplierIngredients.length === 0) {
+        supplierInfo.style.display = 'block';
+        availableIngredients.innerHTML = '<p style="color: #e74c3c; margin: 0;">Este proveedor no tiene ingredientes registrados.</p>';
+        return;
+    }
+
+    supplierInfo.style.display = 'block';
+    availableIngredients.innerHTML = '';
+
+    supplierIngredients.forEach(ingredient => {
+        const ingredientCard = document.createElement('div');
+        ingredientCard.style.cssText = 'background: white; padding: 10px; border-radius: 4px; border-left: 4px solid #3498db; font-size: 0.9em;';
+        ingredientCard.innerHTML = `
+            <strong>${ingredient.name}</strong><br>
+            <span style="color: #666;">Stock: ${ingredient.stock} ${ingredient.unit}</span><br>
+            <span style="color: #27ae60;">Costo: ${parseFloat(ingredient.cost || 0).toFixed(2)}</span>
+        `;
+        availableIngredients.appendChild(ingredientCard);
+    });
 }
 </script>
 @endsection
