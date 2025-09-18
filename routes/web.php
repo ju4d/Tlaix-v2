@@ -35,14 +35,21 @@ Route::middleware(['auth'])->group(function () {
     // Rutas de platos
     Route::resource('dishes', DishController::class);
 
-    // Rutas de órdenes
+    // Rutas de órdenes (completas)
     Route::resource('orders', OrderController::class);
+    Route::post('/orders/{id}/receive', [OrderController::class, 'receive'])->name('orders.receive');
+    Route::patch('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
     // Rutas de proveedores
     Route::resource('suppliers', SupplierController::class);
 
     // Reportes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
-});
-?>
 
+    // APIs
+    Route::get('/api/predictions/{days}', [PredictionController::class, 'predict']);
+    Route::get('/api/waste-report', [ApiController::class, 'wasteReport']);
+    Route::get('/api/dashboard-stats', [ApiController::class, 'dashboardStats']);
+    Route::get('/api/inventory-status', [ApiController::class, 'inventoryStatus']);
+    Route::put('/api/inventory/{id}/stock', [ApiController::class, 'updateStock']);
+});

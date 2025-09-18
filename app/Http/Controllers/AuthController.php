@@ -56,4 +56,8 @@ class AuthController extends Controller
 
         return redirect('login')->with('status', 'Usuario registrado exitosamente!');
     }
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
 }

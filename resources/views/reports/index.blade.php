@@ -246,7 +246,7 @@ function loadWasteReport() {
                 <div class="stats" style="margin: 15px 0;">
                     <div class="stat-box" style="background: #e74c3c;">
                         <span>${data.total_waste_value.toFixed(2)}</span>
-                        Total Waste Value
+                        Valor total del desperdicio
                     </div>
                     <div class="stat-box" style="background: #f39c12;">
                         <span>${data.items_count}</span>
