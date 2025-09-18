@@ -19,7 +19,7 @@
         <span>{{ $availableDishes }}</span>
         Platilos Disponibles
     </div>
-    <div class="stat-box" style="background: #34495e">
+    <div class="stat-box" style="background: #B2C8DFFF">
         <span>{{ $pendingOrders }}</span>
         Pedidos Pendientes
     </div>
@@ -66,7 +66,7 @@
 
 <!-- Demand Predictions -->
 <div class="card" style="margin-top: 20px;">
-    <h3>Predicciones de Tlaix IA (7 dias)</h3>
+    <h3>Predicciones de Tlaix IA</h3>
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px;">
         <button onclick="loadPredictions(7)" class="btn btn-primary">7 dias</button>
         <button onclick="loadPredictions(14)" class="btn">14 dias</button>

@@ -1,6 +1,6 @@
 <!-- Enhanced resources/views/reports/index.blade.php -->
 @extends('layouts.app')
-@section('title','📊 Reports & Analytics')
+@section('title','Reportes')
 @section('content')
 
 <!-- Summary Cards -->
@@ -60,7 +60,7 @@
         @foreach($expired as $item)
             <div style="margin: 5px 0;">
                 • {{ $item->name }} - Caducaron en: {{ $item->expiration_date }}
-                ({{ $item->stock }} {{ $item->unit }} = ${{ number_format($item->stock * ($item->cost ?? 0), 2) }} value)
+                ({{ $item->stock }} {{ $item->unit }} = ${{ number_format($item->stock * ($item->cost ?? 0), 2) }} costo)
             </div>
         @endforeach
     </div>

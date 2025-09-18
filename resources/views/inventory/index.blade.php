@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Inventory')
+@section('title','Inventario')
 @section('content')
 
 <!-- Formulario para agregar ingrediente -->

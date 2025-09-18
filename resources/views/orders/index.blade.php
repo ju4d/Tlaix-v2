@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Orders')
+@section('title','Pedidos')
 @section('content')
 <table border="1" cellpadding="6">
 <tr><th>ID</th><th>Proovedor</th><th>Fecha</th><th>Estado</th><th>Total</th></tr>
