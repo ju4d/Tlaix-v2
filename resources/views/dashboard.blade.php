@@ -195,7 +195,7 @@ function displayPredictionChart(predictions) {
         data: {
             labels: dates,
             datasets: [{
-                label: 'Predicted Demand',
+                label: 'Demanda Predicha',
                 data: demands,
                 borderColor: '#3498db',
                 backgroundColor: 'rgba(52, 152, 219, 0.1)',
@@ -208,7 +208,7 @@ function displayPredictionChart(predictions) {
             plugins: {
                 title: {
                     display: true,
-                    text: 'Demand Forecast'
+                    text: 'Precciones de demanda para los proximos dias'
                 }
             },
             scales: {
@@ -216,13 +216,13 @@ function displayPredictionChart(predictions) {
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Demand Units'
+                        text: 'Unidades necesarias'
                     }
                 },
                 x: {
                     title: {
                         display: true,
-                        text: 'Date'
+                        text: 'Fecha'
                     }
                 }
             }
@@ -231,7 +231,7 @@ function displayPredictionChart(predictions) {
 }
 
 function displayPredictionTable(predictions) {
-    let tableHTML = '<h4>Detailed Predictions</h4><table><tr><th>Date</th><th>Predicted Demand</th><th>Recommendation</th></tr>';
+    let tableHTML = '<h4>Prediccion detallada</h4><table><tr><th>Fecha</th><th>Demanda predicha</th><th>Recomendaciones</th></tr>';
 
     predictions.forEach(p => {
         const demand = parseFloat(p.demand);
@@ -239,19 +239,19 @@ function displayPredictionTable(predictions) {
         let rowClass = '';
 
         if (demand > 25) {
-            recommendation = '📈 High demand expected - stock up';
+            recommendation = 'Se espera una gran demanda manten alto el stock';
             rowClass = 'style="background: #fff3cd;"';
         } else if (demand > 15) {
-            recommendation = '📊 Normal demand expected';
+            recommendation = 'Demanda normal esperada';
             rowClass = 'style="background: #d1ecf1;"';
         } else {
-            recommendation = '📉 Low demand expected - reduce prep';
+            recommendation = 'Baja demanda esperada - no hacer pedidos';
             rowClass = 'style="background: #f8d7da;"';
         }
 
         tableHTML += `<tr ${rowClass}>
             <td>${new Date(p.date).toLocaleDateString()}</td>
-            <td>${demand.toFixed(1)} units</td>
+            <td>${demand.toFixed(1)} unidades</td>
             <td>${recommendation}</td>
         </tr>`;
     });

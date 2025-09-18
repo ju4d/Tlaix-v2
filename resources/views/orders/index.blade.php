@@ -4,12 +4,11 @@
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <div>
-        <h2 style="margin: 0;">Pedidos</h2>
         <p style="color: #7f8c8d; margin: 5px 0;">Administra los pedidos a proveedores</p>
     </div>
     <a href="{{ route('orders.create') }}" class="btn btn-primary"
        style="background: #27ae60; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; font-weight: 500;">
-        ➕ Nuevo Pedido
+        Nuevo Pedido
     </a>
 </div>
 

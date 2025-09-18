@@ -7,7 +7,7 @@ class PredictionController extends Controller {
         $days = $r->input('days',7);
         $datafile = base_path('storage/app/predictions/history.csv'); // optional path
         // Build command safely
-        $cmd = escapeshellcmd("python3 " . base_path('predict.py') . " --file " . escapeshellarg($datafile) . " --days " . intval($days));
+        $cmd = escapeshellcmd("py " . base_path('predict.py') . " --file " . escapeshellarg($datafile) . " --days " . intval($days));
         $output = [];
         $returnVar = 0;
         exec($cmd, $output, $returnVar);
