@@ -330,7 +330,7 @@ function updateIngredientsForItem(item) {
     // Habilitar campos
     ingredientSelect.disabled = false;
     quantityInput.disabled = false;
-    unitCostInput.disabled = false;
+    unitCostInput.disabled = true;
 
     // Agregar opción por defecto
     ingredientSelect.innerHTML = '<option value="">Seleccionar Ingrediente</option>';

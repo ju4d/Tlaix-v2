@@ -1,8 +1,8 @@
 /* ==== Reset / base ==== */
 body {
     font-family: "Segoe UI", Arial, sans-serif;
-    background: #ced4c3;
-    margin: 0;
+    background: #fbfbfb;
+    margin:10px 90px; /* <- aqui joben */
     padding: 0;
 }
 a {
