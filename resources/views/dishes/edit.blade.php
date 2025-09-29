@@ -1,6 +1,6 @@
 <!-- resources/views/dishes/edit.blade.php -->
 @extends('layouts.app')
-@section('title','Edit Dish')
+@section('title','Editar Platillo')
 @section('content')
 <form method="POST" action="{{ route('dishes.update', $dish->id) }}">
     @csrf

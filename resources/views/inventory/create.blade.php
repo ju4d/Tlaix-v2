@@ -1,6 +1,6 @@
 <!-- resources/views/inventory/create.blade.php -->
 @extends('layouts.app')
-@section('title','Add Ingredient')
+@section('title','Agregar Ingrediente')
 @section('content')
 <form method="POST" action="{{ route('inventory.store') }}">
     @csrf

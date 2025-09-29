@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     ReportController,
     PredictionController,
     SupplierController,
-    ApiController
+    ApiController,
+    DemandController
 };
 
 // Rutas públicas
@@ -46,10 +47,22 @@ Route::middleware(['auth'])->group(function () {
     // Reportes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
 
-    // APIs
-    Route::get('/api/predictions/{days}', [PredictionController::class, 'predict']);
-    Route::get('/api/waste-report', [ApiController::class, 'wasteReport']);
-    Route::get('/api/dashboard-stats', [ApiController::class, 'dashboardStats']);
-    Route::get('/api/inventory-status', [ApiController::class, 'inventoryStatus']);
-    Route::put('/api/inventory/{id}/stock', [ApiController::class, 'updateStock']);
+    // APIs de predicciones
+    Route::prefix('api')->group(function () {
+        // Predicciones
+        Route::get('/predictions/{days}', [PredictionController::class, 'predict']);
+
+        // Reportes
+        Route::get('/waste-report', [ApiController::class, 'wasteReport']);
+        Route::get('/dashboard-stats', [ApiController::class, 'dashboardStats']);
+        Route::get('/inventory-status', [ApiController::class, 'inventoryStatus']);
+        Route::put('/inventory/{id}/stock', [ApiController::class, 'updateStock']);
+
+        // Demanda en tiempo real
+        Route::post('/demand/record', [DemandController::class, 'recordDemand']);
+        Route::get('/demand/summary', [DemandController::class, 'getDemandSummary']);
+        Route::post('/demand/auto-record', [DemandController::class, 'autoRecordDailyDemand']);
+        Route::get('/demand/export', [DemandController::class, 'exportHistory']);
+        Route::post('/demand/clean', [DemandController::class, 'cleanOldData']);
+    });
 });

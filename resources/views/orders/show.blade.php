@@ -1,6 +1,6 @@
 <!-- resources/views/orders/show.blade.php -->
 @extends('layouts.app')
-@section('title','Order Details')
+@section('title','Detalles del Pedido')
 @section('content')
 <div class="card">
     <h2>Pedido #{{ $order->id }}</h2>

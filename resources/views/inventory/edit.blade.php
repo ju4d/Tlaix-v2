@@ -1,6 +1,6 @@
 <!-- resources/views/inventory/edit.blade.php -->
 @extends('layouts.app')
-@section('title','Edit Ingredient')
+@section('title','Editar Ingrediente')
 @section('content')
 <form method="POST" action="{{ route('inventory.update', $item->id) }}">
     @csrf

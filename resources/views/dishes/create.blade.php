@@ -1,6 +1,6 @@
 <!-- resources/views/dishes/create.blade.php -->
 @extends('layouts.app')
-@section('title','Create Dish')
+@section('title','Crear Platillo')
 @section('content')
 <form method="POST" action="{{ route('dishes.store') }}">
     @csrf
