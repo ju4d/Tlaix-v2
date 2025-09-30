@@ -1,51 +1,105 @@
-<!-- resources/views/orders/create.blade.php -->
 @extends('layouts.app')
 @section('title','Crear Nuevo Pedido')
 @section('content')
 
-@if ($errors->any())
-    <div class="alert alert-error" style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #f5c6cb;">
-        <strong>¡Errores en el formulario!</strong>
-        <ul style="margin: 10px 0; padding-left: 20px;">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+<div class="max-w-6xl">
+    <!-- Alerts -->
+    @if ($errors->any())
+        <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">¡Errores en el formulario!</h3>
+                    <div class="mt-2">
+                        <ul class="list-disc list-inside text-sm text-red-700">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
-@if (session('success'))
-    <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #c3e6cb;">
-        {{ session('success') }}
-    </div>
-@endif
+    @if (session('success'))
+        <div class="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">{{ session('success') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
 
-<form method="POST" action="{{ route('orders.store') }}" id="orderForm">
-    @csrf
-    <div class="card">
-        <h3>Información del Pedido</h3>
+    <form method="POST" action="{{ route('orders.store') }}" id="orderForm" class="space-y-8">
+        @csrf
+        
+        <!-- Order Information -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Información del Pedido
+            </h3>
 
-        <label>Proveedor *</label>
-        <select name="supplier_id" required id="supplierSelect">
-            <option value="">Seleccionar Proveedor</option>
-            @foreach($suppliers as $supplier)
-                <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                    {{ $supplier->name }} - {{ $supplier->contact }}
-                </option>
-            @endforeach
-        </select>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Proveedor *</label>
+                    <select name="supplier_id" required id="supplierSelect"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('supplier_id') border-red-500 @enderror">
+                        <option value="">Seleccionar Proveedor</option>
+                        @foreach($suppliers as $supplier)
+                            <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                {{ $supplier->name }} - {{ $supplier->contact }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('supplier_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
 
-        <label>Fecha del Pedido *</label>
-        <input type="date" name="date" required value="{{ old('date', date('Y-m-d')) }}">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Fecha del Pedido *</label>
+                    <input type="date" name="date" required value="{{ old('date', date('Y-m-d')) }}"
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('date') border-red-500 @enderror">
+                    @error('date')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
 
-        <label>Estado</label>
-        <select name="status" disabled style="background: #f5f5f5; color: #666;">
-            <option value="pending" selected>Pendiente (automático)</option>
-        </select>
-        <input type="hidden" name="status" value="pending">
-        <small style="color: #666; font-style: italic;">Los pedidos siempre se crean en estado "Pendiente" y pueden ser marcados como "Recibidos" desde la lista de pedidos.</small>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
+                    <div class="relative">
+                        <select disabled class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 text-gray-500">
+                            <option value="pending" selected>Pendiente (automático)</option>
+                        </select>
+                        <input type="hidden" name="status" value="pending">
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">Los pedidos siempre se crean en estado "Pendiente" y pueden ser marcados como "Recibidos" desde la lista de pedidos.</p>
+                </div>
+            </div>
+        </div>
 
-        <h3>Productos del Pedido</h3>
+        <!-- Order Items -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+                Productos del Pedido
+            </h3>
 
         <!-- Panel informativo de ingredientes del proveedor -->
         <div id="supplierInfo" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 4px; padding: 15px; margin-bottom: 20px; display: none;">

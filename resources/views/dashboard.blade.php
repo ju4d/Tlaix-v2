@@ -6,43 +6,43 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Stats Grid -->
-<div class="stats">
-    <div class="stat-box">
-        <span>{{ $totalIngredients }}</span>
-        Insumos Totales
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+    <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $totalIngredients }}</div>
+        <div class="text-blue-100 mt-2">Insumos Totales</div>
     </div>
-    <div class="stat-box" style="background: {{ $lowStock > 0 ? '#e74c3c' : '#27ae60' }}">
-        <span>{{ $lowStock }}</span>
-        Insumos bajos
+    <div class="text-white p-6 rounded-lg shadow-lg {{ $lowStock > 0 ? 'bg-red-500' : 'bg-green-500' }}">
+        <div class="text-3xl font-bold">{{ $lowStock }}</div>
+        <div class="mt-2 {{ $lowStock > 0 ? 'text-red-100' : 'text-green-100' }}">Insumos bajos</div>
     </div>
-    <div class="stat-box" style="background: #f39c12">
-        <span>{{ $totalDishes }}</span>
-        Platillos Totales
+    <div class="bg-orange-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $totalDishes }}</div>
+        <div class="text-orange-100 mt-2">Platillos Totales</div>
     </div>
-    <div class="stat-box" style="background: #9b59b6">
-        <span>{{ $availableDishes }}</span>
-        Platillos Disponibles
+    <div class="bg-purple-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $availableDishes }}</div>
+        <div class="text-purple-100 mt-2">Platillos Disponibles</div>
     </div>
-    <div class="stat-box" style="background: #B2C8DFFF">
-        <span>{{ $pendingOrders }}</span>
-        Pedidos Pendientes
+    <div class="bg-indigo-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $pendingOrders }}</div>
+        <div class="text-indigo-100 mt-2">Pedidos Pendientes</div>
     </div>
 </div>
 
 <!-- Two Column Layout -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
     <!-- Critical Stock Items -->
-    <div class="card">
-        <h3>Stock Crítico</h3>
+    <div class="card" style="padding: 24px;">
+        <h3 style="margin-bottom: 20px; font-size: 20px;">Stock Crítico</h3>
         @if($lowStockItems->count() > 0)
-            <table>
-                <tr><th>Ingrediente</th><th>Actual</th><th>Mínimo</th><th>Estado</th></tr>
+            <table style="margin-top: 16px;">
+                <tr><th style="padding: 12px 8px;">Ingrediente</th><th style="padding: 12px 8px;">Actual</th><th style="padding: 12px 8px;">Mínimo</th><th style="padding: 12px 8px;">Estado</th></tr>
                 @foreach($lowStockItems as $item)
                     <tr class="{{ $item->stock < $item->min_stock ? 'low-stock' : '' }}">
-                        <td>{{ $item->name }}</td>
-                        <td>{{ $item->stock }} {{ $item->unit }}</td>
-                        <td>{{ $item->min_stock }}</td>
-                        <td>
+                        <td style="padding: 12px 8px;">{{ $item->name }}</td>
+                        <td style="padding: 12px 8px;">{{ $item->stock }} {{ $item->unit }}</td>
+                        <td style="padding: 12px 8px;">{{ $item->min_stock }}</td>
+                        <td style="padding: 12px 8px;">
                             @if($item->stock < $item->min_stock)
                                 <span style="color: #e74c3c; font-weight: bold;">CRÍTICO</span>
                             @else
@@ -60,24 +60,24 @@
     <!-- Quick Actions -->
     <div class="card">
         <h3>Acciones Rápidas</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="{{ route('inventory.create') }}" class="quick-action-btn">➕ Agregar Nuevo Ingrediente</a>
-            <a href="{{ route('dishes.create') }}" class="quick-action-btn">🍽️ Crear Nuevo Platillo</a>
-            <a href="{{ route('orders.index') }}" class="quick-action-btn">📦 Consultar Pedidos</a>
-            <a href="{{ route('reports') }}" class="quick-action-btn">📊 Generar Reportes</a>
+        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 20px;">
+            <a href="{{ route('inventory.create') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">➕ Agregar Nuevo Ingrediente</a>
+            <a href="{{ route('dishes.create') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">🍽️ Crear Nuevo Platillo</a>
+            <a href="{{ route('orders.index') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">📦 Consultar Pedidos</a>
+            <a href="{{ route('reports') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">📊 Generar Reportes</a>
         </div>
     </div>
 </div>
 
 <!-- Real-Time Demand Statistics -->
-<div class="card" style="margin-top: 20px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h3>📊 Estadísticas de Demanda en Tiempo Real</h3>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60;">
+<div class="card" style="margin-top: 30px; padding: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h3 style="font-size: 20px; margin: 0;">📊 Estadísticas de Demanda en Tiempo Real</h3>
+        <div style="display: flex; gap: 16px; align-items: center;">
+            <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
                 📝 Registrar Demanda
             </button>
-            <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12;">
+            <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
                 🔄 Auto-registrar Hoy
             </button>
             <span class="status-indicator">
@@ -91,33 +91,33 @@
     <div id="alertContainer"></div>
 
     <!-- Demand Stats Mini Cards -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
-        <div class="mini-stat-card" style="border-left: 4px solid #3498db;">
-            <div class="mini-stat-label">Demanda Hoy</div>
-            <div class="mini-stat-value" id="demandToday">-</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+        <div class="mini-stat-card" style="border-left: 4px solid #3498db; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Hoy</div>
+            <div class="mini-stat-value" id="demandToday" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #27ae60;">
-            <div class="mini-stat-label">Demanda Semanal</div>
-            <div class="mini-stat-value" id="demandWeek">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #27ae60; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Semanal</div>
+            <div class="mini-stat-value" id="demandWeek" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #f39c12;">
-            <div class="mini-stat-label">Demanda Mensual</div>
-            <div class="mini-stat-value" id="demandMonth">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #f39c12; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Mensual</div>
+            <div class="mini-stat-value" id="demandMonth" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #9b59b6;">
-            <div class="mini-stat-label">Promedio Diario</div>
-            <div class="mini-stat-value" id="demandAvg">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #9b59b6; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Promedio Diario</div>
+            <div class="mini-stat-value" id="demandAvg" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
     </div>
 </div>
 
 <!-- Ingredient Predictions -->
-<div class="card" style="margin-top: 20px;">
-    <h3>🔮 Predicciones de Reabastecimiento por Ingrediente</h3>
+<div class="card" style="margin-top: 30px; padding: 24px;">
+    <h3 style="font-size: 20px; margin-bottom: 20px;">🔮 Predicciones de Reabastecimiento por Ingrediente</h3>
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
         <button onclick="loadIngredientPredictions(7)" class="btn btn-primary">7 días</button>
         <button onclick="loadIngredientPredictions(14)" class="btn">14 días</button>

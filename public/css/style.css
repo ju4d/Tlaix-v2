@@ -1,9 +1,20 @@
-/* ==== Reset / base ==== */
-body {
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: #fbfbfb;
-    margin:10px 90px; /* <- aqui joben */
-    padding: 0;
+/* Estilos personalizados mínimos - Usar clases Tailwind directamente en HTML */
+
+/* Solo estilos muy específicos que no se pueden hacer con Tailwind */
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin: 20px 0;
+}
+
+/* Animaciones personalizadas */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
 }
 a {
     text-decoration: none;
@@ -22,16 +33,46 @@ h1, h2, h3 {
 /* ==== Navbar ==== */
 nav {
     background: #2c3e50;
-    padding: 10px 20px;
+    padding: 40px 15px;
     display: flex;
-    gap: 15px;
+    gap: 35px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    position: relative;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    min-height: 80px;
+    align-items: center;
 }
 nav a {
     color: #ecf0f1;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 20px;
+    padding: 15px 25px;
+    border-radius: 6px;
+    transition: background 0.3s ease;
 }
 nav a:hover {
-    text-decoration: underline;
+    background: rgba(255,255,255,0.1);
+    text-decoration: none;
+}
+
+/* ==== Main Content ==== */
+.main-content {
+    padding: 30px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.welcome-msg {
+    background: #ecf0f1;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-weight: 500;
 }
 
 /* ==== Tables ==== */

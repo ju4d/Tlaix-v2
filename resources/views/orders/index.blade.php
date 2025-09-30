@@ -2,19 +2,30 @@
 @section('title','Gestión de Pedidos')
 @section('content')
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+<div class="flex justify-between items-center mb-6">
     <div>
-        <p style="color: #7f8c8d; margin: 5px 0;">Administra los pedidos a proveedores</p>
+        <p class="text-gray-500">Administra los pedidos a proveedores</p>
     </div>
-    <a href="{{ route('orders.create') }}" class="btn btn-primary"
-       style="background: #27ae60; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; font-weight: 500;">
+    <a href="{{ route('orders.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-5 rounded-lg transition duration-200 inline-flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
         Nuevo Pedido
     </a>
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success" style="background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #28a745;">
-        {{ session('success') }}
+    <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-md">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-green-700">{{ session('success') }}</p>
+            </div>
+        </div>
     </div>
 @endif
 
