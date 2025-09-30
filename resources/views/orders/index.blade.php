@@ -29,84 +29,132 @@
     </div>
 @endif
 
-<div class="card">
-    @if($orders->count() > 0)
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Proveedor</th>
-                <th>Fecha</th>
-                <th>Estado</th>
-                <th>Total</th>
-                <th>Productos</th>
-                <th>Acciones</th>
-            </tr>
-            @foreach($orders as $order)
-            <tr style="border-bottom: 1px solid #e0e0e0;">
-                <td>
-                    <a href="{{ route('orders.show', $order->id) }}" style="color: #3498db; font-weight: 500;">
-                        #{{ $order->id }}
-                    </a>
-                </td>
-                <td>
-                    <strong>{{ $order->supplier->name ?? 'Sin proveedor' }}</strong>
-                    @if($order->supplier && $order->supplier->contact)
-                        <br><small style="color: #7f8c8d;">{{ $order->supplier->contact }}</small>
-                    @endif
-                </td>
-                <td>{{ \Carbon\Carbon::parse($order->date)->format('d M Y') }}</td>
-                <td>
-                    @php
-                        $statusColors = [
-                            'pending' => '#f39c12',
-                            'received' => '#27ae60',
-                            'cancelled' => '#e74c3c'
-                        ];
-                        $statusLabels = [
-                            'pending' => 'Pendiente',
-                            'received' => 'Recibido',
-                            'cancelled' => 'Cancelado'
-                        ];
-                    @endphp
-                    <span style="background: {{ $statusColors[$order->status] }}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: 500;">
-                        {{ $statusLabels[$order->status] }}
-                    </span>
-                </td>
-                <td style="font-weight: 600; color: #2c3e50;">${{ number_format($order->total, 2) }}</td>
-                <td>
-                    <span style="background: #ecf0f1; color: #2c3e50; padding: 2px 6px; border-radius: 10px; font-size: 0.9em;">
-                        {{ $order->items->count() }} productos
-                    </span>
-                </td>
-                <td>
-                    <div style="display: flex; gap: 5px; align-items: center;">
-                        <a href="{{ route('orders.show', $order->id) }}"
-                           style="color: #3498db; text-decoration: none; padding: 4px 8px; background: #ebf3fd; border-radius: 3px; font-size: 0.9em;">
-                            Ver
-                        </a>
+@if($orders->count() > 0)
+    <!-- Lista de Pedidos como Cards -->
+    <div class="space-y-4">
+        @foreach($orders as $order)
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <!-- ID y Estado -->
+                        <div class="flex items-center space-x-4">
+                            <a href="{{ route('orders.show', $order->id) }}" class="text-xl font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                                Pedido #{{ $order->id }}
+                            </a>
+                            @php
+                                $statusClasses = [
+                                    'pending' => 'bg-yellow-100 text-yellow-800',
+                                    'received' => 'bg-green-100 text-green-800',
+                                    'cancelled' => 'bg-red-100 text-red-800'
+                                ];
+                                $statusLabels = [
+                                    'pending' => 'Pendiente',
+                                    'received' => 'Recibido',
+                                    'cancelled' => 'Cancelado'
+                                ];
+                            @endphp
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $statusClasses[$order->status] ?? 'bg-gray-100 text-gray-800' }}">
+                                {{ $statusLabels[$order->status] ?? ucfirst($order->status) }}
+                            </span>
+                        </div>
+                        
+                        <!-- Total -->
+                        <div class="text-right">
+                            <p class="text-sm text-gray-500">Total</p>
+                            <p class="text-2xl font-bold text-gray-900">${{ number_format($order->total, 2) }}</p>
+                        </div>
+                    </div>
 
+                    <!-- Información Principal -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <!-- Proveedor -->
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Proveedor</p>
+                            <p class="text-lg font-semibold text-gray-900">{{ $order->supplier->name ?? 'Sin proveedor' }}</p>
+                            @if($order->supplier && $order->supplier->contact)
+                                <p class="text-sm text-gray-600">{{ $order->supplier->contact }}</p>
+                            @endif
+                        </div>
+
+                        <!-- Fecha -->
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Fecha del Pedido</p>
+                            <p class="text-lg text-gray-900">{{ \Carbon\Carbon::parse($order->date)->format('d M Y') }}</p>
+                            <p class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($order->date)->diffForHumans() }}</p>
+                        </div>
+
+                        <!-- Productos -->
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Productos</p>
+                            <p class="text-lg text-gray-900">{{ $order->items->count() }} artículos</p>
+                            @if($order->items->count() > 0)
+                                <p class="text-sm text-gray-600">{{ $order->items->first()->ingredient->name ?? 'N/A' }}{{ $order->items->count() > 1 ? ' y más...' : '' }}</p>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <div class="flex space-x-3">
+                            <a href="{{ route('orders.show', $order->id) }}" 
+                               class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Ver Detalles
+                            </a>
+
+                            @if($order->status == 'pending')
+                                <form method="POST" action="{{ route('orders.receive', $order->id) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            onclick="return confirm('¿Marcar como recibido?')"
+                                            class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition-colors duration-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Recibir
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="{{ route('orders.cancel', $order->id) }}" class="inline">
+                                    @csrf @method('PATCH')
+                                    <button type="submit" 
+                                            onclick="return confirm('¿Cancelar este pedido?')"
+                                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors duration-200">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                        Cancelar
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+
+                        <!-- Indicador de urgencia para pedidos pendientes -->
                         @if($order->status == 'pending')
-                            <form method="POST" action="{{ route('orders.receive', $order->id) }}" style="display: inline;">
-                                @csrf
-                                <button type="submit" onclick="return confirm('¿Marcar como recibido?')"
-                                        style="background: #27ae60; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 0.9em; cursor: pointer;">
-                                    Recibir
-                                </button>
-                            </form>
-
-                            <form method="POST" action="{{ route('orders.cancel', $order->id) }}" style="display: inline;">
-                                @csrf @method('PATCH')
-                                <button type="submit" onclick="return confirm('¿Cancelar este pedido?')"
-                                        style="background: #e74c3c; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 0.9em; cursor: pointer;">
-                                    Cancelar
-                                </button>
-                            </form>
+                            @php
+                                $daysSinceOrder = \Carbon\Carbon::parse($order->date)->diffInDays(now());
+                            @endphp
+                            @if($daysSinceOrder > 7)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    {{ $daysSinceOrder }} días
+                                </span>
+                            @elseif($daysSinceOrder > 3)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    {{ $daysSinceOrder }} días
+                                </span>
+                            @endif
                         @endif
                     </div>
-                </td>
-            </tr>
-            @endforeach
-        </table>
+                </div>
+            </div>
+        @endforeach
+    </div>
     @else
         <div style="text-align: center; padding: 40px; color: #7f8c8d;">
             <div style="font-size: 3em; margin-bottom: 20px;">📦</div>
@@ -120,62 +168,87 @@
     @endif
 </div>
 
-<!-- Resumen de pedidos -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 30px;">
-    <div class="stat-box" style="background: #f39c12;">
-        <span>{{ $orders->where('status', 'pending')->count() }}</span>
-        Pendientes
-    </div>
-    <div class="stat-box" style="background: #27ae60;">
-        <span>{{ $orders->where('status', 'received')->count() }}</span>
-        Recibidos
-    </div>
-    <div class="stat-box" style="background: #e74c3c;">
-        <span>{{ $orders->where('status', 'cancelled')->count() }}</span>
-        Cancelados
-    </div>
-    <div class="stat-box" style="background: #3498db;">
-        <span>${{ number_format($orders->sum('total'), 2) }}</span>
-        Total en Pedidos
+<!-- Resumen de Pedidos -->
+<div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Resumen de Pedidos</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg shadow-lg p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-yellow-100 text-sm font-medium">Pendientes</p>
+                    <p class="text-3xl font-bold">{{ $orders->where('status', 'pending')->count() }}</p>
+                </div>
+                <div class="bg-yellow-500 bg-opacity-30 rounded-full p-3">
+                    <svg class="w-8 h-8 text-yellow-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex items-center text-yellow-100 text-sm">
+                    <span>Requieren atención</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-green-400 to-green-600 rounded-lg shadow-lg p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100 text-sm font-medium">Recibidos</p>
+                    <p class="text-3xl font-bold">{{ $orders->where('status', 'received')->count() }}</p>
+                </div>
+                <div class="bg-green-500 bg-opacity-30 rounded-full p-3">
+                    <svg class="w-8 h-8 text-green-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex items-center text-green-100 text-sm">
+                    <span>Completados exitosamente</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-red-400 to-red-600 rounded-lg shadow-lg p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-red-100 text-sm font-medium">Cancelados</p>
+                    <p class="text-3xl font-bold">{{ $orders->where('status', 'cancelled')->count() }}</p>
+                </div>
+                <div class="bg-red-500 bg-opacity-30 rounded-full p-3">
+                    <svg class="w-8 h-8 text-red-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex items-center text-red-100 text-sm">
+                    <span>No completados</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg shadow-lg p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-blue-100 text-sm font-medium">Total Invertido</p>
+                    <p class="text-3xl font-bold">${{ number_format($orders->sum('total'), 0) }}</p>
+                </div>
+                <div class="bg-blue-500 bg-opacity-30 rounded-full p-3">
+                    <svg class="w-8 h-8 text-blue-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex items-center text-blue-100 text-sm">
+                    <span>En todos los pedidos</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<style>
-.btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
-}
 
-table tr:hover {
-    background-color: #f8f9fa;
-}
-
-.stat-box {
-    background: #3498db;
-    color: white;
-    padding: 20px;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 1.1em;
-}
-
-.stat-box span {
-    display: block;
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.alert {
-    display: flex;
-    align-items: center;
-}
-
-.alert::before {
-    content: "✅";
-    margin-right: 10px;
-    font-size: 1.2em;
-}
-</style>
 @endsection
