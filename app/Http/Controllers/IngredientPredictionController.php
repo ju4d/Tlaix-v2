@@ -70,8 +70,8 @@ class IngredientPredictionController extends Controller
         $historicalData = Order::where('status', 'received')
             ->where('created_at', '>=', $startDate)
             ->selectRaw('DATE(created_at) as date, COUNT(*) as orders_count')
-            ->groupBy('date')
-            ->orderBy('date')
+            ->groupByRaw('DATE(created_at)')
+            ->orderByRaw('DATE(created_at)')
             ->get();
 
         if ($historicalData->count() < 3) {

@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     PredictionController,
     SupplierController,
     ApiController,
-    DemandController
+    DemandController,
+    IngredientPredictionController
 };
 
 // Rutas públicas
@@ -49,8 +50,12 @@ Route::middleware(['auth'])->group(function () {
 
     // APIs de predicciones
     Route::prefix('api')->group(function () {
-        // Predicciones
+        // Predicciones generales
         Route::get('/predictions/{days}', [PredictionController::class, 'predict']);
+
+        // Predicciones por ingrediente
+        Route::get('/ingredient-predictions', [IngredientPredictionController::class, 'predictIngredientNeeds']);
+        Route::get('/ingredient-predictions/suggested-orders', [IngredientPredictionController::class, 'generateSuggestedOrders']);
 
         // Reportes
         Route::get('/waste-report', [ApiController::class, 'wasteReport']);
