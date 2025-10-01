@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
         // Predicciones por ingrediente
         Route::get('/ingredient-predictions', [IngredientPredictionController::class, 'predictIngredientNeeds']);
         Route::get('/ingredient-predictions/suggested-orders', [IngredientPredictionController::class, 'generateSuggestedOrders']);
+        Route::post('/ingredient-predictions/auto-create-order', [IngredientPredictionController::class, 'autoCreateOrder']);
 
         // Reportes
         Route::get('/waste-report', [ApiController::class, 'wasteReport']);

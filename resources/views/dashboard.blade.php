@@ -1,4 +1,3 @@
-<!-- Enhanced resources/views/dashboard.blade.php with Real-Time Predictions -->
 @extends('layouts.app')
 @section('title', 'Dashboard')
 @section('content')
@@ -6,43 +5,43 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-    <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
-        <div class="text-3xl font-bold">{{ $totalIngredients }}</div>
-        <div class="text-blue-100 mt-2">Insumos Totales</div>
+<div class="stats">
+    <div class="stat-box">
+        <span>{{ $totalIngredients }}</span>
+        Insumos Totales
     </div>
-    <div class="text-white p-6 rounded-lg shadow-lg {{ $lowStock > 0 ? 'bg-red-500' : 'bg-green-500' }}">
-        <div class="text-3xl font-bold">{{ $lowStock }}</div>
-        <div class="mt-2 {{ $lowStock > 0 ? 'text-red-100' : 'text-green-100' }}">Insumos bajos</div>
+    <div class="stat-box" style="background: {{ $lowStock > 0 ? '#e74c3c' : '#27ae60' }}">
+        <span>{{ $lowStock }}</span>
+        Insumos bajos
     </div>
-    <div class="bg-orange-500 text-white p-6 rounded-lg shadow-lg">
-        <div class="text-3xl font-bold">{{ $totalDishes }}</div>
-        <div class="text-orange-100 mt-2">Platillos Totales</div>
+    <div class="stat-box" style="background: #f39c12">
+        <span>{{ $totalDishes }}</span>
+        Platillos Totales
     </div>
-    <div class="bg-purple-500 text-white p-6 rounded-lg shadow-lg">
-        <div class="text-3xl font-bold">{{ $availableDishes }}</div>
-        <div class="text-purple-100 mt-2">Platillos Disponibles</div>
+    <div class="stat-box" style="background: #9b59b6">
+        <span>{{ $availableDishes }}</span>
+        Platillos Disponibles
     </div>
-    <div class="bg-indigo-500 text-white p-6 rounded-lg shadow-lg">
-        <div class="text-3xl font-bold">{{ $pendingOrders }}</div>
-        <div class="text-indigo-100 mt-2">Pedidos Pendientes</div>
+    <div class="stat-box" style="background: #B2C8DFFF">
+        <span>{{ $pendingOrders }}</span>
+        Pedidos Pendientes
     </div>
 </div>
 
 <!-- Two Column Layout -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
     <!-- Critical Stock Items -->
-    <div class="card" style="padding: 24px;">
-        <h3 style="margin-bottom: 20px; font-size: 20px;">Stock Crítico</h3>
+    <div class="card">
+        <h3>Stock Crítico</h3>
         @if($lowStockItems->count() > 0)
-            <table style="margin-top: 16px;">
-                <tr><th style="padding: 12px 8px;">Ingrediente</th><th style="padding: 12px 8px;">Actual</th><th style="padding: 12px 8px;">Mínimo</th><th style="padding: 12px 8px;">Estado</th></tr>
+            <table>
+                <tr><th>Ingrediente</th><th>Actual</th><th>Mínimo</th><th>Estado</th></tr>
                 @foreach($lowStockItems as $item)
                     <tr class="{{ $item->stock < $item->min_stock ? 'low-stock' : '' }}">
-                        <td style="padding: 12px 8px;">{{ $item->name }}</td>
-                        <td style="padding: 12px 8px;">{{ $item->stock }} {{ $item->unit }}</td>
-                        <td style="padding: 12px 8px;">{{ $item->min_stock }}</td>
-                        <td style="padding: 12px 8px;">
+                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->stock }} {{ $item->unit }}</td>
+                        <td>{{ $item->min_stock }}</td>
+                        <td>
                             @if($item->stock < $item->min_stock)
                                 <span style="color: #e74c3c; font-weight: bold;">CRÍTICO</span>
                             @else
@@ -53,32 +52,32 @@
                 @endforeach
             </table>
         @else
-            <p style="color: #27ae60;">✅ Todos los ingredientes cuentan con buen stock</p>
+            <p style="color: #27ae60;">Todos los ingredientes cuentan con buen stock</p>
         @endif
     </div>
 
     <!-- Quick Actions -->
     <div class="card">
         <h3>Acciones Rápidas</h3>
-        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 20px;">
-            <a href="{{ route('inventory.create') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">➕ Agregar Nuevo Ingrediente</a>
-            <a href="{{ route('dishes.create') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">🍽️ Crear Nuevo Platillo</a>
-            <a href="{{ route('orders.index') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">📦 Consultar Pedidos</a>
-            <a href="{{ route('reports') }}" class="quick-action-btn" style="padding: 16px 20px; font-size: 16px; border-radius: 8px;">📊 Generar Reportes</a>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="{{ route('inventory.create') }}" class="quick-action-btn">Agregar Nuevo Ingrediente</a>
+            <a href="{{ route('dishes.create') }}" class="quick-action-btn">Crear Nuevo Platillo</a>
+            <a href="{{ route('orders.index') }}" class="quick-action-btn">Consultar Pedidos</a>
+            <a href="{{ route('reports') }}" class="quick-action-btn">Generar Reportes</a>
         </div>
     </div>
 </div>
 
 <!-- Real-Time Demand Statistics -->
-<div class="card" style="margin-top: 30px; padding: 24px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <h3 style="font-size: 20px; margin: 0;">📊 Estadísticas de Demanda en Tiempo Real</h3>
-        <div style="display: flex; gap: 16px; align-items: center;">
-            <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
-                📝 Registrar Demanda
+<div class="card" style="margin-top: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h3>Estadísticas de Demanda en Tiempo Real</h3>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60;">
+                Registrar Demanda
             </button>
-            <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
-                🔄 Auto-registrar Hoy
+            <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12;">
+                Auto-registrar Hoy
             </button>
             <span class="status-indicator">
                 <span class="status-dot"></span>
@@ -91,41 +90,41 @@
     <div id="alertContainer"></div>
 
     <!-- Demand Stats Mini Cards -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
-        <div class="mini-stat-card" style="border-left: 4px solid #3498db; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Hoy</div>
-            <div class="mini-stat-value" id="demandToday" style="margin-bottom: 8px;">-</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
+        <div class="mini-stat-card" style="border-left: 4px solid #3498db;">
+            <div class="mini-stat-label">Demanda Hoy</div>
+            <div class="mini-stat-value" id="demandToday">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #27ae60; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Semanal</div>
-            <div class="mini-stat-value" id="demandWeek" style="margin-bottom: 8px;">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #27ae60;">
+            <div class="mini-stat-label">Demanda Semanal</div>
+            <div class="mini-stat-value" id="demandWeek">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #f39c12; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Mensual</div>
-            <div class="mini-stat-value" id="demandMonth" style="margin-bottom: 8px;">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #f39c12;">
+            <div class="mini-stat-label">Demanda Mensual</div>
+            <div class="mini-stat-value" id="demandMonth">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #9b59b6; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Promedio Diario</div>
-            <div class="mini-stat-value" id="demandAvg" style="margin-bottom: 8px;">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #9b59b6;">
+            <div class="mini-stat-label">Promedio Diario</div>
+            <div class="mini-stat-value" id="demandAvg">-</div>
             <small>unidades</small>
         </div>
     </div>
 </div>
 
 <!-- Ingredient Predictions -->
-<div class="card" style="margin-top: 30px; padding: 24px;">
-    <h3 style="font-size: 20px; margin-bottom: 20px;">🔮 Predicciones de Reabastecimiento por Ingrediente</h3>
+<div class="card" style="margin-top: 20px;">
+    <h3>Predicciones de Reabastecimiento por Ingrediente</h3>
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
         <button onclick="loadIngredientPredictions(7)" class="btn btn-primary">7 días</button>
         <button onclick="loadIngredientPredictions(14)" class="btn">14 días</button>
         <button onclick="loadIngredientPredictions(30)" class="btn">30 días</button>
         <button onclick="loadSuggestedOrders()" class="btn" style="background: #27ae60; margin-left: auto;">
-            📋 Ver Órdenes Sugeridas
+            Ver Órdenes Sugeridas
         </button>
-        <span id="loadingIngredients" style="display: none; color: #3498db;">⏳ Calculando...</span>
+        <span id="loadingIngredients" style="display: none; color: #3498db;">Calculando...</span>
     </div>
 
     <!-- Summary Cards -->
@@ -137,11 +136,11 @@
 
 <!-- Recent Activity -->
 <div class="card" style="margin-top: 20px;">
-    <h3>📋 Actividad Reciente y Pendientes</h3>
+    <h3>Actividad Reciente y Pendientes</h3>
     <div id="recentActivity">
         @if($pendingOrders > 0)
             <div class="activity-item">
-                <span class="activity-icon">📦</span>
+                <span class="activity-icon"></span>
                 <span>{{ $pendingOrders }} Órdenes pendientes</span>
                 <span class="activity-time">Ahora</span>
             </div>
@@ -149,14 +148,14 @@
 
         @if($lowStock > 0)
             <div class="activity-item">
-                <span class="activity-icon">⚠️</span>
+                <span class="activity-icon"></span>
                 <span>{{ $lowStock }} ingredientes bajo el mínimo</span>
                 <span class="activity-time">Ahora</span>
             </div>
         @endif
 
         <div class="activity-item">
-            <span class="activity-icon">✅</span>
+            <span class="activity-icon"></span>
             <span>Dashboard cargado correctamente</span>
             <span class="activity-time">Justo ahora</span>
         </div>
@@ -181,10 +180,10 @@
             </div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button type="submit" class="btn btn-success" style="flex: 1; background: #27ae60; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer;">
-                    💾 Guardar
+                    Guardar
                 </button>
                 <button type="button" class="btn" onclick="closeRecordModal()" style="flex: 1; background: #95a5a6; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer;">
-                    ✖ Cancelar
+                    Cancelar
                 </button>
             </div>
         </form>
@@ -195,7 +194,7 @@
 <div id="ordersModal" class="modal">
     <div class="modal-content" style="max-width: 900px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">📋 Órdenes de Compra Sugeridas</h2>
+            <h2 style="margin: 0;"Órdenes de Compra Sugeridas</h2>
             <button onclick="closeOrdersModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #7f8c8d;">×</button>
         </div>
         <div id="suggestedOrdersContent"></div>
@@ -441,6 +440,7 @@
     align-items: center;
     gap: 10px;
 }
+
 </style>
 
 <script>
@@ -462,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Actualización automática cada 30 segundos
     autoRefreshInterval = setInterval(() => {
         loadDemandSummary();
-        console.log('📊 Datos actualizados automáticamente');
+        console.log('Datos actualizados automáticamente');
     }, 30000);
 });
 
@@ -513,21 +513,21 @@ async function recordDemand(event) {
         const data = await response.json();
 
         if (data.success) {
-            showAlert('✅ Demanda registrada correctamente', 'success');
+            showAlert('Demanda registrada correctamente', 'success');
             closeRecordModal();
             loadDemandSummary();
         } else {
-            showAlert('❌ Error: ' + (data.error || 'Error desconocido'), 'error');
+            showAlert('Error: ' + (data.error || 'Error desconocido'), 'error');
         }
     } catch (error) {
-        showAlert('❌ Error de conexión: ' + error.message, 'error');
+        showAlert('Error de conexión: ' + error.message, 'error');
     }
 }
 
 // Auto-registrar demanda del día
 async function autoRecordDemand() {
     try {
-        showAlert('🔄 Registrando demanda automáticamente...', 'success');
+        showAlert('Registrando demanda automáticamente...', 'success');
 
         const response = await fetch('/api/demand/auto-record', {
             method: 'POST',
@@ -540,16 +540,16 @@ async function autoRecordDemand() {
 
         if (data.success) {
             if (data.recorded) {
-                showAlert(`✅ Demanda registrada: ${data.quantity} unidades`, 'success');
+                showAlert(`Demanda registrada: ${data.quantity} unidades`, 'success');
             } else {
-                showAlert('ℹ️ No hay datos para registrar hoy', 'success');
+                showAlert('No hay datos para registrar hoy', 'success');
             }
             loadDemandSummary();
         } else {
-            showAlert('❌ Error: ' + (data.error || 'No hay datos para registrar'), 'error');
+            showAlert('Error: ' + (data.error || 'No hay datos para registrar'), 'error');
         }
     } catch (error) {
-        showAlert('❌ Error: ' + error.message, 'error');
+        showAlert('Error: ' + error.message, 'error');
     }
 }
 
@@ -644,11 +644,11 @@ function displayIngredientPredictions(predictions, days) {
     if (needsRestock.length > 0) {
         html += `
             <div style="background: #fff3cd; border-left: 4px solid #f39c12; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                <h4 style="margin: 0 0 10px 0;">⚠️ ${needsRestock.length} Ingrediente(s) necesitan reabastecimiento en los próximos ${days} días</h4>
+                <h4 style="margin: 0 0 10px 0;"> ${needsRestock.length} Ingrediente(s) necesitan reabastecimiento en los próximos ${days} días</h4>
             </div>
         `;
 
-        html += '<h4>🚨 Ingredientes Críticos y Prioritarios</h4>';
+        html += '<h4>Ingredientes Críticos y Prioritarios</h4>';
         html += '<table class="prediction-table">';
         html += `
             <thead>
@@ -670,9 +670,9 @@ function displayIngredientPredictions(predictions, days) {
         needsRestock.forEach(pred => {
             const urgencyClass = `urgency-${pred.urgency}`;
             const urgencyText = {
-                'critical': '🔴 CRÍTICO',
-                'high': '🟠 ALTO',
-                'medium': '🟡 MEDIO'
+                'critical': 'CRÍTICO',
+                'high': 'ALTO',
+                'medium': 'MEDIO'
             }[pred.urgency];
 
             const rowBg = pred.urgency === 'critical' ? 'background: #ffe6e6;' :
@@ -718,7 +718,7 @@ function displayIngredientPredictions(predictions, days) {
     } else {
         html += `
             <div style="background: #d4edda; border-left: 4px solid #27ae60; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
-                <h4 style="margin: 0; color: #27ae60;">✅ Todos los ingredientes tienen stock suficiente para los próximos ${days} días</h4>
+                <h4 style="margin: 0; color: #27ae60;">Todos los ingredientes tienen stock suficiente para los próximos ${days} días</h4>
             </div>
         `;
     }
@@ -728,7 +728,7 @@ function displayIngredientPredictions(predictions, days) {
         html += `
             <div style="margin-top: 30px;">
                 <h4 style="cursor: pointer;" onclick="toggleOthers()">
-                    📊 Otros Ingredientes con Stock Normal (${others.length})
+                    Otros Ingredientes con Stock Normal (${others.length})
                     <span id="toggleIcon">▼</span>
                 </h4>
                 <div id="othersTable" style="display: none;">
@@ -752,7 +752,7 @@ function displayIngredientPredictions(predictions, days) {
                     <td>${pred.current_stock.toFixed(1)} ${pred.unit}</td>
                     <td>${pred.projected_consumption.toFixed(1)} ${pred.unit}</td>
                     <td><strong style="color: #27ae60;">${pred.stock_after_period.toFixed(1)}</strong> ${pred.unit}</td>
-                    <td><span class="urgency-normal">✅ OK</span></td>
+                    <td><span class="urgency-normal">OK</span></td>
                 </tr>
             `;
         });
@@ -801,7 +801,7 @@ function displaySuggestedOrders(data) {
     if (data.total_items === 0) {
         container.innerHTML = `
             <div style="text-align: center; padding: 40px; color: #27ae60;">
-                <div style="font-size: 3em; margin-bottom: 20px;">✅</div>
+                <div style="font-size: 3em; margin-bottom: 20px;"></div>
                 <h3>No hay ingredientes que necesiten reabastecimiento</h3>
                 <p>Todos los ingredientes tienen stock suficiente.</p>
             </div>
@@ -829,7 +829,7 @@ function displaySuggestedOrders(data) {
     `;
 
     data.suggested_orders.forEach((order, index) => {
-        const supplierIcon = order.supplier_id ? '🏢' : '⚠️';
+        const supplierIcon = order.supplier_id ? '' : '';
         const borderColor = order.supplier_id ? '#3498db' : '#e74c3c';
 
         html += `
@@ -858,11 +858,11 @@ function displaySuggestedOrders(data) {
         order.items.forEach(item => {
             const urgencyClass = `urgency-${item.urgency}`;
             const urgencyEmoji = {
-                'critical': '🔴',
-                'high': '🟠',
-                'medium': '🟡',
-                'low': '🟢',
-                'normal': '✅'
+                'critical': '',
+                'high': '',
+                'medium': '',
+                'low': '',
+                'normal': ''
             }[item.urgency];
 
             html += `
@@ -890,17 +890,22 @@ function displaySuggestedOrders(data) {
                 </div>
 
                 ${order.supplier_id ? `
-                    <div style="margin-top: 15px; text-align: right;">
+                    <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+                        <button onclick="autoCreateOrder(${order.supplier_id})"
+                                class="btn btn-success"
+                                style="background: #27ae60; padding: 10px 20px;">
+                            Crear Pedido Automático
+                        </button>
                         <a href="/orders/create?supplier_id=${order.supplier_id}"
-                           class="btn btn-success"
-                           style="background: #27ae60; padding: 10px 20px; color: white; text-decoration: none; display: inline-block; border-radius: 4px;">
-                            📦 Crear Pedido
+                           class="btn"
+                           style="background: #3498db; padding: 10px 20px; color: white; text-decoration: none; display: inline-block; border-radius: 4px;">
+                            Crear Manualmente
                         </a>
                     </div>
                 ` : `
                     <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 4px;">
                         <small style="color: #856404;">
-                            ⚠️ Asigna un proveedor a estos ingredientes para poder crear el pedido automáticamente.
+                            Asigna un proveedor a estos ingredientes para poder crear el pedido automáticamente.
                         </small>
                     </div>
                 `}
@@ -911,10 +916,10 @@ function displaySuggestedOrders(data) {
     html += `
         <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
             <button onclick="exportOrdersToCSV()" class="btn" style="background: #3498db;">
-                📄 Exportar CSV
+                Exportar CSV
             </button>
             <button onclick="window.print()" class="btn" style="background: #95a5a6;">
-                🖨️ Imprimir
+                Imprimir
             </button>
         </div>
     `;
@@ -953,10 +958,10 @@ function exportOrdersToCSV() {
             link.click();
             document.body.removeChild(link);
 
-            showAlert('✅ CSV exportado correctamente', 'success');
+            showAlert('CSV exportado correctamente', 'success');
         })
         .catch(error => {
-            showAlert('❌ Error al exportar: ' + error.message, 'error');
+            showAlert('Error al exportar: ' + error.message, 'error');
         });
 }
 
@@ -982,5 +987,43 @@ window.addEventListener('beforeunload', () => {
         clearInterval(autoRefreshInterval);
     }
 });
+
+// Crear pedido automáticamente
+async function autoCreateOrder(supplierId) {
+    if (!confirm('¿Crear pedido automático con las cantidades recomendadas?\n\nEsto creará un pedido en estado PENDIENTE que podrás revisar antes de confirmarlo.')) {
+        return;
+    }
+
+    showAlert('Creando pedido automáticamente...', 'success');
+
+    try {
+        const response = await fetch('/api/ingredient-predictions/auto-create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                supplier_id: supplierId,
+                days: currentPredictionDays
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAlert(`Pedido #${data.order_id} creado exitosamente con ${data.items_count} productos. Total: ${data.total.toFixed(2)}`, 'success');
+
+            // Cerrar modal y redirigir después de 2 segundos
+            setTimeout(() => {
+                window.location.href = data.redirect_url;
+            }, 2000);
+        } else {
+            showAlert('Error: ' + data.error, 'error');
+        }
+    } catch (error) {
+        showAlert('Error de conexión: ' + error.message, 'error');
+    }
+}
 </script>
 @endsection

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Ingredient;
 use App\Models\Dish;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -289,7 +290,8 @@ class IngredientPredictionController extends Controller
         $days = $request->input('days', 7);
 
         try {
-            $predictionResult = $this->predictIngredientNeeds($request);
+            $predictionRequest = new Request(['days' => $days]);
+            $predictionResult = $this->predictIngredientNeeds($predictionRequest);
             $predictions = $predictionResult->getData()->predictions;
 
             // Filtrar solo los que necesitan reabastecimiento
@@ -344,6 +346,109 @@ class IngredientPredictionController extends Controller
             return response()->json([
                 'success' => false,
                 'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Crea automáticamente un pedido basado en las predicciones
+     */
+    public function autoCreateOrder(Request $request)
+    {
+        $supplierId = $request->input('supplier_id');
+        $days = $request->input('days', 7);
+
+        if (!$supplierId) {
+            return response()->json([
+                'success' => false,
+                'error' => 'ID de proveedor requerido'
+            ], 400);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Obtener predicciones
+            $predictionRequest = new Request(['days' => $days]);
+            $predictionsResponse = $this->predictIngredientNeeds($predictionRequest);
+            $predictions = $predictionsResponse->getData()->predictions;
+
+            // Filtrar ingredientes del proveedor que necesitan reabastecimiento
+            $itemsForSupplier = array_filter($predictions, function($pred) use ($supplierId) {
+                return $pred->needs_restock &&
+                       $pred->supplier &&
+                       $pred->supplier->id == $supplierId;
+            });
+
+            if (empty($itemsForSupplier)) {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'error' => 'No hay ingredientes para ordenar de este proveedor'
+                ], 400);
+            }
+
+            // Crear la orden
+            $order = Order::create([
+                'supplier_id' => $supplierId,
+                'date' => now(),
+                'status' => 'pending',
+                'total' => 0
+            ]);
+
+            $total = 0;
+            $itemsCreated = 0;
+
+            foreach ($itemsForSupplier as $pred) {
+                $ingredient = Ingredient::find($pred->ingredient_id);
+                if (!$ingredient) continue;
+
+                $unitCost = $ingredient->cost ?? 0;
+                $subtotal = $pred->recommended_order_quantity * $unitCost;
+
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'ingredient_id' => $pred->ingredient_id,
+                    'quantity' => $pred->recommended_order_quantity,
+                    'unit_cost' => $unitCost,
+                    'subtotal' => $subtotal
+                ]);
+
+                $total += $subtotal;
+                $itemsCreated++;
+            }
+
+            // Actualizar total
+            $order->update(['total' => $total]);
+
+            DB::commit();
+
+            Log::info('Pedido automático creado', [
+                'order_id' => $order->id,
+                'supplier_id' => $supplierId,
+                'total' => $total,
+                'items' => $itemsCreated
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pedido creado automáticamente',
+                'order_id' => $order->id,
+                'total' => $total,
+                'items_count' => $itemsCreated,
+                'redirect_url' => route('orders.show', $order->id)
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creando pedido automático', [
+                'error' => $e->getMessage(),
+                'supplier_id' => $supplierId
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'error' => 'Error al crear el pedido: ' . $e->getMessage()
             ], 500);
         }
     }
