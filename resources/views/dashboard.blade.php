@@ -235,7 +235,7 @@
 
 <!-- Ingredient Predictions -->
 <div class="card" style="margin-top: 30px; padding: 24px;">
-    <h3 style="font-size: 20px; margin-bottom: 20px;">🔮 Predicciones de Reabastecimiento por Ingrediente</h3>
+    <h3 style="font-size: 20px; margin-bottom: 20px;">Predicciones de Reabastecimiento por Ingrediente</h3>
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
         <button onclick="loadIngredientPredictions(7)" class="btn btn-primary">7 días</button>
         <button onclick="loadIngredientPredictions(14)" class="btn">14 días</button>
