@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es" class="h-full">
 <head>
-    <link rel="icon" type="image/png" href="{{ asset('logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('Tlaix.png') }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tlaix - @yield('title')</title>
