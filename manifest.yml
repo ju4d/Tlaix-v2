@@ -1,0 +1,12 @@
+---
+applications:
+- name: tlaix-app
+  memory: 512M
+  instances: 1
+  buildpacks:
+    - https://github.com/cloudfoundry/php-buildpack
+  env:
+    APP_ENV: production
+    APP_DEBUG: false
+    APP_KEY: base64:YOUR_APP_KEY_HERE
+    LOG_CHANNEL: stderr
