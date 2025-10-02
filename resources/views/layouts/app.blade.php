@@ -25,29 +25,31 @@
     @unless(request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register'))
     <nav class="bg-primary shadow-lg">
         <div class="px-4 py-4">
-            <div class="flex items-center space-x-8">
-                <a href="{{ url('/dashboard') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
-                    Dashboards
-                </a>
-                <a href="{{ route('inventory.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
-                    Inventario
-                </a>
-                <a href="{{ route('dishes.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
-                    Platillos
-                </a>
-                <a href="{{ route('orders.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
-                    Pedidos
-                </a>
-                <a href="{{ route('reports') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
-                    Reportes
-                </a>
-                <a href="{{ route('suppliers.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
-                    Proveedores
-                </a>
-                <a href="{{ route('logout') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-red-500 hover:bg-opacity-20 transition duration-300 ml-auto">
-                    Salir
-                </a>
-                <img src="{{ asset('logo.png') }}" class="h-10 w-10" >
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-8">
+                    <a href="{{ url('/dashboard') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                        Dashboards
+                    </a>
+                    <a href="{{ route('inventory.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                        Inventario
+                    </a>
+                    <a href="{{ route('dishes.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                        Platillos
+                    </a>
+                    <a href="{{ route('orders.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                        Pedidos
+                    </a>
+                    <a href="{{ route('reports') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                        Reportes
+                    </a>
+                    <a href="{{ route('suppliers.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                        Proveedores
+                    </a>
+                    <a href="{{ route('logout') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-red-500 hover:bg-opacity-20 transition duration-300">
+                        Salir
+                    </a>
+                </div>
+                <img src="{{ asset('Tlaix.png') }}" class="h-14 w-14" >
             </div>
         </div>
     </nav>
