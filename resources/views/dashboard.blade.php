@@ -171,16 +171,6 @@
                                 <div class="{{ $barColor }} h-4 rounded-full transition-all duration-300" style="width: {{ $percentage }}%"></div>
                             </div>
                         </div>
-                        
-                        <div class="text-center">
-                            <a href="{{ route('inventory.edit', $item->id) }}" 
-                               class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white {{ $item->stock < $item->min_stock ? 'bg-red-600 hover:bg-red-700' : 'bg-yellow-600 hover:bg-yellow-700' }} transition duration-150 shadow-md hover:shadow-lg">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                                Actualizar Stock
-                            </a>
-                        </div>
                     </div>
                 </div>
             @endforeach

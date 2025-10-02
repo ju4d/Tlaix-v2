@@ -20,7 +20,8 @@
     </script>
 </head>
 <body class="h-full bg-gray-50 font-sans">
-    <!-- Navigation -->
+    <!-- Navigation (oculta en páginas de autenticación) -->
+    @unless(request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register'))
     <nav class="bg-primary shadow-lg">
         <div class="px-4 py-4">
             <div class="flex items-center space-x-8">
@@ -48,9 +49,11 @@
             </div>
         </div>
     </nav>
+    @endunless
     
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-6 py-8">
+    <main class="max-w-7xl mx-auto px-6 {{ request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register') ? 'py-16' : 'py-8' }}">
+        @unless(request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register'))
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-primary mb-4">@yield('title')</h1>
             @if(session('user_name')) 
@@ -63,6 +66,10 @@
         <div class="bg-white rounded-lg shadow-sm p-6">
             @yield('content')
         </div>
+        @else
+        <!-- Contenido de autenticación sin navegación -->
+        @yield('content')
+        @endunless
     </main>
 </body>
 </html>
