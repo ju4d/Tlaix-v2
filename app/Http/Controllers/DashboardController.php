@@ -18,10 +18,11 @@ class DashboardController extends Controller
         $availableDishes = Dish::where('available', true)->count();
         $pendingOrders = Order::where('status', 'pending')->count();
 
-        // Ejemplo: top 5 ingredientes con menos stock
-        $lowStockItems = Ingredient::orderByRaw('stock - min_stock ASC')
+        // Ingredientes con stock crítico
+        $lowStockItems = Ingredient::whereColumn('stock', '<=', 'min_stock')
+                            ->orderByRaw('stock - min_stock ASC')
                             ->take(5)
-                            ->get(['name', 'stock', 'min_stock']);
+                            ->get(['id', 'name', 'stock', 'min_stock', 'unit', 'category']);
 
         return view('dashboard', compact(
             'totalIngredients',

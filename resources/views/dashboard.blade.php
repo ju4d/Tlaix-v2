@@ -5,79 +5,209 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
 <!-- Stats Grid -->
-<div class="stats">
-    <div class="stat-box">
-        <span>{{ $totalIngredients }}</span>
-        Insumos Totales
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+    <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $totalIngredients }}</div>
+        <div class="text-blue-100 mt-2">Insumos Totales</div>
     </div>
-    <div class="stat-box" style="background: {{ $lowStock > 0 ? '#e74c3c' : '#27ae60' }}">
-        <span>{{ $lowStock }}</span>
-        Insumos bajos
+    <div class="text-white p-6 rounded-lg shadow-lg {{ $lowStock > 0 ? 'bg-red-500' : 'bg-green-500' }}">
+        <div class="text-3xl font-bold">{{ $lowStock }}</div>
+        <div class="mt-2 {{ $lowStock > 0 ? 'text-red-100' : 'text-green-100' }}">Insumos bajos</div>
     </div>
-    <div class="stat-box" style="background: #f39c12">
-        <span>{{ $totalDishes }}</span>
-        Platillos Totales
+    <div class="bg-orange-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $totalDishes }}</div>
+        <div class="text-orange-100 mt-2">Platillos Totales</div>
     </div>
-    <div class="stat-box" style="background: #9b59b6">
-        <span>{{ $availableDishes }}</span>
-        Platillos Disponibles
+    <div class="bg-purple-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $availableDishes }}</div>
+        <div class="text-purple-100 mt-2">Platillos Disponibles</div>
     </div>
-    <div class="stat-box" style="background: #B2C8DFFF">
-        <span>{{ $pendingOrders }}</span>
-        Pedidos Pendientes
+    <div class="bg-indigo-500 text-white p-6 rounded-lg shadow-lg">
+        <div class="text-3xl font-bold">{{ $pendingOrders }}</div>
+        <div class="text-indigo-100 mt-2">Pedidos Pendientes</div>
     </div>
 </div>
 
-<!-- Two Column Layout -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-    <!-- Critical Stock Items -->
-    <div class="card">
-        <h3>Stock Crítico</h3>
-        @if($lowStockItems->count() > 0)
-            <table>
-                <tr><th>Ingrediente</th><th>Actual</th><th>Mínimo</th><th>Estado</th></tr>
-                @foreach($lowStockItems as $item)
-                    <tr class="{{ $item->stock < $item->min_stock ? 'low-stock' : '' }}">
-                        <td>{{ $item->name }}</td>
-                        <td>{{ $item->stock }} {{ $item->unit }}</td>
-                        <td>{{ $item->min_stock }}</td>
-                        <td>
-                            @if($item->stock < $item->min_stock)
-                                <span style="color: #e74c3c; font-weight: bold;">CRÍTICO</span>
-                            @else
-                                <span style="color: #f39c12;">LOW</span>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </table>
-        @else
-            <p style="color: #27ae60;">Todos los ingredientes cuentan con buen stock</p>
-        @endif
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="card">
-        <h3>Acciones Rápidas</h3>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="{{ route('inventory.create') }}" class="quick-action-btn">Agregar Nuevo Ingrediente</a>
-            <a href="{{ route('dishes.create') }}" class="quick-action-btn">Crear Nuevo Platillo</a>
-            <a href="{{ route('orders.index') }}" class="quick-action-btn">Consultar Pedidos</a>
-            <a href="{{ route('reports') }}" class="quick-action-btn">Generar Reportes</a>
+<!-- Quick Actions Section -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex items-center mb-6">
+        <div class="bg-blue-100 p-3 rounded-full mr-4">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
         </div>
+        <h3 class="text-xl font-bold text-gray-900">Acciones Rápidas</h3>
     </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <a href="{{ route('inventory.create') }}" class="group bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+            <div class="flex items-center">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">Agregar</div>
+                    <div class="text-xs opacity-90">Nuevo Ingrediente</div>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ route('dishes.create') }}" class="group bg-gradient-to-r from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+            <div class="flex items-center">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">Crear</div>
+                    <div class="text-xs opacity-90">Nuevo Platillo</div>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ route('orders.index') }}" class="group bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+            <div class="flex items-center">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0H4m16 0l-2-2m-14 2l2-2"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">Consultar</div>
+                    <div class="text-xs opacity-90">Pedidos</div>
+                </div>
+            </div>
+        </a>
+
+        <a href="{{ route('reports') }}" class="group bg-gradient-to-r from-indigo-400 to-indigo-600 hover:from-indigo-500 hover:to-indigo-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+            <div class="flex items-center">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">Generar</div>
+                    <div class="text-xs opacity-90">Reportes</div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Critical Stock Items - Full Width -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex items-center mb-6">
+        <div class="bg-red-100 p-3 rounded-full mr-4">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900">Stock Crítico</h3>
+    </div>
+        
+    @if($lowStockItems->count() > 0)
+        <div class="space-y-4">
+            @foreach($lowStockItems as $item)
+                <div class="border-l-4 {{ $item->stock < $item->min_stock ? 'border-red-500 bg-red-50' : 'border-yellow-500 bg-yellow-50' }} p-6 rounded-r-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <h4 class="font-bold text-xl text-gray-900 mr-4">{{ $item->name }}</h4>
+                            @if($item->category)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    {{ ucfirst($item->category) }}
+                                </span>
+                            @endif
+                        </div>
+                        
+                        @if($item->stock < $item->min_stock)
+                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                CRÍTICO
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                STOCK BAJO
+                            </span>
+                        @endif
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+                        <div class="text-center">
+                            <span class="text-sm text-gray-500 block mb-1">Stock Actual</span>
+                            <span class="font-bold text-2xl {{ $item->stock < $item->min_stock ? 'text-red-600' : 'text-yellow-600' }}">
+                                {{ $item->stock }}
+                            </span>
+                            <span class="text-sm text-gray-600">{{ $item->unit }}</span>
+                        </div>
+                        
+                        <div class="text-center">
+                            <span class="text-sm text-gray-500 block mb-1">Stock Mínimo</span>
+                            <span class="font-bold text-2xl text-gray-900">{{ $item->min_stock }}</span>
+                            <span class="text-sm text-gray-600">{{ $item->unit }}</span>
+                        </div>
+                        
+                        <div class="md:col-span-1">
+                            @php
+                                $percentage = $item->min_stock > 0 ? min(($item->stock / $item->min_stock) * 100, 100) : 100;
+                                $barColor = $item->stock < $item->min_stock ? 'bg-red-500' : 'bg-yellow-500';
+                                $bgColor = $item->stock < $item->min_stock ? 'bg-red-100' : 'bg-yellow-100';
+                            @endphp
+                            <div class="text-center mb-2">
+                                <span class="text-sm font-medium text-gray-600">Nivel de Stock</span>
+                                <div class="text-lg font-bold {{ $item->stock < $item->min_stock ? 'text-red-600' : 'text-yellow-600' }}">
+                                    {{ number_format($percentage, 0) }}%
+                                </div>
+                            </div>
+                            <div class="w-full {{ $bgColor }} rounded-full h-4">
+                                <div class="{{ $barColor }} h-4 rounded-full transition-all duration-300" style="width: {{ $percentage }}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{{ route('inventory.edit', $item->id) }}" 
+                               class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg text-white {{ $item->stock < $item->min_stock ? 'bg-red-600 hover:bg-red-700' : 'bg-yellow-600 hover:bg-yellow-700' }} transition duration-150 shadow-md hover:shadow-lg">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                                Actualizar Stock
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <div class="text-center py-8">
+            <div class="bg-green-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">¡Excelente!</h4>
+            <p class="text-gray-600">Todos los ingredientes tienen buen stock</p>
+        </div>
+    @endif
 </div>
 
 <!-- Real-Time Demand Statistics -->
-<div class="card" style="margin-top: 20px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <h3>Estadísticas de Demanda en Tiempo Real</h3>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60;">
-                Registrar Demanda
+<div class="card" style="margin-top: 30px; padding: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h3 style="font-size: 20px; margin: 0;">📊 Estadísticas de Demanda en Tiempo Real</h3>
+        <div style="display: flex; gap: 16px; align-items: center;">
+            <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
+                📝 Registrar Demanda
             </button>
-            <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12;">
-                Auto-registrar Hoy
+            <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
+                🔄 Auto-registrar Hoy
             </button>
             <span class="status-indicator">
                 <span class="status-dot"></span>
@@ -90,33 +220,33 @@
     <div id="alertContainer"></div>
 
     <!-- Demand Stats Mini Cards -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px;">
-        <div class="mini-stat-card" style="border-left: 4px solid #3498db;">
-            <div class="mini-stat-label">Demanda Hoy</div>
-            <div class="mini-stat-value" id="demandToday">-</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+        <div class="mini-stat-card" style="border-left: 4px solid #3498db; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Hoy</div>
+            <div class="mini-stat-value" id="demandToday" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #27ae60;">
-            <div class="mini-stat-label">Demanda Semanal</div>
-            <div class="mini-stat-value" id="demandWeek">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #27ae60; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Semanal</div>
+            <div class="mini-stat-value" id="demandWeek" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #f39c12;">
-            <div class="mini-stat-label">Demanda Mensual</div>
-            <div class="mini-stat-value" id="demandMonth">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #f39c12; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Mensual</div>
+            <div class="mini-stat-value" id="demandMonth" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #9b59b6;">
-            <div class="mini-stat-label">Promedio Diario</div>
-            <div class="mini-stat-value" id="demandAvg">-</div>
+        <div class="mini-stat-card" style="border-left: 4px solid #9b59b6; padding: 20px;">
+            <div class="mini-stat-label" style="margin-bottom: 8px;">Promedio Diario</div>
+            <div class="mini-stat-value" id="demandAvg" style="margin-bottom: 8px;">-</div>
             <small>unidades</small>
         </div>
     </div>
 </div>
 
 <!-- Ingredient Predictions -->
-<div class="card" style="margin-top: 20px;">
-    <h3>Predicciones de Reabastecimiento por Ingrediente</h3>
+<div class="card" style="margin-top: 30px; padding: 24px;">
+    <h3 style="font-size: 20px; margin-bottom: 20px;">🔮 Predicciones de Reabastecimiento por Ingrediente</h3>
     <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
         <button onclick="loadIngredientPredictions(7)" class="btn btn-primary">7 días</button>
         <button onclick="loadIngredientPredictions(14)" class="btn">14 días</button>
