@@ -190,13 +190,13 @@
 <!-- Real-Time Demand Statistics -->
 <div class="card" style="margin-top: 30px; padding: 24px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <h3 style="font-size: 20px; margin: 0;">📊 Estadísticas de Demanda en Tiempo Real</h3>
+        <h3 style="font-size: 20px; margin: 0;">Estadísticas de Demanda en Tiempo Real</h3>
         <div style="display: flex; gap: 16px; align-items: center;">
             <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
-                📝 Registrar Demanda
+                Registrar Demanda
             </button>
             <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
-                🔄 Auto-registrar Hoy
+                Auto-registrar Hoy
             </button>
             <span class="status-indicator">
                 <span class="status-dot"></span>
