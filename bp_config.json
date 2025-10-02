@@ -1,0 +1,19 @@
+{
+    "PHP_VERSION": "{PHP_81_LATEST}",
+    "PHP_EXTENSIONS": [
+        "mysqli",
+        "pdo",
+        "pdo_mysql",
+        "mbstring",
+        "openssl",
+        "curl",
+        "json",
+        "zip"
+    ],
+    "WEBDIR": "public",
+    "PHP_FPM_ENABLE": true,
+    "COMPOSER_INSTALL_OPTIONS": [
+        "--no-dev",
+        "--optimize-autoloader"
+    ]
+}

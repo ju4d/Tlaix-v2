@@ -3,7 +3,6 @@
 @section('content')
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
-
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
     <div class="bg-blue-500 text-white p-6 rounded-lg shadow-lg">
@@ -38,7 +37,7 @@
         </div>
         <h3 class="text-xl font-bold text-gray-900">Acciones Rápidas</h3>
     </div>
-    
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <a href="{{ route('inventory.create') }}" class="group bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
             <div class="flex items-center">
@@ -108,7 +107,7 @@
         </div>
         <h3 class="text-xl font-bold text-gray-900">Stock Crítico</h3>
     </div>
-        
+
     @if($lowStockItems->count() > 0)
         <div class="space-y-4">
             @foreach($lowStockItems as $item)
@@ -122,7 +121,7 @@
                                 </span>
                             @endif
                         </div>
-                        
+
                         @if($item->stock < $item->min_stock)
                             <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
                                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -139,7 +138,7 @@
                             </span>
                         @endif
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
                         <div class="text-center">
                             <span class="text-sm text-gray-500 block mb-1">Stock Actual</span>
@@ -148,13 +147,13 @@
                             </span>
                             <span class="text-sm text-gray-600">{{ $item->unit }}</span>
                         </div>
-                        
+
                         <div class="text-center">
                             <span class="text-sm text-gray-500 block mb-1">Stock Mínimo</span>
                             <span class="font-bold text-2xl text-gray-900">{{ $item->min_stock }}</span>
                             <span class="text-sm text-gray-600">{{ $item->unit }}</span>
                         </div>
-                        
+
                         <div class="md:col-span-1">
                             @php
                                 $percentage = $item->min_stock > 0 ? min(($item->stock / $item->min_stock) * 100, 100) : 100;
