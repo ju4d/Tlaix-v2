@@ -58,10 +58,20 @@
                             </span>
                         </div>
                         
-                        <!-- Total -->
+                        <!-- Totales -->
                         <div class="text-right">
-                            <p class="text-sm text-gray-500">Total</p>
-                            <p class="text-2xl font-bold text-gray-900">${{ number_format($order->total, 2) }}</p>
+                            <div class="mb-1">
+                                <p class="text-xs text-gray-500">Subtotal</p>
+                                <p class="text-sm text-gray-700">${{ number_format($order->total, 2) }}</p>
+                            </div>
+                            <div class="mb-1">
+                                <p class="text-xs text-gray-500">IVA (16%)</p>
+                                <p class="text-sm text-gray-700">${{ number_format($order->total * 0.16, 2) }}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Total</p>
+                                <p class="text-2xl font-bold text-gray-900">${{ number_format($order->total * 1.16, 2) }}</p>
+                            </div>
                         </div>
                     </div>
 
@@ -233,7 +243,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-blue-100 text-sm font-medium">Total Invertido</p>
-                    <p class="text-3xl font-bold">${{ number_format($orders->whereNotIn('status', ['cancelled'])->sum('total'), 0) }}</p>
+                    <p class="text-3xl font-bold">${{ number_format($orders->whereNotIn('status', ['cancelled'])->sum('total') * 1.16, 2) }}</p>
                 </div>
                 <div class="bg-blue-500 bg-opacity-30 rounded-full p-3">
                     <svg class="w-8 h-8 text-blue-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">

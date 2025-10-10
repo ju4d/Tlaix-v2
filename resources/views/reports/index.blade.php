@@ -32,8 +32,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-green-100 text-sm font-medium uppercase tracking-wide">Valor Total</p>
-                <p class="text-3xl font-bold">${{ number_format($totalStockValue, 2) }}</p>
-                <p class="text-green-100 text-sm">Inventario</p>
+                <p class="text-3xl font-bold">${{ number_format($totalStockValue * 1.16, 2) }}</p>
+                <p class="text-sm text-green-100">Subtotal: ${{ number_format($totalStockValue, 2) }}</p>
+                <p class="text-sm text-green-100">IVA (16%): ${{ number_format($totalStockValue * 0.16, 2) }}</p>
+                <p class="text-green-100 text-xl">Inventario</p>
             </div>
             <div class="bg-green-400 bg-opacity-30 rounded-full p-3">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -448,7 +450,9 @@ function loadWasteReport() {
             let wasteHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div class="bg-red-500 text-white p-4 rounded-lg">
-                        <div class="text-2xl font-bold">$${data.total_waste_value.toFixed(2)}</div>
+                        <div class="text-2xl font-bold">$${(data.total_waste_value * 1.16).toFixed(2)}</div>
+                        <div class="text-sm text-red-100">Subtotal: $${data.total_waste_value.toFixed(2)}</div>
+                        <div class="text-sm text-red-100">IVA (16%): $${(data.total_waste_value * 0.16).toFixed(2)}</div>
                         <div class="text-red-100">Valor total del desperdicio</div>
                     </div>
                     <div class="bg-orange-500 text-white p-4 rounded-lg">

@@ -188,69 +188,129 @@
 </div>
 
 <!-- Real-Time Demand Statistics -->
-<div class="card" style="margin-top: 30px; padding: 24px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-        <h3 style="font-size: 20px; margin: 0;">Estadísticas de Demanda en Tiempo Real</h3>
-        <div style="display: flex; gap: 16px; align-items: center;">
-            <button onclick="openRecordModal()" class="btn btn-success" style="background: #27ae60; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Estadísticas de Demanda en Tiempo Real</h3>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button onclick="openRecordModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200 transform hover:scale-105 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
                 Registrar Demanda
             </button>
-            <button onclick="autoRecordDemand()" class="btn" style="background: #f39c12; padding: 12px 18px; font-size: 15px; border-radius: 8px;">
+            <button onclick="autoRecordDemand()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition duration-200 transform hover:scale-105 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 Auto-registrar Hoy
             </button>
-            <span class="status-indicator">
-                <span class="status-dot"></span>
+            <div class="flex items-center text-sm text-gray-600">
+                <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                 Actualización automática
-            </span>
+            </div>
         </div>
     </div>
 
     <!-- Alert Container -->
     <div id="alertContainer"></div>
 
-    <!-- Demand Stats Mini Cards -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
-        <div class="mini-stat-card" style="border-left: 4px solid #3498db; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Hoy</div>
-            <div class="mini-stat-value" id="demandToday" style="margin-bottom: 8px;">-</div>
-            <small>unidades</small>
+    <!-- Demand Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center mb-2">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <span class="text-sm opacity-90">Demanda Hoy</span>
+            </div>
+            <div class="text-3xl font-bold mb-1" id="demandToday">-</div>
+            <div class="text-sm text-blue-100">Platillos</div>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #27ae60; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Semanal</div>
-            <div class="mini-stat-value" id="demandWeek" style="margin-bottom: 8px;">-</div>
-            <small>unidades</small>
+        <div class="bg-gradient-to-r from-green-400 to-green-600 text-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center mb-2">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                </div>
+                <span class="text-sm opacity-90">Demanda Semanal</span>
+            </div>
+            <div class="text-3xl font-bold mb-1" id="demandWeek">-</div>
+            <div class="text-sm text-green-100">Platillos</div>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #f39c12; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Demanda Mensual</div>
-            <div class="mini-stat-value" id="demandMonth" style="margin-bottom: 8px;">-</div>
-            <small>unidades</small>
+        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center mb-2">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <span class="text-sm opacity-90">Demanda Mensual</span>
+            </div>
+            <div class="text-3xl font-bold mb-1" id="demandMonth">-</div>
+            <div class="text-sm text-yellow-100">Platillos</div>
         </div>
-        <div class="mini-stat-card" style="border-left: 4px solid #9b59b6; padding: 20px;">
-            <div class="mini-stat-label" style="margin-bottom: 8px;">Promedio Diario</div>
-            <div class="mini-stat-value" id="demandAvg" style="margin-bottom: 8px;">-</div>
-            <small>unidades</small>
+        <div class="bg-gradient-to-r from-purple-400 to-purple-600 text-white p-6 rounded-lg shadow-lg">
+            <div class="flex items-center mb-2">
+                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <span class="text-sm opacity-90">Promedio Diario</span>
+            </div>
+            <div class="text-3xl font-bold mb-1" id="demandAvg">-</div>
+            <div class="text-sm text-purple-100">Platillos</div>
         </div>
     </div>
 </div>
 
 <!-- Ingredient Predictions -->
-<div class="card" style="margin-top: 30px; padding: 24px;">
-    <h3 style="font-size: 20px; margin-bottom: 20px;">Predicciones de Reabastecimiento por Ingrediente</h3>
-    <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
-        <button onclick="loadIngredientPredictions(7)" class="btn btn-primary">7 días</button>
-        <button onclick="loadIngredientPredictions(14)" class="btn">14 días</button>
-        <button onclick="loadIngredientPredictions(30)" class="btn">30 días</button>
-        <button onclick="loadSuggestedOrders()" class="btn" style="background: #27ae60; margin-left: auto;">
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex items-center mb-6">
+        <div class="bg-green-100 p-3 rounded-full mr-4">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900">Predicciones de Reabastecimiento por Ingrediente</h3>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-4 mb-6">
+        <div class="flex space-x-2">
+            <button onclick="loadIngredientPredictions(7)" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">7 días</button>
+            <button onclick="loadIngredientPredictions(14)" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">14 días</button>
+            <button onclick="loadIngredientPredictions(30)" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200">30 días</button>
+        </div>
+        <button onclick="loadSuggestedOrders()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center ml-auto">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
             Ver Órdenes Sugeridas
         </button>
-        <span id="loadingIngredients" style="display: none; color: #3498db;">Calculando...</span>
+        <span id="loadingIngredients" class="hidden text-blue-600 items-center">
+            <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Calculando...
+        </span>
     </div>
 
     <!-- Summary Cards -->
-    <div id="predictionSummary" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px;"></div>
+    <div id="predictionSummary" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6"></div>
 
     <!-- Predictions Table -->
-    <div id="ingredientPredictions"></div>
+    <div id="ingredientPredictions" class="overflow-x-auto"></div>
 </div>
 
 <!-- Recent Activity -->
@@ -294,7 +354,7 @@
                 <input type="date" id="demandDate" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
             </div>
             <div class="form-group">
-                <label>Cantidad (unidades):</label>
+                <label>Cantidad (Platillos):</label>
                 <input type="number" id="demandQuantity" min="0" step="0.1" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
             </div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
@@ -659,7 +719,7 @@ async function autoRecordDemand() {
 
         if (data.success) {
             if (data.recorded) {
-                showAlert(`Demanda registrada: ${data.quantity} unidades`, 'success');
+                showAlert(`Demanda registrada: ${data.quantity} Platillos`, 'success');
             } else {
                 showAlert('No hay datos para registrar hoy', 'success');
             }
@@ -689,8 +749,30 @@ async function loadDemandSummary() {
 }
 
 // Cargar predicciones de ingredientes
+function showLoading() {
+    const loading = document.getElementById('loadingIngredients');
+    loading.classList.remove('hidden');
+    loading.classList.add('flex');
+}
+
+function hideLoading() {
+    const loading = document.getElementById('loadingIngredients');
+    loading.classList.add('hidden');
+    loading.classList.remove('flex');
+}
+
 async function loadIngredientPredictions(days) {
     currentPredictionDays = days;
+    
+    // Actualizar estado visual de los botones
+    document.querySelectorAll('button[onclick^="loadIngredientPredictions"]').forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+        btn.classList.add('bg-gray-500', 'hover:bg-gray-600');
+    });
+    event.target.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+    event.target.classList.add('bg-blue-500', 'hover:bg-blue-600');
+    
+    showLoading();
     const loading = document.getElementById('loadingIngredients');
     const container = document.getElementById('ingredientPredictions');
 
@@ -940,8 +1022,14 @@ function displaySuggestedOrders(data) {
                     <div style="font-size: 1.5em; color: #f39c12;">${data.total_items}</div>
                 </div>
                 <div>
-                    <strong>Costo Total Estimado:</strong>
-                    <div style="font-size: 1.5em; color: #27ae60;">${data.grand_total_cost.toFixed(2)}</div>
+                    <strong>Costo Total Estimado (con IVA):</strong>
+                    <div style="font-size: 1.5em; color: #27ae60;">
+                        $${(data.grand_total_cost * 1.16).toFixed(2)}
+                        <div style="font-size: 0.6em; color: #666;">
+                            Subtotal: $${data.grand_total_cost.toFixed(2)}<br>
+                            IVA (16%): $${(data.grand_total_cost * 0.16).toFixed(2)}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -956,7 +1044,11 @@ function displaySuggestedOrders(data) {
                 <h4>
                     ${supplierIcon} ${order.supplier_name}
                     <span style="margin-left: auto; font-size: 0.9em; color: #27ae60;">
-                        Total: ${order.total_cost.toFixed(2)}
+                        Total (con IVA): $${(order.total_cost * 1.16).toFixed(2)}
+                        <div style="font-size: 0.8em; color: #666;">
+                            Subtotal: $${order.total_cost.toFixed(2)}<br>
+                            IVA: $${(order.total_cost * 0.16).toFixed(2)}
+                        </div>
                     </span>
                 </h4>
                 ${order.supplier_contact ? `<p style="color: #7f8c8d; margin: 5px 0;">Contacto: ${order.supplier_contact}</p>` : ''}
@@ -976,12 +1068,12 @@ function displaySuggestedOrders(data) {
 
         order.items.forEach(item => {
             const urgencyClass = `urgency-${item.urgency}`;
-            const urgencyEmoji = {
-                'critical': '',
-                'high': '',
-                'medium': '',
-                'low': '',
-                'normal': ''
+            const urgencyText = {
+                'critical': 'CRÍTICO',
+                'high': 'ALTO',
+                'medium': 'MEDIO',
+                'low': 'BAJO',
+                'normal': 'NORMAL'
             }[item.urgency];
 
             html += `
@@ -994,10 +1086,14 @@ function displaySuggestedOrders(data) {
                         <strong>${item.recommended_order_quantity.toFixed(1)}</strong> ${item.unit}
                     </td>
                     <td style="padding: 8px; text-align: center;">
-                        <span class="${urgencyClass}">${urgencyEmoji} ${item.urgency.toUpperCase()}</span>
+                        <span class="${urgencyClass}">${urgencyText}</span>
                     </td>
                     <td style="padding: 8px; text-align: right;">
-                        <strong>${item.cost_estimate.toFixed(2)}</strong>
+                        <strong>${(item.cost_estimate * 1.16).toFixed(2)}</strong>
+                        <div style="font-size: 0.8em; color: #666;">
+                            Subtotal: $${item.cost_estimate.toFixed(2)}<br>
+                            IVA: $${(item.cost_estimate * 0.16).toFixed(2)}
+                        </div>
                     </td>
                 </tr>
             `;
