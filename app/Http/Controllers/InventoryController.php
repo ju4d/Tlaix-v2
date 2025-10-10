@@ -16,8 +16,19 @@ class InventoryController extends Controller {
         return view('inventory.create', compact('suppliers'));
     }
     public function store(Request $r){
+        $r->validate([
+            'name' => 'required|unique:ingredients,name,NULL,id,supplier_id,' . ($r->supplier_id ?? 'NULL'),
+            'category' => 'required|in:perecedero,no_perecedero,bebida,condimento',
+            'stock' => 'required|numeric|min:0',
+            'min_stock' => 'required|numeric|min:0',
+            'unit' => 'required|in:kg,lbs,pcs,liters,bottles',
+            'supplier_id' => 'nullable|exists:suppliers,id',
+            'cost' => 'nullable|numeric|min:0',
+            'expiration_date' => 'nullable|date|after:today'
+        ]);
+
         Ingredient::create($r->only(['name','category','expiration_date','stock','min_stock','unit','supplier_id','cost']));
-        return redirect()->route('inventory.index');
+        return redirect()->route('inventory.index')->with('success', 'Ingrediente agregado exitosamente.');
     }
     public function edit($id){
         $item = Ingredient::findOrFail($id);

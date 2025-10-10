@@ -31,7 +31,7 @@
                                value="{{ old('name') }}" 
                                placeholder="ej. Fresh Foods Co."
                                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md @error('name') border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500 @enderror">
-                        @error('name')
+                        @error('')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
