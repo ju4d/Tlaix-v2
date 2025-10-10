@@ -313,7 +313,7 @@
 <div id="ordersModal" class="modal">
     <div class="modal-content" style="max-width: 900px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;"Órdenes de Compra Sugeridas</h2>
+            <h2 style="margin: 0;"></h2>Órdenes de Compra Sugeridas</h2>
             <button onclick="closeOrdersModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #7f8c8d;">×</button>
         </div>
         <div id="suggestedOrdersContent"></div>

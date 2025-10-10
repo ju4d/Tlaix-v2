@@ -233,7 +233,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-blue-100 text-sm font-medium">Total Invertido</p>
-                    <p class="text-3xl font-bold">${{ number_format($orders->sum('total'), 0) }}</p>
+                    <p class="text-3xl font-bold">${{ number_format($orders->whereNotIn('status', ['cancelled'])->sum('total'), 0) }}</p>
                 </div>
                 <div class="bg-blue-500 bg-opacity-30 rounded-full p-3">
                     <svg class="w-8 h-8 text-blue-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
