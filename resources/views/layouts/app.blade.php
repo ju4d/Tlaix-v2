@@ -23,10 +23,11 @@
 <body class="h-full bg-gray-50 font-sans">
     <!-- Navigation (oculta en páginas de autenticación) -->
     @unless(request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register'))
-    <nav class="bg-primary shadow-lg">
+    <div class="h-20"><!-- Spacer for fixed nav --></div>
+    <nav class="bg-primary shadow-lg fixed top-0 left-0 right-0 z-50">
         <div class="px-4 py-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-8">
+                <div class="flex items-center space-x-8 overflow-x-auto whitespace-nowrap">
                     <a href="{{ url('/dashboard') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
                         Dashboards
                     </a>
@@ -45,6 +46,8 @@
                     <a href="{{ route('suppliers.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
                         Proveedores
                     </a>
+                    <a href="{{ route('waste.index') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300">
+                        Mermas
                     <a href="{{ route('logout') }}" class="text-white font-semibold text-lg px-6 py-3 rounded-lg hover:bg-red-500 hover:bg-opacity-20 transition duration-300">
                         Salir
                     </a>
@@ -56,7 +59,7 @@
     @endunless
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-6 {{ request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register') ? 'py-16' : 'py-8' }}">
+    <main class="max-w-7xl mx-auto px-6 {{ request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register') ? 'py-16' : 'mt-24 pb-8' }}">
         @unless(request()->routeIs('login') || request()->routeIs('register') || request()->is('login') || request()->is('register'))
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-primary mb-4">@yield('title')</h1>

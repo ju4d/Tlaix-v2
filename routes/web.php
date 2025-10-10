@@ -11,7 +11,8 @@ use App\Http\Controllers\{
     SupplierController,
     ApiController,
     DemandController,
-    IngredientPredictionController
+    IngredientPredictionController,
+    WasteController
 };
 
 // Rutas públicas
@@ -47,6 +48,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Reportes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+
+    // Rutas de mermas
+    Route::get('/waste', [WasteController::class, 'index'])->name('waste.index');
+    Route::post('/waste', [WasteController::class, 'store'])->name('waste.store');
 
     // APIs de predicciones
     Route::prefix('api')->group(function () {
