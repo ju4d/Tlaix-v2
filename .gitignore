@@ -22,3 +22,13 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Certificados y archivos de configuración
+mysql-cert.pem
+.env.*
+
+# Archivos de Docker
+.docker
+dockerfile.backup
+dockerfile.optimized
+
