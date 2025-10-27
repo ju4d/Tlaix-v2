@@ -38,7 +38,7 @@ class CocinaController extends Controller
         // Si todos los platillos de la orden están completos, marcar la orden como completada
         $order = $item->order;
         if ($order->dishes()->where('completed', false)->count() === 0) {
-            $order->status = 'completed';
+            $order->status = 'completada'; // Debe coincidir con el enum de la migración
             $order->save();
         }
         return back()->with('success', 'Platillo marcado como hecho y stock descontado.');
