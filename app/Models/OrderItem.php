@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model {
+    public function dish() {
+        return $this->belongsTo(Dish::class);
+    }
     protected $fillable = ['order_id','ingredient_id','quantity','unit_cost','subtotal'];
 
     // Deshabilitar timestamps ya que la tabla no los tiene

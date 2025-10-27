@@ -23,7 +23,20 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('dashboard');
+            // Guardar el rol del usuario en la sesión
+            $user = Auth::user();
+            $request->session()->put('user_role', $user->role);
+            $request->session()->put('user_name', $user->name);
+            $role = strtolower(trim($user->role));
+            if ($role == 'admin') {
+                return redirect()->intended('dashboard');
+            } elseif ($role == 'mesero') {
+                return redirect()->intended(route('mesero.index'));
+            } elseif ($role == 'chef' || $role == 'chip') {
+                return redirect()->intended(route('cocina.index'));
+            } else {
+                return redirect()->intended('/');
+            }
         }
 
         return back()->withErrors([

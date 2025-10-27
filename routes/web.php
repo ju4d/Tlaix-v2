@@ -1,4 +1,6 @@
+
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     AuthController,
@@ -19,6 +21,15 @@ use App\Http\Controllers\{
 Route::get('/', function () {
     return redirect('/login');
 });
+
+// Apartado Mesero
+Route::get('/mesero', [App\Http\Controllers\MeseroController::class, 'index'])->name('mesero.index');
+Route::post('/mesero/orders', [App\Http\Controllers\MeseroController::class, 'store'])->name('mesero.orders.store');
+Route::delete('/mesero/orders/{order}', [App\Http\Controllers\MeseroController::class, 'destroy'])->name('mesero.orders.destroy');
+
+// Apartado Cocina
+Route::get('/cocina', [App\Http\Controllers\CocinaController::class, 'index'])->name('cocina.index');
+Route::post('/cocina/{order}/{item}/complete', [App\Http\Controllers\CocinaController::class, 'complete'])->name('cocina.complete');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -49,9 +60,13 @@ Route::middleware(['auth'])->group(function () {
     // Reportes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
 
+
     // Rutas de mermas
     Route::get('/waste', [WasteController::class, 'index'])->name('waste.index');
     Route::post('/waste', [WasteController::class, 'store'])->name('waste.store');
+
+    // Rutas de usuarios (admin)
+    Route::resource('users', App\Http\Controllers\UserController::class);
 
     // APIs de predicciones
     Route::prefix('api')->group(function () {

@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model {
     protected $fillable = ['supplier_id','date','status','total'];
     public function items(){ return $this->hasMany(OrderItem::class); }
+    public function dishes(){ return $this->hasMany(\App\Models\OrderDish::class); }
     public function supplier(){ return $this->belongsTo(Supplier::class); }
 }
