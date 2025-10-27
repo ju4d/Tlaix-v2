@@ -32,9 +32,9 @@ class TlaixSeeder extends Seeder
             ],
             [
                 'name' => 'Mesero Juan',
-                'email' => 'waiter@tlaix.com',
-                'password' => Hash::make('waiter123'),
-                'role' => 'waiter'
+                'email' => 'mesero@tlaix.com',
+                'password' => Hash::make('mesero123'),
+                'role' => 'mesero'
             ]
         ];
 
