@@ -10,12 +10,12 @@ class CocinaController extends Controller
 {
     public function index()
     {
-    $orders = Order::with('dishes.dish')->where('status', 'pendiente')->orderBy('created_at')->get();
-    $historico = OrderDish::with('dish', 'order')
-        ->where('completed', true)
-        ->orderByDesc('updated_at')
-        ->take(20)
-        ->get();
+    $orders = Order::with('dishes.dish')->where('status', 'pending')->orderBy('created_at')->get();
+        $historico = OrderDish::with('dish', 'order')
+            ->where('completed', true)
+            ->orderByDesc('updated_at')
+            ->take(20)
+            ->get();
     return view('cocina.index', compact('orders', 'historico'));
     }
 
@@ -38,7 +38,7 @@ class CocinaController extends Controller
         // Si todos los platillos de la orden están completos, marcar la orden como completada
         $order = $item->order;
         if ($order->dishes()->where('completed', false)->count() === 0) {
-            $order->status = 'completada';
+            $order->status = 'completed';
             $order->save();
         }
         return back()->with('success', 'Platillo marcado como hecho y stock descontado.');

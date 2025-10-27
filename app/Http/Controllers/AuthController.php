@@ -64,7 +64,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'waiter' // rol por defecto
+            'role' => 'admin' // rol por defecto
         ]);
 
         return redirect('login')->with('status', 'Usuario registrado exitosamente!');

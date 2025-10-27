@@ -10,7 +10,7 @@ class CreateOrdersTable extends Migration {
             $table->id();
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->date('date')->nullable();
-            $table->enum('status',['pending','received','cancelled'])->default('pending');
+            $table->enum('status',['pending','received','cancelled','pendiente','completada'])->default('pending');
             $table->decimal('total',10,2)->default(0);
             $table->timestamps();
 
