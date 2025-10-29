@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es" class="h-full">
 <head>
-    <link rel="icon" type="image/png" href="{{ asset('Tlaix.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('Tlaix.PNG') }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tlaix - @yield('title')</title>
@@ -74,7 +74,7 @@
                     </div>
                     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
                 </div>
-                <img src="{{ asset('Tlaix.png') }}" class="h-14 w-14" >
+                <img src="{{ asset('Tlaix.PNG') }}" class="h-14 w-14" >
             </div>
         </div>
     </nav>

@@ -17,10 +17,14 @@
                 @foreach($order->dishes as $item)
                     <li class="flex items-center justify-between border-b py-1">
                         <span>{{ $item->dish->name }} (x{{ $item->quantity }})</span>
-                        <form action="{{ route('cocina.complete', [$order->id, $item->id]) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded text-sm">Marcar como hecho</button>
-                        </form>
+                        @if(!$item->completed)
+                            <form action="{{ route('cocina.complete', [$order->id, $item->id]) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded text-sm">Marcar como hecho</button>
+                            </form>
+                        @else
+                            <span class="text-green-500 text-sm">Completado</span>
+                        @endif
                     </li>
                 @endforeach
             </ul>

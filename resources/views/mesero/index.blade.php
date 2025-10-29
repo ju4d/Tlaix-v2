@@ -42,11 +42,13 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="flex justify-between items-center">
                 <h3 class="font-bold">Orden #{{ $order->id }}</h3>
                 <div class="flex gap-2">
+                    @if(!$order->dishes->every(function($item) { return $item->completed; }))
                     <form action="{{ route('mesero.orders.destroy', $order->id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas cancelar esta orden?')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded text-sm">Cancelar orden</button>
                     </form>
+                    @endif
                 </div>
             </div>
             <ul>
@@ -61,9 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             - <span class="{{ $item->completed ? 'text-green-600' : 'text-yellow-600' }}">{{ $item->completed ? 'Completado' : 'En preparación' }}</span>
                         </div>
                         <div>
-                            @if($item->completed && !$item->received)
-                                <button type="button" class="bg-blue-500 text-white px-2 py-1 rounded text-sm" disabled>Recibido</button>
-                            @elseif($item->received)
+                            @if($item->received)
                                 <span class="text-blue-600">Recibido</span>
                             @endif
                         </div>
