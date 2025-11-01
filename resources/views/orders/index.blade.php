@@ -3,8 +3,19 @@
 @section('content')
 
 <div class="flex justify-between items-center mb-6">
-    <div>
-        <p class="text-gray-500">Administra los pedidos a proveedores</p>
+    <div class="flex items-center space-x-4">
+        <div class="relative flex-1 max-w-md">
+            <input type="text" id="searchInput" placeholder="Buscar pedidos..." 
+                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg" style="outline:none;">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        </div>
+        <div>
+            <p class="text-gray-500">Administra los pedidos a proveedores</p>
+        </div>
     </div>
     <a href="{{ route('orders.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-5 rounded-lg transition duration-200 inline-flex items-center">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,7 +44,7 @@
     <!-- Lista de Pedidos como Cards -->
     <div class="space-y-4">
         @foreach($orders as $order)
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200 order-card" data-search="{{ strtolower('pedido #' . $order->id . ' ' . ($order->supplier->name ?? '') . ' ' . $order->status . ' ' . \Carbon\Carbon::parse($order->date)->format('d/m/Y')) }}">
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-4">
                         <!-- ID y Estado -->
@@ -259,6 +270,56 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const orderCards = document.querySelectorAll('.order-card');
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        orderCards.forEach(card => {
+            const searchData = card.getAttribute('data-search');
+            if (searchData.includes(searchTerm)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Mostrar mensaje si no hay resultados
+        const visibleCards = document.querySelectorAll('.order-card[style=""]').length;
+        const ordersContainer = document.querySelector('.space-y-4');
+        
+        if (visibleCards === 0 && searchTerm !== '') {
+            // Crear mensaje de no resultados si no existe
+            const existingNoResults = document.getElementById('no-results');
+            if (!existingNoResults) {
+                const noResultsDiv = document.createElement('div');
+                noResultsDiv.id = 'no-results';
+                noResultsDiv.className = 'text-center py-12';
+                noResultsDiv.innerHTML = `
+                    <div class="text-gray-500">
+                        <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <h3 class="text-sm font-medium text-gray-900 mb-2">No se encontraron pedidos</h3>
+                        <p class="text-sm text-gray-500">Intenta con otros términos de búsqueda.</p>
+                    </div>
+                `;
+                ordersContainer.appendChild(noResultsDiv);
+            }
+        } else {
+            // Remover mensaje de no resultados si existe
+            const noResultsDiv = document.getElementById('no-results');
+            if (noResultsDiv) {
+                noResultsDiv.remove();
+            }
+        }
+    });
+});
+</script>
 
 
 @endsection

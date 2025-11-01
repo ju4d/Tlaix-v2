@@ -2,8 +2,17 @@
 @section('title','Platillos')
 @section('content')
 
-<div class="mb-6">
-    <a href="{{ route('dishes.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 inline-flex items-center">
+<div class="mb-6 flex justify-between items-center">
+    <div class="relative flex-1 max-w-md">
+        <input type="text" id="searchInput" placeholder="Buscar platillos..." 
+               class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg" style="outline:none;">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+    </div>
+    <a href="{{ route('dishes.create') }}" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 inline-flex items-center ml-4">
         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
         </svg>
@@ -23,7 +32,7 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
             @foreach($dishes as $d)
-            <tr class="hover:bg-gray-50">
+            <tr class="hover:bg-gray-50 dish-row" data-search="{{ strtolower($d->name . ' ' . ($d->available ? 'disponible' : 'no disponible')) }}">
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm font-medium text-gray-900">{{ $d->name }}</div>
                 </td>
@@ -86,5 +95,54 @@
         <p class="mt-1 text-sm text-gray-500">Comienza creando tu primer platillo.</p>
     </div>
 @endif
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const dishRows = document.querySelectorAll('.dish-row');
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        dishRows.forEach(row => {
+            const searchData = row.getAttribute('data-search');
+            if (searchData.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Mostrar mensaje si no hay resultados
+        const visibleRows = document.querySelectorAll('.dish-row[style=""]').length;
+        const emptyRow = document.querySelector('tr td[colspan="4"]');
+        
+        if (visibleRows === 0 && searchTerm !== '' && !emptyRow) {
+            // Crear mensaje de no resultados si no existe
+            const tbody = document.querySelector('tbody');
+            const noResultsRow = document.createElement('tr');
+            noResultsRow.id = 'no-results';
+            noResultsRow.innerHTML = `
+                <td colspan="4" class="px-6 py-12 text-center">
+                    <div class="text-gray-500">
+                        <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <h3 class="text-sm font-medium text-gray-900 mb-2">No se encontraron resultados</h3>
+                        <p class="text-sm text-gray-500">Intenta con otros términos de búsqueda.</p>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(noResultsRow);
+        } else {
+            // Remover mensaje de no resultados si existe
+            const noResultsRow = document.getElementById('no-results');
+            if (noResultsRow) {
+                noResultsRow.remove();
+            }
+        }
+    });
+});
+</script>
 
 @endsection
