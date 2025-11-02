@@ -37,11 +37,16 @@ else
     echo "✅ Conexión a la base de datos establecida"
     
     # Ejecutar migraciones en segundo plano
-    (
-        echo "📊 Ejecutando migraciones..."
-        php artisan migrate --force --no-interaction || echo "⚠️ Error en las migraciones"
-        
-        echo "🧹 Optimizando la aplicación..."
+# Intentar migraciones sin bloquear el inicio
+(
+    # Esperar un poco para que el sistema se estabilice
+    sleep 5
+    
+    echo "📊 Ejecutando migraciones..."
+    php artisan migrate --force --no-interaction || echo "⚠️ Error en las migraciones"
+    
+    echo "🌱 Ejecutando seeders..."
+    php artisan db:seed --force --no-interaction || echo "⚠️ Error en los seeders"        echo "🧹 Optimizando la aplicación..."
         php artisan config:cache || true
         php artisan route:cache || true
         php artisan view:cache || true
