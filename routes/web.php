@@ -17,6 +17,11 @@ use App\Http\Controllers\{
     WasteController
 };
 
+// Health check para DigitalOcean
+Route::get('/health', function () {
+    return response()->json(['status' => 'healthy'], 200);
+});
+
 // Rutas públicas
 Route::get('/', function () {
     return redirect('/login');

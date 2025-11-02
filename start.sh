@@ -3,18 +3,58 @@ set -e
 
 echo "🚀 Iniciando aplicación Tlaix..."
 
-# Esperar a que la base de datos esté lista
-echo "⏳ Esperando conexión a base de datos..."
-until php artisan db:show 2>/dev/null; do
-    echo "Base de datos no disponible, reintentando en 3 segundos..."
-    sleep 3
+# Asegurarnos de que Apache esté escuchando en el puerto correcto
+sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
+
+# Iniciar Apache en segundo plano
+apache2-foreground &
+APACHE_PID=$!
+
+# Función para verificar la conexión a la base de datos
+check_db_connection() {
+    php -r "
+        \$host = getenv('DB_HOST');
+        \$port = getenv('DB_PORT');
+        \$timeout = 3;
+        @fsockopen(\$host, \$port, \$errno, \$errstr, \$timeout);
+    " > /dev/null 2>&1
+}
+
+# Esperar a que la base de datos esté disponible
+echo "⏳ Verificando conexión a la base de datos..."
+RETRIES=30
+COUNT=0
+until check_db_connection || [ $COUNT -eq $RETRIES ]; do
+    echo "Intentando conectar a la base de datos... (intento $((COUNT+1))/$RETRIES)"
+    COUNT=$((COUNT+1))
+    sleep 2
 done
 
-echo "✅ Base de datos conectada"
+if [ $COUNT -eq $RETRIES ]; then
+    echo "⚠️ No se pudo establecer conexión con la base de datos después de $RETRIES intentos"
+    echo "🔄 Continuando con el inicio de la aplicación..."
+else
+    echo "✅ Conexión a la base de datos establecida"
+    
+    # Ejecutar migraciones en segundo plano
+    (
+        echo "📊 Ejecutando migraciones..."
+        php artisan migrate --force --no-interaction || echo "⚠️ Error en las migraciones"
+        
+        echo "🧹 Optimizando la aplicación..."
+        php artisan config:cache || true
+        php artisan route:cache || true
+        php artisan view:cache || true
+    ) &
+fi
 
-# Ejecutar migraciones primero
-echo "📊 Ejecutando migraciones..."
-php artisan migrate --force
+# Verificar y ajustar permisos
+echo "🔒 Ajustando permisos..."
+chown -R www-data:www-data /var/www/html/storage
+chmod -R 775 /var/www/html/storage
+
+# Mantener el script en ejecución y esperar a Apache
+wait $APACHE_PID
 
 # Limpiar y optimizar caché (después de migraciones)
 echo "🧹 Optimizando aplicación..."
@@ -39,6 +79,9 @@ chmod -R 775 /var/www/html/storage
 
 echo "✅ Aplicación lista"
 echo "🌐 Iniciando Apache en puerto 8080..."
+
+# Asegurarse de que Apache escuche en el puerto 8080
+sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
 
 # Iniciar Apache
 apache2-foreground
