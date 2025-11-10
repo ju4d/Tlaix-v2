@@ -341,6 +341,58 @@
     </div>
 </div>
 
+<!-- Confirmation Modal for Orders -->
+<div id="confirmOrderModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">Confirmar Pedido</h2>
+            <button onclick="closeConfirmOrderModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #7f8c8d;">×</button>
+        </div>
+        
+        <div id="confirmOrderContent" style="margin-bottom: 20px;">
+            <!-- Contenido dinámico del pedido a confirmar -->
+        </div>
+
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <span class="text-sm text-gray-500" style="color: #7f8c8d; font-size: 0.9em;">Subtotal:</span>
+                    <div style="font-size: 1.3em; font-weight: bold; color: #2c3e50;">
+                        $<span id="confirmSubtotal">0.00</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-500" style="color: #7f8c8d; font-size: 0.9em;">IVA (16%):</span>
+                    <div style="font-size: 1.3em; font-weight: bold; color: #f39c12;">
+                        $<span id="confirmIVA">0.00</span>
+                    </div>
+                </div>
+                <div style="grid-column: 1 / -1; border-top: 2px solid #ddd; padding-top: 10px;">
+                    <span class="text-sm text-gray-500" style="color: #7f8c8d; font-size: 0.9em;">Total (con IVA):</span>
+                    <div style="font-size: 1.5em; font-weight: bold; color: #27ae60;">
+                        $<span id="confirmTotal">0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #e3f2fd; padding: 12px; border-radius: 6px; border-left: 4px solid #3498db; margin-bottom: 20px;">
+            <p style="margin: 0; color: #1565c0; font-size: 0.9em;">
+                <strong>Nota:</strong> El pedido se creará en estado <strong>PENDIENTE</strong>. Podrás revisarlo y editarlo antes de confirmarlo definitivamente.
+            </p>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <button type="button" onclick="confirmCreateOrder()" class="btn btn-success" style="flex: 1; background: #27ae60; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                ✓ Crear Pedido
+            </button>
+            <button type="button" onclick="closeConfirmOrderModal()" style="flex: 1; background: #95a5a6; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600;">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Record Demand Modal -->
 <div id="recordModal" class="modal">
     <div class="modal-content">
@@ -491,6 +543,14 @@
     background: rgba(0,0,0,0.5);
     animation: fadeIn 0.3s ease;
 }
+
+#confirmOrderModal {
+    z-index: 1100 !important;
+}
+
+#ordersModal {
+    z-index: 1000;
+}
 .modal-content {
     background: white;
     margin: 5% auto;
@@ -620,11 +680,72 @@
     gap: 10px;
 }
 
+/* Confirmation Modal Styles */
+#confirmOrderContent {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+#confirmOrderContent .order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+#confirmOrderContent .order-item:last-child {
+    border-bottom: none;
+}
+
+#confirmOrderContent .order-item-name {
+    flex: 1;
+}
+
+#confirmOrderContent .order-item-name strong {
+    display: block;
+    color: #2c3e50;
+}
+
+#confirmOrderContent .order-item-name small {
+    display: block;
+    color: #7f8c8d;
+    font-size: 0.85em;
+    margin-top: 2px;
+}
+
+#confirmOrderContent .order-item-quantity {
+    text-align: center;
+    margin: 0 20px;
+    min-width: 80px;
+}
+
+#confirmOrderContent .order-item-cost {
+    text-align: right;
+    min-width: 100px;
+}
+
+#confirmOrderContent .order-item-urgency {
+    text-align: center;
+    margin-left: 10px;
+}
+
 </style>
 
 <script>
 let autoRefreshInterval = null;
 let currentPredictionDays = 7;
+let pendingOrderData = null; // Almacenar datos del pedido pendiente de confirmación
+
+// Variables para almacenar datos de confirmación
+let confirmOrderData = {
+    supplier_id: null,
+    supplier_name: null,
+    items: [],
+    subtotal: 0,
+    total: 0
+};
 
 // Configurar fecha por defecto
 document.addEventListener('DOMContentLoaded', function() {
@@ -660,15 +781,141 @@ function closeOrdersModal() {
     document.getElementById('ordersModal').style.display = 'none';
 }
 
-// Cerrar modal al hacer clic fuera
+// Funciones para el Modal de Confirmación de Pedido
+function openConfirmOrderModal(supplierData) {
+    confirmOrderData = {
+        supplier_id: supplierData.supplier_id,
+        supplier_name: supplierData.supplier_name,
+        items: supplierData.items,
+        subtotal: supplierData.subtotal,
+        total: supplierData.total
+    };
+
+    // Construir contenido del modal
+    let itemsHtml = '';
+    supplierData.items.forEach(item => {
+        const urgencyClass = `urgency-${item.urgency}`;
+        const urgencyText = {
+            'critical': 'CRÍTICO',
+            'high': 'ALTO',
+            'medium': 'MEDIO',
+            'low': 'BAJO',
+            'normal': 'NORMAL'
+        }[item.urgency];
+
+        itemsHtml += `
+            <div class="order-item">
+                <div class="order-item-name">
+                    <strong>${item.ingredient_name}</strong>
+                    <small>${item.category || 'Sin categoría'}</small>
+                </div>
+                <div class="order-item-quantity">
+                    <strong>${item.recommended_order_quantity.toFixed(1)}</strong>
+                    <small>${item.unit}</small>
+                </div>
+                <div class="order-item-urgency">
+                    <span class="${urgencyClass}">${urgencyText}</span>
+                </div>
+                <div class="order-item-cost">
+                    <strong>$${item.cost_estimate.toFixed(2)}</strong>
+                    <small style="color: #7f8c8d;">+IVA</small>
+                </div>
+            </div>
+        `;
+    });
+
+    // Actualizar contenido del modal
+    document.getElementById('confirmOrderContent').innerHTML = `
+        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #ddd;">
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Proveedor: <strong>${supplierData.supplier_name}</strong></h4>
+            <p style="margin: 0; color: #7f8c8d; font-size: 0.9em;">
+                ${supplierData.items.length} producto(s) a ordenar
+            </p>
+        </div>
+        <div style="margin-bottom: 15px;">
+            <h5 style="margin: 0 0 10px 0; color: #2c3e50;">Detalles de los productos:</h5>
+            ${itemsHtml}
+        </div>
+    `;
+
+    // Actualizar totales
+    document.getElementById('confirmSubtotal').textContent = supplierData.subtotal.toFixed(2);
+    document.getElementById('confirmIVA').textContent = (supplierData.subtotal * 0.16).toFixed(2);
+    document.getElementById('confirmTotal').textContent = (supplierData.subtotal * 1.16).toFixed(2);
+
+    // Mostrar modal
+    document.getElementById('confirmOrderModal').style.display = 'block';
+}
+
+function closeConfirmOrderModal() {
+    document.getElementById('confirmOrderModal').style.display = 'none';
+    confirmOrderData = {
+        supplier_id: null,
+        supplier_name: null,
+        items: [],
+        subtotal: 0,
+        total: 0
+    };
+}
+
+async function confirmCreateOrder() {
+    if (!confirmOrderData.supplier_id) {
+        showAlert('Error: No hay datos del proveedor', 'error');
+        return;
+    }
+
+    const confirmBtn = event.target;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Creando pedido...';
+
+    try {
+        const response = await fetch('/api/ingredient-predictions/auto-create-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                supplier_id: confirmOrderData.supplier_id,
+                days: currentPredictionDays
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showAlert(`✓ Pedido #${data.order_id} creado exitosamente con ${data.items_count} productos. Total: $${data.total.toFixed(2)}`, 'success');
+            closeConfirmOrderModal();
+
+            // Redirigir después de 2 segundos
+            setTimeout(() => {
+                window.location.href = data.redirect_url;
+            }, 2000);
+        } else {
+            showAlert('Error: ' + data.error, 'error');
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = '✓ Crear Pedido';
+        }
+    } catch (error) {
+        showAlert('Error de conexión: ' + error.message, 'error');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = '✓ Crear Pedido';
+    }
+}
+
+
 window.onclick = function(event) {
     const recordModal = document.getElementById('recordModal');
     const ordersModal = document.getElementById('ordersModal');
+    const confirmOrderModal = document.getElementById('confirmOrderModal');
     if (event.target == recordModal) {
         closeRecordModal();
     }
     if (event.target == ordersModal) {
         closeOrdersModal();
+    }
+    if (event.target == confirmOrderModal) {
+        closeConfirmOrderModal();
     }
 }
 
@@ -1205,36 +1452,34 @@ window.addEventListener('beforeunload', () => {
 
 // Crear pedido automáticamente
 async function autoCreateOrder(supplierId) {
-    if (!confirm('¿Crear pedido automático con las cantidades recomendadas?\n\nEsto creará un pedido en estado PENDIENTE que podrás revisar antes de confirmarlo.')) {
-        return;
-    }
-
-    showAlert('Creando pedido automáticamente...', 'success');
+    showAlert('Cargando detalles del pedido...', 'success');
 
     try {
-        const response = await fetch('/api/ingredient-predictions/auto-create-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({
-                supplier_id: supplierId,
-                days: currentPredictionDays
-            })
-        });
-
+        // Obtener los datos de la orden sugerida
+        const response = await fetch(`/api/ingredient-predictions/suggested-orders?days=${currentPredictionDays}`);
         const data = await response.json();
 
         if (data.success) {
-            showAlert(`Pedido #${data.order_id} creado exitosamente con ${data.items_count} productos. Total: ${data.total.toFixed(2)}`, 'success');
+            // Buscar el proveedor en las órdenes sugeridas
+            const supplierOrder = data.suggested_orders.find(order => order.supplier_id === supplierId);
 
-            // Cerrar modal y redirigir después de 2 segundos
-            setTimeout(() => {
-                window.location.href = data.redirect_url;
-            }, 2000);
+            if (supplierOrder) {
+                // Preparar datos para el modal de confirmación
+                const supplierData = {
+                    supplier_id: supplierOrder.supplier_id,
+                    supplier_name: supplierOrder.supplier_name,
+                    items: supplierOrder.items,
+                    subtotal: supplierOrder.total_cost,
+                    total: supplierOrder.total_cost * 1.16
+                };
+
+                // Abrir modal de confirmación
+                openConfirmOrderModal(supplierData);
+            } else {
+                showAlert('No se encontraron detalles del proveedor', 'error');
+            }
         } else {
-            showAlert('Error: ' + data.error, 'error');
+            showAlert('Error al obtener datos: ' + data.error, 'error');
         }
     } catch (error) {
         showAlert('Error de conexión: ' + error.message, 'error');

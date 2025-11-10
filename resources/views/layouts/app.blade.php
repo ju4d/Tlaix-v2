@@ -69,7 +69,9 @@
                         </button>
                         <div id="submenu-account" x-show="openAccount" @mouseenter="openAccount = true" @mouseleave="openAccount = false" class="absolute left-0 mt-2 w-32 bg-white rounded shadow-lg z-50" style="display: none;">
                             <span class="block px-4 py-2 text-gray-800">{{ session('user_name') }}</span>
+                            @if($role == 'admin')
                             <a href="{{ route('users.index') }}" class="block px-4 py-2 text-gray-800 hover:bg-primary hover:text-white transition rounded-md">Usuarios</a>
+                            @endif
                             <a href="{{ route('logout') }}" class="block px-4 py-2 text-red-600 hover:bg-primary hover:text-white transition rounded-md">Cerrar sesión</a>
                         </div>
                     </div>

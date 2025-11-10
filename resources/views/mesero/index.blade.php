@@ -2,22 +2,71 @@
 @section('title', 'Mesero')
 @section('content')
 <h2 class="text-2xl font-bold mb-4">Generar nueva orden</h2>
+
+@if($errors->any())
+    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+        <h3 class="font-bold mb-2">Error al crear la orden:</h3>
+        @foreach($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+        {{ session('error') }}
+    </div>
+@endif
+
+@if(session('success'))
+    <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+        {{ session('success') }}
+    </div>
+@endif
+
 <form action="{{ route('mesero.orders.store') }}" method="POST" class="mb-8 bg-white p-4 rounded shadow" id="orderForm">
     @csrf
     <div class="mb-4">
         <label class="block font-bold mb-2">Selecciona platillos:</label>
         <div id="dish-list">
             @foreach($dishes as $dish)
-                <div class="flex items-center mb-2">
-                    <input type="checkbox" id="dish_{{ $dish->id }}" name="dishes[]" value="{{ $dish->id }}" class="dish-checkbox mr-2">
-                    <label for="dish_{{ $dish->id }}" class="mr-4">{{ $dish->name }}</label>
-                    <input type="number" name="quantities[{{ $dish->id }}]" min="1" value="1" class="quantity-input w-20 border rounded px-2 py-1" style="display:none;" placeholder="Cantidad">
+                @php
+                    $availability = $dishesAvailability[$dish->id] ?? ['available' => true, 'message' => 'Disponible'];
+                @endphp
+                <div class="flex items-center mb-3 p-3 rounded {{ !$availability['available'] ? 'bg-red-50 border border-red-200' : 'hover:bg-gray-50' }}">
+                    <input 
+                        type="checkbox" 
+                        id="dish_{{ $dish->id }}" 
+                        name="dishes[]" 
+                        value="{{ $dish->id }}" 
+                        class="dish-checkbox mr-2"
+                        {{ !$availability['available'] ? 'disabled' : '' }}
+                    >
+                    <label for="dish_{{ $dish->id }}" class="mr-4 flex-1 cursor-pointer {{ !$availability['available'] ? 'text-gray-400' : '' }}">
+                        <strong>{{ $dish->name }}</strong>
+                        @if(!$availability['available'])
+                            <span class="text-red-600 text-sm ml-2">({{ $availability['message'] }})</span>
+                        @else
+                            <span class="text-green-600 text-sm ml-2">(Disponible)</span>
+                        @endif
+                    </label>
+                    <input 
+                        type="number" 
+                        name="quantities[{{ $dish->id }}]" 
+                        min="1" 
+                        value="1" 
+                        class="quantity-input w-20 border rounded px-2 py-1" 
+                        style="display:none;" 
+                        placeholder="Cantidad"
+                        {{ !$availability['available'] ? 'disabled' : '' }}
+                    >
                 </div>
             @endforeach
         </div>
     </div>
-    <button type="submit" class="bg-primary text-white px-4 py-2 rounded">Enviar orden a cocina</button>
+    <button type="submit" class="bg-primary text-white px-4 py-2 rounded hover:opacity-80 transition">Enviar orden a cocina</button>
 </form>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const checkboxes = document.querySelectorAll('.dish-checkbox');
@@ -33,8 +82,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Validar antes de enviar
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        const checkedBoxes = document.querySelectorAll('.dish-checkbox:checked');
+        const selectedDishes = Array.from(checkedBoxes).filter(cb => !cb.disabled);
+        
+        if (selectedDishes.length === 0) {
+            e.preventDefault();
+            alert('Por favor selecciona al menos un platillo disponible');
+        }
+    });
 });
 </script>
+
 <h2 class="text-xl font-bold mb-4">Órdenes recientes</h2>
 <div id="recent-orders">
     @foreach($orders as $order)

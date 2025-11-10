@@ -40,7 +40,7 @@
                 <li class="flex items-center justify-between border-b py-1">
                     <span>
                         {{ $item->dish ? $item->dish->name : 'Platillo eliminado' }} (x{{ $item->quantity }})
-                        <span class="text-gray-500 text-xs ml-2">Orden #{{ $item->order_id }} | {{ $item->updated_at->format('d/m/Y H:i') }}</span>
+                        <span class="text-gray-500 text-xs ml-2">Orden #{{ $item->customer_order_id }} | {{ $item->updated_at->format('d/m/Y H:i') }}</span>
                     </span>
                 </li>
             @empty
