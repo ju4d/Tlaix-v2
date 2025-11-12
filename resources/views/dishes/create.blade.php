@@ -53,11 +53,23 @@
         </div>
 
         <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">Ingredientes Requeridos</h2>
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-gray-900">Ingredientes Requeridos</h2>
+                <div class="relative flex-1 max-w-md ml-4">
+                    <input type="text" id="ingredientSearchInput" placeholder="Buscar ingredientes..." 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none ">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
             
             <div id="ingredients-section" class="space-y-4">
                 @foreach($ingredients as $ingredient)
-                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition duration-200">
+                <div class="ingredient-row border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition duration-200"
+                     data-search="{{ strtolower($ingredient->name . ' ' . $ingredient->category . ' ' . $ingredient->unit) }}">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <input type="checkbox" class="ingredient-checkbox w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2" 
@@ -80,6 +92,14 @@
                     </div>
                 </div>
                 @endforeach
+            </div>
+            
+            <div id="no-results" class="hidden text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <h3 class="text-sm font-medium text-gray-900 mb-2">No se encontraron ingredientes</h3>
+                <p class="text-sm text-gray-500">Intenta con otros términos de búsqueda.</p>
             </div>
         </div>
 
@@ -105,6 +125,33 @@ document.addEventListener('DOMContentLoaded', function() {
             input.disabled = !this.checked;
             if (!this.checked) input.value = '';
         });
+    });
+
+    // Buscador de ingredientes
+    const searchInput = document.getElementById('ingredientSearchInput');
+    const ingredientRows = document.querySelectorAll('.ingredient-row');
+    const noResults = document.getElementById('no-results');
+    
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        let visibleCount = 0;
+        
+        ingredientRows.forEach(row => {
+            const searchData = row.getAttribute('data-search');
+            if (searchData.includes(searchTerm)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Mostrar/ocultar mensaje de no resultados
+        if (visibleCount === 0 && searchTerm !== '') {
+            noResults.classList.remove('hidden');
+        } else {
+            noResults.classList.add('hidden');
+        }
     });
 });
 </script>

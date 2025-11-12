@@ -6,9 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\Ingredient;
 use App\Models\Dish;
 use App\Models\Order;
+use App\Models\CustomerOrder;
+use App\Services\PredictionService;
 
 class DashboardController extends Controller
 {
+    private $predictionService;
+
+    public function __construct(PredictionService $predictionService)
+    {
+        $this->predictionService = $predictionService;
+    }
+
     public function index()
     {
         // Conteos generales
@@ -24,13 +33,24 @@ class DashboardController extends Controller
                             ->take(5)
                             ->get(['id', 'name', 'stock', 'min_stock', 'unit', 'category']);
 
+        // 🔥 ESTADÍSTICAS DE DEMANDA EN TIEMPO REAL
+        $demandStats = $this->predictionService->getDemandStats();
+
+        // Órdenes de clientes del día
+        $todayOrders = CustomerOrder::whereDate('created_at', today())->count();
+        $todayCompleted = CustomerOrder::whereDate('created_at', today())
+                            ->where('status', 'completed')->count();
+
         return view('dashboard', compact(
             'totalIngredients',
             'lowStock',
             'totalDishes',
             'availableDishes',
             'pendingOrders',
-            'lowStockItems'
+            'lowStockItems',
+            'demandStats',
+            'todayOrders',
+            'todayCompleted'
         ));
     }
 }

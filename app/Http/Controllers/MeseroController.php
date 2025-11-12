@@ -6,9 +6,17 @@ use App\Models\CustomerOrder;
 use App\Models\CustomerOrderDish;
 use App\Models\Dish;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class MeseroController extends Controller
 {
+    private $historyFile;
+
+    public function __construct()
+    {
+        $this->historyFile = storage_path('app/predictions/history.csv');
+    }
     public function index()
     {
         $dishes = Dish::all();
@@ -73,6 +81,8 @@ class MeseroController extends Controller
             'status' => 'pending',
             'user_id' => Auth::id(),
         ]);
+
+        $totalDishes = 0;
         foreach($dishIds as $dishId) {
             $qty = isset($quantities[$dishId]) ? intval($quantities[$dishId]) : 1;
             CustomerOrderDish::create([
@@ -81,7 +91,18 @@ class MeseroController extends Controller
                 'quantity' => $qty,
                 'completed' => false,
             ]);
+            $totalDishes += $qty;
         }
+
+        // 🔥 ACTUALIZAR DEMANDA EN TIEMPO REAL
+        $this->updateDemandHistory($totalDishes);
+
+        Log::info('Orden creada y demanda actualizada', [
+            'order_id' => $order->id,
+            'dishes_count' => $totalDishes,
+            'user' => Auth::user()->name
+        ]);
+
         return redirect()->route('mesero.index')->with('success', 'Orden enviada a cocina.');
     }
 
@@ -90,5 +111,96 @@ class MeseroController extends Controller
         $order = CustomerOrder::findOrFail($id);
         $order->delete();
         return redirect()->route('mesero.index')->with('success', 'Orden cancelada correctamente.');
+    }
+
+    /**
+     * 🔥 Actualiza el archivo de demanda histórica en tiempo real
+     */
+    private function updateDemandHistory($quantity)
+    {
+        try {
+            $today = Carbon::today()->format('Y-m-d');
+            
+            // Asegurar que el directorio existe
+            $directory = dirname($this->historyFile);
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            $data = $this->loadHistoryData();
+
+            // Buscar si ya existe el registro para hoy
+            $found = false;
+            foreach ($data as $key => $row) {
+                if ($row['date'] === $today) {
+                    // Acumular demanda del mismo día
+                    $data[$key]['demand'] = floatval($row['demand']) + floatval($quantity);
+                    $found = true;
+                    break;
+                }
+            }
+
+            // Si no existe, agregar nuevo registro
+            if (!$found) {
+                $data[] = [
+                    'date' => $today,
+                    'demand' => floatval($quantity)
+                ];
+            }
+
+            // Ordenar por fecha
+            usort($data, function($a, $b) {
+                return strcmp($a['date'], $b['date']);
+            });
+
+            // Guardar en CSV
+            $fp = fopen($this->historyFile, 'w');
+            fputcsv($fp, ['date', 'demand']);
+
+            foreach ($data as $row) {
+                fputcsv($fp, [$row['date'], $row['demand']]);
+            }
+
+            fclose($fp);
+
+            Log::info('Demanda actualizada en history.csv', [
+                'date' => $today,
+                'quantity_added' => $quantity,
+                'total_today' => $found ? $data[array_search($today, array_column($data, 'date'))]['demand'] : $quantity
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error actualizando demanda', [
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Carga datos históricos del CSV
+     */
+    private function loadHistoryData()
+    {
+        if (!file_exists($this->historyFile)) {
+            return [];
+        }
+
+        $data = [];
+        $fp = fopen($this->historyFile, 'r');
+
+        // Saltar encabezado
+        fgetcsv($fp);
+
+        while (($row = fgetcsv($fp)) !== false) {
+            if (count($row) >= 2) {
+                $data[] = [
+                    'date' => $row[0],
+                    'demand' => floatval($row[1])
+                ];
+            }
+        }
+
+        fclose($fp);
+        return $data;
     }
 }

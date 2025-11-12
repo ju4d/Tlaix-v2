@@ -97,19 +97,31 @@
     <div class="bg-white rounded-xl shadow-lg p-6">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-900">Niveles de Inventario</h3>
-            <div class="flex items-center space-x-4 text-sm">
+            <div class="flex items-center space-x-2">
+                <label for="inventoryFilter" class="text-sm font-medium text-gray-600">Filtrar:</label>
+                <select id="inventoryFilter" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 cursor-pointer hover:from-blue-600 hover:to-blue-700 transition duration-200 shadow-md">
+                    <option value="all" class="bg-white text-gray-900">Todos ({{ count($ingredients) }})</option>
+                    <option value="low" class="bg-white text-gray-900">Solo stock bajo ({{ count($lowStock) }})</option>
+                    <option value="expired" class="bg-white text-gray-900">Caducados ({{ count($expired) }})</option>
+                    <option value="expiring" class="bg-white text-gray-900">Por caducar ({{ count($expiringSoon) }})</option>
+                </select>
+            </div>
+        </div>
+        <div class="relative" style="height: 400px;">
+            <canvas id="inventoryChart"></canvas>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+            <div class="flex items-center space-x-4">
                 <div class="flex items-center">
                     <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                    <span class="text-gray-600">Debajo del mínimo</span>
+                    <span>Debajo del mínimo</span>
                 </div>
                 <div class="flex items-center">
                     <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                    <span class="text-gray-600">Stock normal</span>
+                    <span>Stock normal</span>
                 </div>
             </div>
-        </div>
-        <div class="relative">
-            <canvas id="inventoryChart" class="w-full h-64"></canvas>
+            <span id="chartItemCount" class="font-medium">Mostrando {{ count($ingredients) }} productos</span>
         </div>
     </div>
 
@@ -119,8 +131,8 @@
             <h3 class="text-lg font-semibold text-gray-900">Inventario por Categoría</h3>
             <div class="text-sm text-gray-500">Distribución de productos</div>
         </div>
-        <div class="relative mb-4">
-            <canvas id="categoryChart" class="w-full h-64"></canvas>
+        <div class="relative mb-4" style="height: 280px;">
+            <canvas id="categoryChart"></canvas>
         </div>
         <div class="space-y-3">
             @foreach($categoryAnalysis as $category => $data)
@@ -344,65 +356,161 @@
 </div>
 
 <script>
-// Inventory levels chart
-const inventoryLabels = {!! json_encode($ingredients->pluck('name')) !!};
-const inventoryStock = {!! json_encode($ingredients->pluck('stock')) !!};
-const inventoryMinStock = {!! json_encode($ingredients->pluck('min_stock')) !!};
+// Inventory data
+const allIngredients = {!! json_encode($ingredients->map(function($item) {
+    return [
+        'name' => $item->name,
+        'stock' => $item->stock,
+        'min_stock' => $item->min_stock,
+        'is_low' => $item->stock < $item->min_stock,
+        'is_expired' => $item->expiration_date && \Carbon\Carbon::parse($item->expiration_date)->isPast(),
+        'is_expiring_soon' => $item->expiration_date && \Carbon\Carbon::parse($item->expiration_date)->between(now(), now()->addDays(3))
+    ];
+})) !!};
 
-// Create colors based on stock levels
-const inventoryColors = inventoryStock.map((stock, index) => {
-    return stock < inventoryMinStock[index] ? '#e74c3c' : '#27ae60';
-});
+const lowStockItems = {!! json_encode($lowStock->map(function($item) {
+    return [
+        'name' => $item->name,
+        'stock' => $item->stock,
+        'min_stock' => $item->min_stock,
+        'is_low' => true
+    ];
+})) !!};
 
-const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
-new Chart(inventoryCtx, {
-    type: 'bar',
-    data: {
-        labels: inventoryLabels,
-        datasets: [
-            {
-                label: 'Stock actual',
-                data: inventoryStock,
-                backgroundColor: inventoryColors,
-                borderColor: inventoryColors,
-                borderWidth: 1
-            },
-            {
-                label: 'Stock mínimo',
-                data: inventoryMinStock,
-                type: 'line',
-                borderColor: '#f39c12',
-                backgroundColor: 'transparent',
-                borderWidth: 2,
-                pointBackgroundColor: '#f39c12'
-            }
-        ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            title: {
-                display: true,
-            },
-            legend: {
-                display: true
-            }
+const expiredItems = {!! json_encode($expired->map(function($item) {
+    return [
+        'name' => $item->name,
+        'stock' => $item->stock,
+        'min_stock' => $item->min_stock,
+        'is_low' => $item->stock < $item->min_stock
+    ];
+})) !!};
+
+const expiringSoonItems = {!! json_encode($expiringSoon->map(function($item) {
+    return [
+        'name' => $item->name,
+        'stock' => $item->stock,
+        'min_stock' => $item->min_stock,
+        'is_low' => $item->stock < $item->min_stock
+    ];
+})) !!};
+
+let inventoryChart;
+
+function createInventoryChart(dataSet) {
+    const labels = dataSet.map(item => item.name);
+    const stock = dataSet.map(item => item.stock);
+    const minStock = dataSet.map(item => item.min_stock);
+    const colors = dataSet.map(item => item.is_low || (item.stock < item.min_stock) ? '#e74c3c' : '#27ae60');
+
+    if (inventoryChart) {
+        inventoryChart.destroy();
+    }
+
+    const ctx = document.getElementById('inventoryChart').getContext('2d');
+    inventoryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Stock actual',
+                    data: stock,
+                    backgroundColor: colors,
+                    borderColor: colors,
+                    borderWidth: 1,
+                    barThickness: Math.max(8, Math.min(30, 600 / dataSet.length))
+                },
+                {
+                    label: 'Stock mínimo',
+                    data: minStock,
+                    type: 'line',
+                    borderColor: '#f39c12',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#f39c12',
+                    pointRadius: dataSet.length > 50 ? 0 : 3,
+                    pointHoverRadius: 5,
+                    borderDash: [5, 5]
+                }
+            ]
         },
-        scales: {
-            y: {
-                beginAtZero: true,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
                 title: {
+                    display: false,
+                },
+                legend: {
                     display: true,
-                    text: 'Cantidad'
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.y.toFixed(1);
+                            return label;
+                        }
+                    }
                 }
             },
-            x: {
-                ticks: {
-                    maxRotation: 45
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cantidad'
+                    },
+                    ticks: {
+                        precision: 0
+                    }
+                },
+                x: {
+                    ticks: {
+                        maxRotation: 90,
+                        minRotation: 45,
+                        font: {
+                            size: dataSet.length > 50 ? 8 : 10
+                        },
+                        autoSkip: dataSet.length > 30,
+                        maxTicksLimit: dataSet.length > 50 ? 20 : undefined
+                    }
                 }
             }
         }
+    });
+
+    document.getElementById('chartItemCount').textContent = `Mostrando ${dataSet.length} productos`;
+}
+
+// Initialize chart with all data
+createInventoryChart(allIngredients);
+
+// Filter handler
+document.getElementById('inventoryFilter').addEventListener('change', function(e) {
+    const filterValue = e.target.value;
+    let dataToShow;
+
+    switch(filterValue) {
+        case 'low':
+            dataToShow = lowStockItems;
+            break;
+        case 'expired':
+            dataToShow = expiredItems;
+            break;
+        case 'expiring':
+            dataToShow = expiringSoonItems;
+            break;
+        default:
+            dataToShow = allIngredients;
     }
+
+    createInventoryChart(dataToShow);
 });
 
 // Category distribution chart
@@ -424,12 +532,34 @@ new Chart(categoryCtx, {
     },
     options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             title: {
-                display: true,
+                display: false,
             },
             legend: {
-                position: 'bottom'
+                position: 'bottom',
+                labels: {
+                    padding: 15,
+                    font: {
+                        size: 11
+                    }
+                }
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        if (label) {
+                            label += ': ';
+                        }
+                        label += '$' + context.parsed.toFixed(2);
+                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        const percentage = ((context.parsed / total) * 100).toFixed(1);
+                        label += ' (' + percentage + '%)';
+                        return label;
+                    }
+                }
             }
         }
     }
@@ -580,11 +710,6 @@ setInterval(() => {
 
 .fade-in {
     animation: fadeIn 0.3s ease-out;
-}
-
-/* Chart container improvements */
-canvas {
-    max-height: 300px;
 }
 </style>
 @endsection

@@ -92,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
         // Demanda en tiempo real
         Route::post('/demand/record', [DemandController::class, 'recordDemand']);
         Route::get('/demand/summary', [DemandController::class, 'getDemandSummary']);
+        Route::get('/demand/history', [DemandController::class, 'getDemandHistory']);
         Route::post('/demand/auto-record', [DemandController::class, 'autoRecordDailyDemand']);
         Route::get('/demand/export', [DemandController::class, 'exportHistory']);
         Route::post('/demand/clean', [DemandController::class, 'cleanOldData']);

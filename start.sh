@@ -42,11 +42,10 @@ else
     # Esperar un poco para que el sistema se estabilice
     sleep 5
     
-    echo "📊 Ejecutando migraciones..."
-    php artisan migrate --force --no-interaction || echo "⚠️ Error en las migraciones"
+    echo "�️ Eliminando datos anteriores y ejecutando migraciones frescas..."
+    php artisan migrate:fresh --seed --force --no-interaction || echo "⚠️ Error en migraciones/seeders"
     
-    echo "🌱 Ejecutando seeders..."
-    php artisan db:seed --force --no-interaction || echo "⚠️ Error en los seeders"        echo "🧹 Optimizando la aplicación..."
+    echo "🧹 Optimizando la aplicación..."
         php artisan config:cache || true
         php artisan route:cache || true
         php artisan view:cache || true

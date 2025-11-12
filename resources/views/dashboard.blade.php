@@ -26,7 +26,6 @@
         <div class="text-indigo-100 mt-2">Pedidos Pendientes</div>
     </div>
 </div>
-
 <!-- Quick Actions Section -->
 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
     <div class="flex items-center mb-6">
@@ -96,6 +95,96 @@
         </a>
     </div>
 </div>
+<!-- 🔥 DEMANDA EN TIEMPO REAL -->
+<div class="bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex items-center mb-4">
+        <div class="bg-white bg-opacity-20 p-3 rounded-full mr-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+            </svg>
+        </div>
+        <div>
+            <h3 class="text-xl font-bold text-white">Demanda en Tiempo Real</h3>
+            <p class="text-cyan-100 text-sm">Actualización automática desde módulo mesero</p>
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-white text-opacity-80 text-sm mb-1">Hoy</div>
+            <div class="text-3xl font-bold text-white" id="demand-today">
+                {{ number_format($demandStats['today'] ?? 0, 1) }}
+            </div>
+            <div class="text-xs text-white text-opacity-70 mt-1">platillos vendidos</div>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-white text-opacity-80 text-sm mb-1">Esta Semana</div>
+            <div class="text-3xl font-bold text-white">
+                {{ number_format($demandStats['week'] ?? 0, 1) }}
+            </div>
+            <div class="text-xs text-white text-opacity-70 mt-1">platillos totales</div>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-white text-opacity-80 text-sm mb-1">Este Mes</div>
+            <div class="text-3xl font-bold text-white">
+                {{ number_format($demandStats['month'] ?? 0, 1) }}
+            </div>
+            <div class="text-xs text-white text-opacity-70 mt-1">platillos totales</div>
+        </div>
+        
+        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-4">
+            <div class="text-white text-opacity-80 text-sm mb-1">Promedio Diario</div>
+            <div class="text-3xl font-bold text-white">
+                {{ number_format($demandStats['average'] ?? 0, 1) }}
+            </div>
+            <div class="text-xs text-white text-opacity-70 mt-1">basado en {{ $demandStats['total_days'] ?? 0 }} días</div>
+        </div>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between">
+        <div class="text-white text-opacity-80 text-sm">
+            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            Los datos se actualizan automáticamente cuando el mesero crea nuevas órdenes
+        </div>
+
+    </div>
+</div>
+
+<!-- 📊 GRÁFICA DE DEMANDA EN TIEMPO REAL -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center">
+            <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-full mr-4">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-gray-900">Visualización de Demanda</h3>
+                <p class="text-gray-500 text-sm">Gráfica de tendencia de los últimos 30 días</p>
+            </div>
+        </div>
+        <div class="flex space-x-2">
+            <button onclick="changeDemandPeriod(7)" id="btn-7days" class="px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">7 días</button>
+            <button onclick="changeDemandPeriod(14)" id="btn-14days" class="px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">14 días</button>
+            <button onclick="changeDemandPeriod(30)" id="btn-30days" class="px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white">30 días</button>
+        </div>
+    </div>
+    
+    <div class="relative" style="height: 400px;">
+        <canvas id="demandChart"></canvas>
+    </div>
+
+
+    </div>
+</div>
+
+
 
 <!-- Critical Stock Items - Full Width -->
 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
@@ -187,92 +276,7 @@
     @endif
 </div>
 
-<!-- Real-Time Demand Statistics -->
-<div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center">
-            <div class="bg-blue-100 p-3 rounded-full mr-4">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900">Estadísticas de Demanda en Tiempo Real</h3>
-        </div>
-        <div class="flex items-center space-x-4">
-            <button onclick="openRecordModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200 transform hover:scale-105 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-                Registrar Demanda
-            </button>
-            <button onclick="autoRecordDemand()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition duration-200 transform hover:scale-105 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                Auto-registrar Hoy
-            </button>
-            <div class="flex items-center text-sm text-gray-600">
-                <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                Actualización automática
-            </div>
-        </div>
-    </div>
 
-    <!-- Alert Container -->
-    <div id="alertContainer"></div>
-
-    <!-- Demand Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-6 rounded-lg shadow-lg">
-            <div class="flex items-center mb-2">
-                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <span class="text-sm opacity-90">Demanda Hoy</span>
-            </div>
-            <div class="text-3xl font-bold mb-1" id="demandToday">-</div>
-            <div class="text-sm text-blue-100">Platillos</div>
-        </div>
-        <div class="bg-gradient-to-r from-green-400 to-green-600 text-white p-6 rounded-lg shadow-lg">
-            <div class="flex items-center mb-2">
-                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                </div>
-                <span class="text-sm opacity-90">Demanda Semanal</span>
-            </div>
-            <div class="text-3xl font-bold mb-1" id="demandWeek">-</div>
-            <div class="text-sm text-green-100">Platillos</div>
-        </div>
-        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white p-6 rounded-lg shadow-lg">
-            <div class="flex items-center mb-2">
-                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                </div>
-                <span class="text-sm opacity-90">Demanda Mensual</span>
-            </div>
-            <div class="text-3xl font-bold mb-1" id="demandMonth">-</div>
-            <div class="text-sm text-yellow-100">Platillos</div>
-        </div>
-        <div class="bg-gradient-to-r from-purple-400 to-purple-600 text-white p-6 rounded-lg shadow-lg">
-            <div class="flex items-center mb-2">
-                <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                </div>
-                <span class="text-sm opacity-90">Promedio Diario</span>
-            </div>
-            <div class="text-3xl font-bold mb-1" id="demandAvg">-</div>
-            <div class="text-sm text-purple-100">Platillos</div>
-        </div>
-    </div>
-</div>
 
 <!-- Ingredient Predictions -->
 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
@@ -340,6 +344,9 @@
         </div>
     </div>
 </div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <!-- Confirmation Modal for Orders -->
 <div id="confirmOrderModal" class="modal">
@@ -737,6 +744,8 @@
 let autoRefreshInterval = null;
 let currentPredictionDays = 7;
 let pendingOrderData = null; // Almacenar datos del pedido pendiente de confirmación
+let demandChart = null; // Instancia de la gráfica
+let currentDemandPeriod = 30; // Período actual de la gráfica
 
 // Variables para almacenar datos de confirmación
 let confirmOrderData = {
@@ -753,6 +762,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Cargar datos iniciales
     loadDemandSummary();
+    
+    // Inicializar gráfica de demanda
+    initDemandChart();
 
     // Cargar predicciones por ingrediente después de un breve delay
     setTimeout(() => {
@@ -762,9 +774,243 @@ document.addEventListener('DOMContentLoaded', function() {
     // Actualización automática cada 30 segundos
     autoRefreshInterval = setInterval(() => {
         loadDemandSummary();
+        updateDemandChart(); // Actualizar gráfica también
         console.log('Datos actualizados automáticamente');
     }, 30000);
 });
+
+// 📊 FUNCIONES PARA LA GRÁFICA DE DEMANDA
+async function initDemandChart() {
+    const ctx = document.getElementById('demandChart').getContext('2d');
+    
+    // Obtener datos históricos
+    const data = await fetchDemandHistory(currentDemandPeriod);
+    
+    demandChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Platillos Vendidos',
+                data: data.values,
+                borderColor: 'rgb(147, 51, 234)', // purple-600
+                backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointHoverRadius: 6,
+                pointBackgroundColor: 'rgb(147, 51, 234)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointHoverBackgroundColor: 'rgb(192, 38, 211)', // pink-600
+                pointHoverBorderColor: '#fff',
+                pointHoverBorderWidth: 3
+            }, {
+                label: 'Promedio',
+                data: calculateMovingAverage(data.values, 7),
+                borderColor: 'rgb(59, 130, 246)', // blue-500
+                backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: true,
+                tension: 0.4,
+                pointRadius: 0,
+                pointHoverRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: 'rgb(147, 51, 234)',
+                    borderWidth: 2,
+                    padding: 12,
+                    displayColors: true,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += context.parsed.y.toFixed(1) + ' platillos';
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)',
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 11
+                        },
+                        callback: function(value) {
+                            return value.toFixed(0);
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Número de Platillos',
+                        font: {
+                            size: 13,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    ticks: {
+                        font: {
+                            size: 10
+                        },
+                        maxRotation: 45,
+                        minRotation: 45
+                    },
+                    title: {
+                        display: true,
+                        text: 'Fecha',
+                        font: {
+                            size: 13,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Actualizar estadísticas
+    updateDemandStats(data.values, data.labels);
+}
+
+async function fetchDemandHistory(days) {
+    try {
+        const response = await fetch(`/api/demand/history?days=${days}`);
+        const data = await response.json();
+        
+        if (data.success) {
+            return {
+                labels: data.data.map(item => {
+                    const date = new Date(item.date);
+                    return date.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' });
+                }),
+                values: data.data.map(item => parseFloat(item.quantity) || 0)
+            };
+        }
+        return { labels: [], values: [] };
+    } catch (error) {
+        console.error('Error cargando historial:', error);
+        return { labels: [], values: [] };
+    }
+}
+
+function calculateMovingAverage(data, windowSize) {
+    const result = [];
+    for (let i = 0; i < data.length; i++) {
+        const start = Math.max(0, i - windowSize + 1);
+        const end = i + 1;
+        const window = data.slice(start, end);
+        const avg = window.reduce((a, b) => a + b, 0) / window.length;
+        result.push(avg);
+    }
+    return result;
+}
+
+function updateDemandStats(values, labels) {
+    if (values.length === 0) return;
+    
+    // Pico máximo
+    const maxValue = Math.max(...values);
+    const maxIndex = values.indexOf(maxValue);
+    document.getElementById('peak-value').textContent = maxValue.toFixed(1);
+    document.getElementById('peak-date').textContent = labels[maxIndex];
+    
+    // Promedio del período
+    const average = values.reduce((a, b) => a + b, 0) / values.length;
+    document.getElementById('period-average').textContent = average.toFixed(1);
+    
+    // Tendencia (comparar primera mitad vs segunda mitad)
+    const midPoint = Math.floor(values.length / 2);
+    const firstHalf = values.slice(0, midPoint);
+    const secondHalf = values.slice(midPoint);
+    
+    const firstAvg = firstHalf.reduce((a, b) => a + b, 0) / firstHalf.length;
+    const secondAvg = secondHalf.reduce((a, b) => a + b, 0) / secondHalf.length;
+    
+    const trend = ((secondAvg - firstAvg) / firstAvg) * 100;
+    
+    const trendIndicator = document.getElementById('trend-indicator');
+    const trendPercentage = document.getElementById('trend-percentage');
+    
+    if (trend > 5) {
+        trendIndicator.textContent = '📈 Creciente';
+        trendPercentage.textContent = `+${trend.toFixed(1)}%`;
+        trendPercentage.style.color = '#16a34a'; // green
+    } else if (trend < -5) {
+        trendIndicator.textContent = '📉 Decreciente';
+        trendPercentage.textContent = `${trend.toFixed(1)}%`;
+        trendPercentage.style.color = '#dc2626'; // red
+    } else {
+        trendIndicator.textContent = '➡️ Estable';
+        trendPercentage.textContent = `${trend > 0 ? '+' : ''}${trend.toFixed(1)}%`;
+        trendPercentage.style.color = '#6b7280'; // gray
+    }
+}
+
+async function changeDemandPeriod(days) {
+    currentDemandPeriod = days;
+    
+    // Actualizar botones
+    document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+        btn.className = 'px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors';
+    });
+    document.getElementById(`btn-${days}days`).className = 'px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white';
+    
+    // Actualizar gráfica
+    await updateDemandChart();
+}
+
+async function updateDemandChart() {
+    if (!demandChart) return;
+    
+    const data = await fetchDemandHistory(currentDemandPeriod);
+    
+    demandChart.data.labels = data.labels;
+    demandChart.data.datasets[0].data = data.values;
+    demandChart.data.datasets[1].data = calculateMovingAverage(data.values, 7);
+    demandChart.update('none'); // Update sin animación para actualizaciones automáticas
+    
+    updateDemandStats(data.values, data.labels);
+}
 
 // Modal Functions
 function openRecordModal() {
@@ -1449,6 +1695,52 @@ window.addEventListener('beforeunload', () => {
         clearInterval(autoRefreshInterval);
     }
 });
+
+// 🔥 ACTUALIZACIÓN EN TIEMPO REAL DE DEMANDA
+let demandRefreshInterval;
+
+function updateDemandStats() {
+    fetch('/api/demand/summary')
+        .then(response => response.json())
+        .then(data => {
+            // Actualizar el contador de "Hoy" con animación
+            const todayElement = document.getElementById('demand-today');
+            if (todayElement) {
+                const currentValue = parseFloat(todayElement.textContent.replace(',', ''));
+                const newValue = data.today || 0;
+                
+                if (currentValue !== newValue) {
+                    todayElement.style.transform = 'scale(1.2)';
+                    todayElement.style.transition = 'transform 0.3s ease';
+                    
+                    setTimeout(() => {
+                        todayElement.textContent = newValue.toFixed(1);
+                        todayElement.style.transform = 'scale(1)';
+                    }, 150);
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error actualizando estadísticas de demanda:', error);
+        });
+}
+
+// Iniciar actualización automática cada 30 segundos
+document.addEventListener('DOMContentLoaded', function() {
+    // Actualizar inmediatamente
+    updateDemandStats();
+    
+    // Actualizar cada 30 segundos
+    demandRefreshInterval = setInterval(updateDemandStats, 30000);
+});
+
+// Limpiar intervalo de demanda al salir
+window.addEventListener('beforeunload', () => {
+    if (demandRefreshInterval) {
+        clearInterval(demandRefreshInterval);
+    }
+});
+
 
 // Crear pedido automáticamente
 async function autoCreateOrder(supplierId) {

@@ -94,47 +94,108 @@
 
         <!-- Order Items -->
         <div class="bg-white rounded-lg shadow p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-                <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                </svg>
-                Productos del Pedido
-            </h3>
-
-        <!-- Panel informativo de ingredientes del proveedor -->
-        <div id="supplierInfo" style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 4px; padding: 15px; margin-bottom: 20px; display: none;">
-            <h4 style="margin-top: 0; color: #495057;">📦 Productos disponibles de este proveedor:</h4>
-            <div id="availableIngredients" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px;">
-                <!-- Se llenará dinámicamente -->
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                    <svg class="w-6 h-6 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    Productos del Pedido
+                </h3>
+                <button type="button" id="addItem" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 inline-flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Agregar Producto
+                </button>
             </div>
-        </div>
 
-        <div id="orderItems">
-            <div class="order-item" id="item-template" style="display: none;">
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 0.5fr; gap: 10px; align-items: center; margin-bottom: 15px; padding: 15px; border: 1px solid #ddd; border-radius: 4px;">
-                    <select name="items[0][ingredient_id]" class="ingredient-select" disabled>
-                        <option value="">Primero seleccione un proveedor</option>
-                    </select>
+            <!-- Panel informativo de ingredientes del proveedor -->
+            <div id="supplierInfo" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 hidden">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    <div class="flex-1">
 
-                    <div>
-                        <label style="font-size: 0.9em; color: #666;">Cantidad</label>
-                        <input type="number" name="items[0][quantity]" step="0.01" min="0" class="quantity-input" placeholder="0" disabled>
+                        
+                        <!-- Buscador de ingredientes -->
+                        <div class="relative mb-3">
+                            <input type="text" id="ingredientSearchInput" placeholder="Buscar ingredientes..." 
+                                   class="w-full pl-10 pr-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div id="availableIngredients" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-64 overflow-y-auto">
+                            <!-- Se llenará dinámicamente -->
+                        </div>
+                        
+                        <div id="noIngredientsFound" class="hidden text-center py-4 text-gray-500">
+                            <svg class="mx-auto h-8 w-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <p class="text-sm">No se encontraron ingredientes</p>
+                        </div>
                     </div>
-
-                    <div>
-                        <label style="font-size: 0.9em; color: #666;">Costo Unitario</label>
-                        <input type="number" name="items[0][unit_cost]" step="0.01" min="0" class="unit-cost-input" placeholder="0.00" disabled>
-                    </div>
-
-                    <div>
-                        <label style="font-size: 0.9em; color: #666;">Subtotal</label>
-                        <input type="number" class="subtotal-display" readonly style="background: #f5f5f5; border: 1px solid #ddd;" value="0.00">
-                    </div>
-
-                    <button type="button" class="remove-item" style="background: #e74c3c; color: white; border: none; padding: 8px; cursor: pointer; border-radius: 4px;">✖</button>
                 </div>
             </div>
-        </div>
+
+            <div id="orderItems" class="space-y-4">
+                <!-- Template para items -->
+                <div class="order-item hidden" id="item-template">
+                    <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition duration-200 bg-gray-50">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                            <div class="md:col-span-5">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ingrediente *</label>
+                                <select name="items[0][ingredient_id]" class="ingredient-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm" disabled>
+                                    <option value="">Primero seleccione un proveedor</option>
+                                </select>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Cantidad *</label>
+                                <input type="number" name="items[0][quantity]" step="0.01" min="0" 
+                                       class="quantity-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm" 
+                                       placeholder="0" disabled>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Costo Unitario *</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500 text-sm">$</span>
+                                    </div>
+                                    <input type="number" name="items[0][unit_cost]" step="0.01" min="0" 
+                                           class="unit-cost-input w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm" 
+                                           placeholder="0.00" disabled>
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Subtotal</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <span class="text-gray-500 text-sm">$</span>
+                                    </div>
+                                    <input type="text" class="subtotal-display w-full pl-7 pr-3 py-2 border border-gray-200 rounded-md bg-gray-100 text-gray-700 text-sm font-medium" 
+                                           readonly value="0.00">
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-1 flex items-end">
+                                <button type="button" class="remove-item w-full bg-red-600 hover:bg-red-700 text-white p-2 rounded-md transition duration-200">
+                                    <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         <!-- Datos de ingredientes por proveedor (para JavaScript) -->
         <script type="application/json" id="ingredients-data">
@@ -145,93 +206,147 @@
                         'name' => $item->name,
                         'cost' => $item->cost ?? 0,
                         'unit' => $item->unit,
-                        'stock' => $item->stock
+                        'stock' => $item->stock,
+                        'category' => $item->category ?? ''
                     ];
                 });
             })) !!}
         </script>
 
-        <button type="button" id="addItem" style="background: #27ae60; color: white; margin: 10px 0;">
-            ➕ Agregar Producto
-        </button>
-
-        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong>Total del Pedido:</strong>
-                <span id="orderTotal" style="font-size: 1.3em; color: #27ae60;">$0.00</span>
+        <!-- Total del pedido -->
+        <div class="mt-6 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <svg class="w-8 h-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z"></path>
+                    </svg>
+                    <div>
+                        <p class="text-sm text-gray-600">Total del Pedido</p>
+                        <p id="orderTotal" class="text-3xl font-bold text-green-700">$0.00</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-gray-500">Productos agregados</p>
+                    <p id="itemCount" class="text-lg font-semibold text-gray-700">0</p>
+                </div>
             </div>
         </div>
 
-        <div style="margin-top: 25px;">
-            <button type="submit" id="submitBtn" style="background: #3498db; color: white; padding: 12px 20px; font-size: 1.1em;">
+        <!-- Botones de acción -->
+        <div class="flex justify-end space-x-4 mt-6">
+            <a href="{{ route('orders.index') }}" 
+               class="px-6 py-3 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                Cancelar
+            </a>
+            <button type="submit" id="submitBtn"
+                    class="px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 inline-flex items-center">
+                <svg id="submitIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
                 <span id="submitText">Crear Pedido</span>
-                <span id="submitLoading" style="display: none;">Creando...</span>
+                <svg id="submitLoading" class="animate-spin h-5 w-5 mr-2 hidden" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
             </button>
-            <a href="{{ route('orders.index') }}" style="margin-left: 15px; color: #7f8c8d; text-decoration: none;">Cancelar</a>
         </div>
     </div>
 </form>
 
 <style>
-.order-item {
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    margin-bottom: 15px;
-}
-
-.order-item:hover {
-    border-color: #3498db;
-}
-
-input[readonly] {
-    background: #f8f9fa !important;
-    color: #6c757d;
-}
-
-.remove-item:hover {
-    background: #c0392b !important;
-}
-
-#addItem:hover {
-    background: #229954 !important;
-}
-
-button[type="submit"]:hover {
-    background: #2980b9 !important;
-}
-
 /* Estilos para campos deshabilitados */
 select:disabled, input:disabled {
-    background: #f8f9fa !important;
-    color: #6c757d !important;
+    background-color: #f9fafb !important;
+    color: #9ca3af !important;
     cursor: not-allowed;
+    opacity: 0.6;
 }
 
-/* Animación para el panel de información del proveedor */
-#supplierInfo {
-    transition: all 0.3s ease;
+/* Animación para ingredientes */
+.ingredient-card {
+    transition: all 0.2s ease;
+    position: relative;
 }
 
-/* Estilos para campos con error */
-.error-field {
-    border-color: #e74c3c !important;
-    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+.ingredient-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-/* Mejorar la apariencia de los select */
-select {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
+.ingredient-card:active {
+    transform: translateY(-2px);
+}
+
+.ingredient-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 0.5rem;
+    padding: 2px;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.ingredient-card:hover::before {
+    opacity: 0.5;
+}
+
+/* Scrollbar personalizado */
+#availableIngredients::-webkit-scrollbar {
+    width: 8px;
+}
+
+#availableIngredients::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+#availableIngredients::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+#availableIngredients::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Animación de carga */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Mejorar inputs de número */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+/* Animación de pulso para feedback */
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
 }
 </style>
 
 <script>
 let itemIndex = 0;
 let ingredientsData = {};
+let allIngredients = [];
 
 document.addEventListener('DOMContentLoaded', function() {
     // Cargar datos de ingredientes
@@ -252,6 +367,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener para agregar items
     document.getElementById('addItem').addEventListener('click', addOrderItem);
 
+    // Event listener para el buscador de ingredientes
+    const searchInput = document.getElementById('ingredientSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            filterIngredients(this.value);
+        });
+    }
+
     // Event listener para el formulario
     document.getElementById('orderForm').addEventListener('submit', function(e) {
         // Remover required de campos ocultos antes de validar
@@ -267,11 +390,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const submitBtn = document.getElementById('submitBtn');
             const submitText = document.getElementById('submitText');
             const submitLoading = document.getElementById('submitLoading');
+            const submitIcon = document.getElementById('submitIcon');
 
             submitBtn.disabled = true;
-            submitText.style.display = 'none';
-            submitLoading.style.display = 'inline';
-            submitBtn.style.background = '#95a5a6';
+            submitText.textContent = 'Creando...';
+            submitIcon.classList.add('hidden');
+            submitLoading.classList.remove('hidden');
+            submitBtn.classList.add('opacity-75');
         }
     });
 });
@@ -282,9 +407,9 @@ function addOrderItem() {
 
     // Actualizar IDs y nombres para el nuevo item
     newItem.id = `item-${itemIndex}`;
-    newItem.style.display = 'block';
+    newItem.classList.remove('hidden');
 
-    // Actualizar nombres de inputs y remover required del template
+    // Actualizar nombres de inputs
     const inputs = newItem.querySelectorAll('input, select');
     inputs.forEach(input => {
         const name = input.getAttribute('name');
@@ -309,7 +434,8 @@ function addOrderItem() {
     document.getElementById('orderItems').appendChild(newItem);
     itemIndex++;
 
-    // Actualizar botones de eliminar
+    // Actualizar contador y botones
+    updateItemCount();
     updateRemoveButtons();
 }
 
@@ -328,27 +454,26 @@ function setupItemEventListeners(item) {
             unitCostInput.value = cost || 0;
             calculateSubtotal(item);
         }
-
-        // Limpiar estilos de error
-        this.style.borderColor = '';
+        this.classList.remove('border-red-500');
     });
 
     // Calcular subtotal cuando cambia cantidad o costo
     quantityInput.addEventListener('input', () => {
         calculateSubtotal(item);
-        quantityInput.style.borderColor = '';
+        quantityInput.classList.remove('border-red-500');
     });
 
     unitCostInput.addEventListener('input', () => {
         calculateSubtotal(item);
-        unitCostInput.style.borderColor = '';
+        unitCostInput.classList.remove('border-red-500');
     });
 
     // Eliminar item
     removeButton.addEventListener('click', function() {
-        if (document.querySelectorAll('.order-item:not(#item-template)').length > 1) {
+        if (document.querySelectorAll('.order-item:not(#item-template):not(.hidden)').length > 1) {
             item.remove();
             calculateTotal();
+            updateItemCount();
             updateRemoveButtons();
         } else {
             alert('Debe haber al menos un producto en el pedido.');
@@ -357,7 +482,7 @@ function setupItemEventListeners(item) {
 }
 
 function updateIngredientsForAllItems() {
-    const items = document.querySelectorAll('.order-item:not(#item-template)');
+    const items = document.querySelectorAll('.order-item:not(#item-template):not(.hidden)');
     items.forEach(item => {
         updateIngredientsForItem(item);
     });
@@ -373,7 +498,6 @@ function updateIngredientsForItem(item) {
     ingredientSelect.innerHTML = '';
 
     if (!supplierId) {
-        // No hay proveedor seleccionado
         ingredientSelect.innerHTML = '<option value="">Primero seleccione un proveedor</option>';
         ingredientSelect.disabled = true;
         quantityInput.disabled = true;
@@ -421,22 +545,190 @@ function calculateSubtotal(item) {
 
 function calculateTotal() {
     let total = 0;
-    const subtotals = document.querySelectorAll('.subtotal-display');
+    const subtotals = document.querySelectorAll('.order-item:not(#item-template):not(.hidden) .subtotal-display');
 
     subtotals.forEach(subtotal => {
         total += parseFloat(subtotal.value) || 0;
     });
 
-    document.getElementById('orderTotal').textContent = `${total.toFixed(2)}`;
+    document.getElementById('orderTotal').textContent = `$${total.toFixed(2)}`;
+}
+
+function updateItemCount() {
+    const count = document.querySelectorAll('.order-item:not(#item-template):not(.hidden)').length;
+    document.getElementById('itemCount').textContent = count;
 }
 
 function updateRemoveButtons() {
-    const items = document.querySelectorAll('.order-item:not(#item-template)');
-    const removeButtons = document.querySelectorAll('.remove-item');
-
-    removeButtons.forEach((button, index) => {
-        button.style.display = items.length > 1 ? 'block' : 'none';
+    const items = document.querySelectorAll('.order-item:not(#item-template):not(.hidden)');
+    items.forEach(item => {
+        const removeButton = item.querySelector('.remove-item');
+        if (removeButton) {
+            removeButton.style.display = items.length > 1 ? 'block' : 'none';
+        }
     });
+}
+
+function updateSupplierInfo() {
+    const supplierId = document.getElementById('supplierSelect').value;
+    const supplierInfo = document.getElementById('supplierInfo');
+    const availableIngredients = document.getElementById('availableIngredients');
+    const searchInput = document.getElementById('ingredientSearchInput');
+
+    if (!supplierId) {
+        supplierInfo.classList.add('hidden');
+        return;
+    }
+
+    const supplierIngredients = ingredientsData[supplierId] || [];
+    allIngredients = supplierIngredients;
+
+    if (supplierIngredients.length === 0) {
+        supplierInfo.classList.remove('hidden');
+        availableIngredients.innerHTML = '<div class="col-span-full text-center py-4"><p class="text-red-600 font-medium">Este proveedor no tiene ingredientes registrados.</p></div>';
+        if (searchInput) searchInput.disabled = true;
+        return;
+    }
+
+    supplierInfo.classList.remove('hidden');
+    if (searchInput) {
+        searchInput.disabled = false;
+        searchInput.value = '';
+    }
+    
+    renderIngredients(supplierIngredients);
+}
+
+function renderIngredients(ingredients) {
+    const availableIngredients = document.getElementById('availableIngredients');
+    const noIngredientsFound = document.getElementById('noIngredientsFound');
+    
+    availableIngredients.innerHTML = '';
+
+    if (ingredients.length === 0) {
+        availableIngredients.classList.add('hidden');
+        noIngredientsFound.classList.remove('hidden');
+        return;
+    }
+
+    availableIngredients.classList.remove('hidden');
+    noIngredientsFound.classList.add('hidden');
+
+    ingredients.forEach(ingredient => {
+        const card = document.createElement('div');
+        card.className = 'ingredient-card bg-white p-3 rounded-lg border-2 border-blue-200 hover:border-green-500 hover:shadow-md cursor-pointer transition-all';
+        card.setAttribute('data-ingredient-id', ingredient.id);
+        card.innerHTML = `
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <h5 class="font-semibold text-gray-900 text-sm mb-1">${ingredient.name}</h5>
+                    <div class="space-y-1">
+                        <p class="text-xs text-gray-600">
+                            <span class="inline-flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                                Stock: <span class="font-medium">${ingredient.stock} ${ingredient.unit}</span>
+                            </span>
+                        </p>
+                        <p class="text-xs text-green-700 font-medium">
+                            <span class="inline-flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                                $${parseFloat(ingredient.cost || 0).toFixed(2)}
+                            </span>
+                        </p>
+                        ${ingredient.category ? `<p class="text-xs text-gray-500"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">${ingredient.category}</span></p>` : ''}
+                    </div>
+                </div>
+                <div class="ml-2">
+                    <button type="button" class="add-ingredient-btn bg-green-500 hover:bg-green-600 text-white rounded-full p-1.5 transition-colors" title="Agregar al pedido">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Evento para agregar ingrediente al hacer clic en la card o en el botón
+        const addButton = card.querySelector('.add-ingredient-btn');
+        addButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addIngredientToOrder(ingredient);
+        });
+        
+        card.addEventListener('click', () => {
+            addIngredientToOrder(ingredient);
+        });
+        
+        availableIngredients.appendChild(card);
+    });
+}
+
+function addIngredientToOrder(ingredient) {
+    // Buscar si ya existe un item vacío o crear uno nuevo
+    let targetItem = findEmptyItem();
+    
+    if (!targetItem) {
+        // No hay items vacíos, crear uno nuevo
+        addOrderItem();
+        targetItem = document.querySelector('.order-item:not(#item-template):not(.hidden):last-child');
+    }
+    
+    // Llenar el item con los datos del ingrediente
+    const ingredientSelect = targetItem.querySelector('.ingredient-select');
+    const quantityInput = targetItem.querySelector('.quantity-input');
+    const unitCostInput = targetItem.querySelector('.unit-cost-input');
+    
+    // Seleccionar el ingrediente
+    ingredientSelect.value = ingredient.id;
+    
+    // Llenar el costo
+    unitCostInput.value = ingredient.cost || 0;
+    
+    // Enfocar el campo de cantidad para que el usuario ingrese la cantidad
+    quantityInput.value = '';
+    quantityInput.focus();
+    
+    // Mostrar feedback visual
+    targetItem.classList.add('ring-2', 'ring-green-400');
+    setTimeout(() => {
+        targetItem.classList.remove('ring-2', 'ring-green-400');
+    }, 1000);
+    
+    // Scroll al item
+    targetItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    calculateSubtotal(targetItem);
+}
+
+function findEmptyItem() {
+    const items = document.querySelectorAll('.order-item:not(#item-template):not(.hidden)');
+    
+    for (let item of items) {
+        const ingredientSelect = item.querySelector('.ingredient-select');
+        const quantityInput = item.querySelector('.quantity-input');
+        
+        // Si el item no tiene ingrediente seleccionado o no tiene cantidad, considerarlo vacío
+        if (!ingredientSelect.value || !quantityInput.value || parseFloat(quantityInput.value) === 0) {
+            return item;
+        }
+    }
+    
+    return null;
+}
+
+function filterIngredients(searchTerm) {
+    const filtered = allIngredients.filter(ingredient => {
+        const searchLower = searchTerm.toLowerCase();
+        return ingredient.name.toLowerCase().includes(searchLower) ||
+               (ingredient.category && ingredient.category.toLowerCase().includes(searchLower)) ||
+               ingredient.unit.toLowerCase().includes(searchLower);
+    });
+
+    renderIngredients(filtered);
 }
 
 function validateForm() {
@@ -447,7 +739,6 @@ function validateForm() {
         return false;
     }
 
-    // Verificar que el proveedor tenga ingredientes
     const supplierIngredients = ingredientsData[supplier] || [];
     if (supplierIngredients.length === 0) {
         alert('El proveedor seleccionado no tiene ingredientes registrados. Por favor seleccione otro proveedor.');
@@ -455,7 +746,7 @@ function validateForm() {
         return false;
     }
 
-    const visibleItems = document.querySelectorAll('.order-item:not(#item-template)');
+    const visibleItems = document.querySelectorAll('.order-item:not(#item-template):not(.hidden)');
     let hasValidItems = false;
     let firstErrorField = null;
 
@@ -464,37 +755,28 @@ function validateForm() {
         const quantity = parseFloat(item.querySelector('.quantity-input').value);
         const unitCost = parseFloat(item.querySelector('.unit-cost-input').value);
 
-        // Verificar si el item tiene al menos un campo lleno
         if (ingredient || quantity > 0 || unitCost >= 0) {
-            // Si tiene algún campo lleno, validar que todos estén completos
             if (!ingredient) {
-                if (!firstErrorField) {
-                    firstErrorField = item.querySelector('.ingredient-select');
-                }
-                item.querySelector('.ingredient-select').style.borderColor = '#e74c3c';
+                if (!firstErrorField) firstErrorField = item.querySelector('.ingredient-select');
+                item.querySelector('.ingredient-select').classList.add('border-red-500');
             } else {
-                item.querySelector('.ingredient-select').style.borderColor = '';
+                item.querySelector('.ingredient-select').classList.remove('border-red-500');
             }
 
             if (!quantity || quantity <= 0) {
-                if (!firstErrorField) {
-                    firstErrorField = item.querySelector('.quantity-input');
-                }
-                item.querySelector('.quantity-input').style.borderColor = '#e74c3c';
+                if (!firstErrorField) firstErrorField = item.querySelector('.quantity-input');
+                item.querySelector('.quantity-input').classList.add('border-red-500');
             } else {
-                item.querySelector('.quantity-input').style.borderColor = '';
+                item.querySelector('.quantity-input').classList.remove('border-red-500');
             }
 
             if (unitCost < 0 || isNaN(unitCost)) {
-                if (!firstErrorField) {
-                    firstErrorField = item.querySelector('.unit-cost-input');
-                }
-                item.querySelector('.unit-cost-input').style.borderColor = '#e74c3c';
+                if (!firstErrorField) firstErrorField = item.querySelector('.unit-cost-input');
+                item.querySelector('.unit-cost-input').classList.add('border-red-500');
             } else {
-                item.querySelector('.unit-cost-input').style.borderColor = '';
+                item.querySelector('.unit-cost-input').classList.remove('border-red-500');
             }
 
-            // Si todos los campos están completos, es un item válido
             if (ingredient && quantity > 0 && unitCost >= 0) {
                 hasValidItems = true;
             }
@@ -503,9 +785,7 @@ function validateForm() {
 
     if (!hasValidItems) {
         alert('Por favor agregue al menos un producto válido al pedido.');
-        if (firstErrorField) {
-            firstErrorField.focus();
-        }
+        if (firstErrorField) firstErrorField.focus();
         return false;
     }
 
@@ -516,39 +796,6 @@ function validateForm() {
     }
 
     return true;
-}
-
-function updateSupplierInfo() {
-    const supplierId = document.getElementById('supplierSelect').value;
-    const supplierInfo = document.getElementById('supplierInfo');
-    const availableIngredients = document.getElementById('availableIngredients');
-
-    if (!supplierId) {
-        supplierInfo.style.display = 'none';
-        return;
-    }
-
-    const supplierIngredients = ingredientsData[supplierId] || [];
-
-    if (supplierIngredients.length === 0) {
-        supplierInfo.style.display = 'block';
-        availableIngredients.innerHTML = '<p style="color: #e74c3c; margin: 0;">Este proveedor no tiene ingredientes registrados.</p>';
-        return;
-    }
-
-    supplierInfo.style.display = 'block';
-    availableIngredients.innerHTML = '';
-
-    supplierIngredients.forEach(ingredient => {
-        const ingredientCard = document.createElement('div');
-        ingredientCard.style.cssText = 'background: white; padding: 10px; border-radius: 4px; border-left: 4px solid #3498db; font-size: 0.9em;';
-        ingredientCard.innerHTML = `
-            <strong>${ingredient.name}</strong><br>
-            <span style="color: #666;">Stock: ${ingredient.stock} ${ingredient.unit}</span><br>
-            <span style="color: #27ae60;">Costo: ${parseFloat(ingredient.cost || 0).toFixed(2)}</span>
-        `;
-        availableIngredients.appendChild(ingredientCard);
-    });
 }
 </script>
 @endsection

@@ -101,6 +101,70 @@ class DemandController extends Controller
     }
 
     /**
+     * Obtiene el historial de demanda para gráficas
+     */
+    public function getDemandHistory(Request $request)
+    {
+        try {
+            $days = $request->input('days', 30);
+            $data = $this->loadHistoryData();
+            
+            // Filtrar últimos N días
+            $startDate = Carbon::now()->subDays($days)->format('Y-m-d');
+            $filteredData = array_filter($data, function($row) use ($startDate) {
+                return $row['date'] >= $startDate;
+            });
+
+            // Asegurar que tenemos todos los días (incluso con demanda 0)
+            $completeData = [];
+            $currentDate = Carbon::now()->subDays($days);
+            $endDate = Carbon::now();
+
+            while ($currentDate <= $endDate) {
+                $dateStr = $currentDate->format('Y-m-d');
+                
+                // Buscar si existe data para esta fecha
+                $found = false;
+                foreach ($filteredData as $row) {
+                    if ($row['date'] === $dateStr) {
+                        $completeData[] = $row;
+                        $found = true;
+                        break;
+                    }
+                }
+                
+                // Si no existe, agregar con demanda 0
+                if (!$found) {
+                    $completeData[] = [
+                        'date' => $dateStr,
+                        'quantity' => 0
+                    ];
+                } else {
+                    // Renombrar 'demand' a 'quantity' para consistencia
+                    $completeData[count($completeData) - 1]['quantity'] = $completeData[count($completeData) - 1]['demand'];
+                    unset($completeData[count($completeData) - 1]['demand']);
+                }
+                
+                $currentDate->addDay();
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => $completeData,
+                'period' => $days,
+                'total_days' => count($completeData)
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error obteniendo historial de demanda', ['error' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Registra automáticamente la demanda diaria basada en ventas
      */
     public function autoRecordDailyDemand()
