@@ -46,7 +46,7 @@
                 </div>
 
                                 <div class="mt-6">
-                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 border border-transparent rounded-lg font-semibold text-sm text-white uppercase tracking-wider hover:from-blue-700 hover:to-blue-800 active:from-blue-800 active:to-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 ease-in-out hover:scale-105">
+                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-600 border border-transparent rounded-lg font-semibold text-sm text-white uppercase tracking-wider hover:from-blue-700 hover:to-blue-700 active:from-blue-800 active:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform transition-all duration-200 ease-in-out hover:scale-105">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
@@ -72,7 +72,7 @@
                             <input type="date" name="date_end" id="date_end" value="{{ request('date_end', Carbon\Carbon::now()->format('Y-m-d')) }}" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-150 ease-in-out" required>
                         </div>
                         <div class="flex items-end">
-                            <button type="submit" class="group bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg font-semibold text-xs uppercase tracking-widest">
+                            <button type="submit" class="group bg-gradient-to-r from-blue-500 to-blue-500 hover:from-blue-600 hover:to-blue-600 text-white px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg font-semibold text-xs uppercase tracking-widest">
                                 Filtrar
                             </button>
                         </div>
@@ -83,7 +83,7 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
                         <!-- Tarjeta 1 - Pérdida Total Sin IVA -->
-                        <div class="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-6 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-500 text-white p-6 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
                                     <svg class="h-8 w-8 text-blue-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -106,7 +106,7 @@
                         </div>
 
                         <!-- Tarjeta 2 - IVA -->
-                        <div class="bg-gradient-to-r from-purple-400 to-purple-600 text-white p-6 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl">
+                        <div class="bg-gradient-to-r from-purple-500 to-purple-500 text-white p-6 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
                                     <svg class="h-8 w-8 text-purple-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -129,7 +129,7 @@
                         </div>
 
                         <!-- Tarjeta 3 - Total con IVA -->
-                        <div class="bg-gradient-to-r from-orange-400 to-orange-600 text-white p-6 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl">
+                        <div class="bg-gradient-to-r from-orange-500 to-orange-500 text-white p-6 rounded-lg shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0">
                                     <svg class="h-8 w-8 text-orange-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">

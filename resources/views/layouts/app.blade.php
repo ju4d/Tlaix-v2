@@ -67,8 +67,8 @@
                             Cuenta
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                         </button>
-                        <div id="submenu-account" x-show="openAccount" @mouseenter="openAccount = true" @mouseleave="openAccount = false" class="absolute left-0 mt-2 w-32 bg-white rounded shadow-lg z-50" style="display: none;">
-                            <span class="block px-4 py-2 text-gray-800">{{ session('user_name') }}</span>
+                        <div id="submenu-account" x-show="openAccount" @mouseenter="openAccount = true" @mouseleave="openAccount = false" class="absolute left-0 mt-2 min-w-max bg-white rounded shadow-lg z-50" style="display: none;">
+                            <span class="block px-4 py-2 text-gray-800 font-medium border-b border-gray-200">{{ session('user_name') }}</span>
                             @if($role == 'admin')
                             <a href="{{ route('users.index') }}" class="block px-4 py-2 text-gray-800 hover:bg-primary hover:text-white transition rounded-md">Usuarios</a>
                             @endif

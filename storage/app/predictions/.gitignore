@@ -1,0 +1,7 @@
+# Ignorar todos los archivos temporales o generados
+*.tmp
+*.temp
+
+# IMPORTANTE: NO ignorar history.csv - es necesario para las predicciones
+!history.csv
+!.gitignore

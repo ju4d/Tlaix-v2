@@ -38,7 +38,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <a href="{{ route('inventory.create') }}" class="group bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <a href="{{ route('inventory.create') }}" class="group bg-gradient-to-r from-green-400 to-green-400 hover:from-green-500 hover:to-green-500 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
             <div class="flex items-center">
                 <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@
             </div>
         </a>
 
-        <a href="{{ route('dishes.create') }}" class="group bg-gradient-to-r from-orange-400 to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <a href="{{ route('dishes.create') }}" class="group bg-gradient-to-r from-orange-400 to-orange-400 hover:from-orange-500 hover:to-orange-500 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
             <div class="flex items-center">
                 <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@
             </div>
         </a>
 
-        <a href="{{ route('orders.index') }}" class="group bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <a href="{{ route('orders.index') }}" class="group bg-gradient-to-r from-purple-400 to-purple-400 hover:from-purple-500 hover:to-purple-500 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
             <div class="flex items-center">
                 <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@
             </div>
         </a>
 
-        <a href="{{ route('reports') }}" class="group bg-gradient-to-r from-indigo-400 to-indigo-600 hover:from-indigo-500 hover:to-indigo-700 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
+        <a href="{{ route('reports') }}" class="group bg-gradient-to-r from-indigo-400 to-indigo-400 hover:from-indigo-500 hover:to-indigo-500 text-white p-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md hover:shadow-lg">
             <div class="flex items-center">
                 <div class="bg-white bg-opacity-20 p-2 rounded-full mr-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,7 +96,7 @@
     </div>
 </div>
 <!-- 🔥 DEMANDA EN TIEMPO REAL -->
-<div class="bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg shadow-lg p-6 mb-8">
+<div class="bg-gradient-to-r from-cyan-500 to-cyan-500 rounded-lg shadow-lg p-6 mb-8">
     <div class="flex items-center mb-4">
         <div class="bg-white bg-opacity-20 p-3 rounded-full mr-4">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -159,7 +159,7 @@
 <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center">
-            <div class="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-full mr-4">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-500 p-3 rounded-full mr-4">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
                 </svg>
@@ -172,7 +172,7 @@
         <div class="flex space-x-2">
             <button onclick="changeDemandPeriod(7)" id="btn-7days" class="px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">7 días</button>
             <button onclick="changeDemandPeriod(14)" id="btn-14days" class="px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors">14 días</button>
-            <button onclick="changeDemandPeriod(30)" id="btn-30days" class="px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white">30 días</button>
+            <button onclick="changeDemandPeriod(30)" id="btn-30days" class="px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500 to-purple-500 text-white">30 días</button>
         </div>
     </div>
     
@@ -993,7 +993,7 @@ async function changeDemandPeriod(days) {
     document.querySelectorAll('[id^="btn-"]').forEach(btn => {
         btn.className = 'px-4 py-2 text-sm rounded-lg bg-gray-200 hover:bg-gray-300 transition-colors';
     });
-    document.getElementById(`btn-${days}days`).className = 'px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white';
+    document.getElementById(`btn-${days}days`).className = 'px-4 py-2 text-sm rounded-lg bg-gradient-to-r from-purple-500 to-purple-500 text-white';
     
     // Actualizar gráfica
     await updateDemandChart();

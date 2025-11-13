@@ -10,25 +10,20 @@
             <p class="text-gray-600">Análisis completo del inventario y operaciones</p>
         </div>
         <div class="flex space-x-3">
-            <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200 flex items-center">
+            <button onclick="exportToCSV()" class="bg-green-600 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200 flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                CSV
+                Excel
             </button>
-            <button onclick="window.print()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200 flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                </svg>
-                Imprimir
-            </button>
+
         </div>
     </div>
 </div>
 
 <!-- Summary Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg">
+    <div class="bg-gradient-to-r from-green-500 to-green-500 text-white p-6 rounded-xl shadow-lg">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-green-100 text-sm font-medium uppercase tracking-wide">Valor Total</p>
@@ -45,7 +40,7 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-r {{ count($expired) > 0 ? 'from-red-500 to-red-600' : 'from-gray-400 to-gray-500' }} text-white p-6 rounded-xl shadow-lg">
+    <div class="bg-gradient-to-r {{ count($expired) > 0 ? 'from-red-500 to-red-500' : 'from-gray-400 to-gray-400' }} text-white p-6 rounded-xl shadow-lg">
         <div class="flex items-center justify-between">
             <div>
                 <p class="{{ count($expired) > 0 ? 'text-red-100' : 'text-gray-100' }} text-sm font-medium uppercase tracking-wide">Caducados</p>
@@ -60,7 +55,7 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-r {{ count($lowStock) > 0 ? 'from-orange-500 to-orange-600' : 'from-gray-400 to-gray-500' }} text-white p-6 rounded-xl shadow-lg">
+    <div class="bg-gradient-to-r {{ count($lowStock) > 0 ? 'from-orange-500 to-orange-500' : 'from-gray-400 to-gray-500' }} text-white p-6 rounded-xl shadow-lg">
         <div class="flex items-center justify-between">
             <div>
                 <p class="{{ count($lowStock) > 0 ? 'text-orange-100' : 'text-gray-100' }} text-sm font-medium uppercase tracking-wide">Stock Bajo</p>
@@ -75,7 +70,7 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-xl shadow-lg">
+    <div class="bg-gradient-to-r from-purple-500 to-purple-500 text-white p-6 rounded-xl shadow-lg">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-purple-100 text-sm font-medium uppercase tracking-wide">Disponibles</p>
@@ -99,7 +94,7 @@
             <h3 class="text-lg font-semibold text-gray-900">Niveles de Inventario</h3>
             <div class="flex items-center space-x-2">
                 <label for="inventoryFilter" class="text-sm font-medium text-gray-600">Filtrar:</label>
-                <select id="inventoryFilter" class="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-medium rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 cursor-pointer hover:from-blue-600 hover:to-blue-700 transition duration-200 shadow-md">
+                <select id="inventoryFilter" class="bg-gradient-to-r from-blue-500 to-blue-500 text-white text-sm font-medium rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 cursor-pointer hover:from-blue-600 hover:to-blue-700 transition duration-200 shadow-md">
                     <option value="all" class="bg-white text-gray-900">Todos ({{ count($ingredients) }})</option>
                     <option value="low" class="bg-white text-gray-900">Solo stock bajo ({{ count($lowStock) }})</option>
                     <option value="expired" class="bg-white text-gray-900">Caducados ({{ count($expired) }})</option>

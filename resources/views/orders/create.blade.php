@@ -110,9 +110,9 @@
             </div>
 
             <!-- Panel informativo de ingredientes del proveedor -->
-            <div id="supplierInfo" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 hidden">
+            <div id="supplierInfo" class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6 hidden">
                 <div class="flex items-start">
-                    <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5 text-black mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                     </svg>
                     <div class="flex-1">
@@ -121,9 +121,9 @@
                         <!-- Buscador de ingredientes -->
                         <div class="relative mb-3">
                             <input type="text" id="ingredientSearchInput" placeholder="Buscar ingredientes..." 
-                                   class="w-full pl-10 pr-4 py-2 border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm bg-white">
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 text-sm bg-white">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
                             </div>
@@ -146,11 +146,11 @@
             <div id="orderItems" class="space-y-4">
                 <!-- Template para items -->
                 <div class="order-item hidden" id="item-template">
-                    <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition duration-200 bg-gray-50">
+                    <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition duration-200 bg-gray-50">
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
                             <div class="md:col-span-5">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Ingrediente *</label>
-                                <select name="items[0][ingredient_id]" class="ingredient-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm" disabled>
+                                <select name="items[0][ingredient_id]" class="ingredient-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 text-sm" disabled>
                                     <option value="">Primero seleccione un proveedor</option>
                                 </select>
                             </div>
@@ -158,7 +158,7 @@
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Cantidad *</label>
                                 <input type="number" name="items[0][quantity]" step="0.01" min="0" 
-                                       class="quantity-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm" 
+                                       class="quantity-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 text-sm" 
                                        placeholder="0" disabled>
                             </div>
 
@@ -169,7 +169,7 @@
                                         <span class="text-gray-500 text-sm">$</span>
                                     </div>
                                     <input type="number" name="items[0][unit_cost]" step="0.01" min="0" 
-                                           class="unit-cost-input w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm" 
+                                           class="unit-cost-input w-full pl-7 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-gray-500 text-sm" 
                                            placeholder="0.00" disabled>
                                 </div>
                             </div>
@@ -214,15 +214,15 @@
         </script>
 
         <!-- Total del pedido -->
-        <div class="mt-6 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
+        <div class="mt-6 bg-gradient-to-r from-gray-50 to-gray-50 border border-gray-200 rounded-lg p-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <svg class="w-8 h-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-8 h-8 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z"></path>
                     </svg>
                     <div>
                         <p class="text-sm text-gray-600">Total del Pedido</p>
-                        <p id="orderTotal" class="text-3xl font-bold text-green-700">$0.00</p>
+                        <p id="orderTotal" class="text-3xl font-bold text-gray-700">$0.00</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -283,7 +283,7 @@ select:disabled, input:disabled {
     inset: 0;
     border-radius: 0.5rem;
     padding: 2px;
-    background: linear-gradient(135deg, #10b981, #3b82f6);
+    background: linear-gradient(135deg, #00ffaa, #3b82f6);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;

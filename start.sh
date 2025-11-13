@@ -74,7 +74,16 @@ php artisan view:cache
 # Verificar y crear archivo de historial si no existe
 if [ ! -f /var/www/html/storage/app/predictions/history.csv ]; then
     echo "📝 Creando archivo de historial de predicciones..."
+    mkdir -p /var/www/html/storage/app/predictions
     echo "date,demand" > /var/www/html/storage/app/predictions/history.csv
+else
+    # Verificar si tiene contenido (más de una línea)
+    LINE_COUNT=$(wc -l < /var/www/html/storage/app/predictions/history.csv)
+    if [ "$LINE_COUNT" -le 1 ]; then
+        echo "⚠️ history.csv existe pero está vacío, manteniendo estructura"
+    else
+        echo "✅ history.csv con datos históricos detectado ($LINE_COUNT líneas)"
+    fi
 fi
 
 # Ajustar permisos finales

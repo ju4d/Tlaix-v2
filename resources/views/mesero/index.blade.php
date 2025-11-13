@@ -2,7 +2,7 @@
 @section('title', 'Mesero')
 @section('content')
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 -m-6 p-6">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-50 -m-6 p-6">
     <!-- Header -->
     <div class="mb-6">
         <div class="flex items-center justify-between mb-4">
@@ -68,7 +68,7 @@
         <!-- Panel de Selección de Platillos -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-500 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center">
                         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -176,7 +176,7 @@
         <!-- Resumen y Envío -->
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden sticky top-6">
-                <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
+                <div class="bg-gradient-to-r from-green-500 to-green-500 px-6 py-4">
                     <h3 class="text-xl font-bold text-white flex items-center">
                         <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
@@ -202,7 +202,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" form="orderForm" id="submitOrderBtn" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition duration-200 transform hover:scale-105 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
+                    <button type="submit" form="orderForm" id="submitOrderBtn" class="w-full bg-gradient-to-r from-green-500 to-green-500 hover:from-green-600 hover:to-green-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition duration-200 transform hover:scale-105 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>
@@ -216,7 +216,7 @@
     <!-- Órdenes Recientes -->
     <div class="mt-8">
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-orange-500 to-yellow-400 px-6 py-4">
+            <div class="bg-gradient-to-r from-orange-500 to-orange-500 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -227,7 +227,7 @@
 
             <div id="recent-orders" class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @forelse($orders as $order)
-                    <div class="order-recent-card bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200 p-5 hover:shadow-lg transition-all duration-200">
+                    <div class="order-recent-card bg-gradient-to-br from-gray-50 to-gray-50 rounded-xl border-2 border-gray-200 p-5 hover:shadow-lg transition-all duration-200">
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center space-x-2">
                                 <div class="bg-orange-500 text-white px-3 py-1 rounded-lg font-bold">
@@ -274,7 +274,7 @@
                                             <span class="text-gray-600">(x{{ $item->quantity }})</span>
                                         </p>
                                         <p class="text-xs {{ $item->received ? 'text-blue-600' : ($item->completed ? 'text-green-600' : 'text-yellow-600') }}">
-                                            {{ $item->received ? '✓ Entregado' : ($item->completed ? '✓ Listo' : '⏱ En preparación') }}
+                                            {{ $item->received ? '✓ Entregado' : ($item->completed ? '✓ Listo' : ' En preparación') }}
                                         </p>
                                     </div>
                                 </div>

@@ -51,8 +51,14 @@ RUN mkdir -p storage/app/predictions \
     storage/logs \
     bootstrap/cache
 
-# Crear archivo de historial vacío (se sobrescribirá si existe uno real)
-RUN echo "date,demand" > storage/app/predictions/history.csv
+# Copiar archivo de historial si existe (esto copia el archivo real con datos)
+# Si no existe, crear uno vacío
+RUN if [ -f storage/app/predictions/history.csv ]; then \
+        echo "✅ Usando history.csv con datos históricos"; \
+    else \
+        echo "date,demand" > storage/app/predictions/history.csv; \
+        echo "⚠️ Creado history.csv vacío"; \
+    fi
 
 # Permisos
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

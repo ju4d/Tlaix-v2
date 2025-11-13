@@ -2,7 +2,7 @@
 @section('title', 'Cocina')
 @section('content')
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 -m-6 p-6">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-50 -m-6 p-6">
     <!-- Header -->
     <div class="mb-6">
         <div class="flex items-center justify-between mb-4">
@@ -49,7 +49,7 @@
             @forelse($orders as $order)
                 <div class="order-card bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl" data-order-id="{{ $order->id }}">
                     <!-- Header de la orden -->
-                    <div class="bg-gradient-to-r from-orange-500 to-red-500 px-6 py-4">
+                    <div class="bg-gradient-to-r from-orange-500 to-orange-500 px-6 py-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
                                 <div class="bg-white bg-opacity-30 backdrop-blur-sm rounded-lg px-3 py-1">
@@ -129,7 +129,7 @@
                             <span class="text-xs font-bold text-gray-900">{{ $completedItems }}/{{ $totalItems }}</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                            <div class="bg-gradient-to-r from-green-400 to-green-600 h-3 rounded-full transition-all duration-500 shadow-inner" style="width: {{ $progress }}%"></div>
+                            <div class="bg-gradient-to-r from-green-500 to-green-500 h-3 rounded-full transition-all duration-500 shadow-inner" style="width: {{ $progress }}%"></div>
                         </div>
                     </div>
                 </div>
@@ -149,7 +149,7 @@
 
     <!-- Histórico -->
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div class="bg-gradient-to-r from-gray-700 to-gray-900 px-6 py-4">
+        <div class="bg-gradient-to-r from-gray-900 to-gray-900 px-6 py-4">
             <h2 class="text-xl font-bold text-white flex items-center">
                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
