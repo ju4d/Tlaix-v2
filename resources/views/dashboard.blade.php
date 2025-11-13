@@ -1675,7 +1675,16 @@ function exportOrdersToCSV() {
 
 // Mostrar alertas
 function showAlert(message, type) {
-    const container = document.getElementById('alertContainer');
+    let container = document.getElementById('alertContainer');
+    
+    // Crear el contenedor si no existe
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'alertContainer';
+        container.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999;';
+        document.body.appendChild(container);
+    }
+    
     const alert = document.createElement('div');
     alert.className = `alert alert-${type}`;
     alert.textContent = message;
