@@ -60,9 +60,11 @@ RUN if [ -f storage/app/predictions/history.csv ]; then \
         echo "⚠️ Creado history.csv vacío"; \
     fi
 
-# Permisos
+# Permisos (CRÍTICO: storage/logs necesita 777 para escritura)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 777 /var/www/html/storage/logs
+RUN chmod -R 777 /var/www/html/storage/framework
 
 # Crear symlink para python3
 RUN ln -s /usr/bin/python3 /usr/bin/py
