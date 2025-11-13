@@ -54,8 +54,13 @@ fi
 
 # Verificar y ajustar permisos
 echo "🔒 Ajustando permisos..."
-chown -R www-data:www-data /var/www/html/storage
-chmod -R 775 /var/www/html/storage
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Asegurar que el directorio de logs exista con permisos correctos
+mkdir -p /var/www/html/storage/logs
+chmod -R 777 /var/www/html/storage/logs
+chown -R www-data:www-data /var/www/html/storage/logs
 
 # Mantener el script en ejecución y esperar a Apache
 wait $APACHE_PID
@@ -87,8 +92,9 @@ else
 fi
 
 # Ajustar permisos finales
-chown -R www-data:www-data /var/www/html/storage
-chmod -R 775 /var/www/html/storage
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 777 /var/www/html/storage/logs
 
 echo "✅ Aplicación lista"
 echo "🌐 Iniciando Apache en puerto 8080..."
