@@ -1626,9 +1626,6 @@ function displaySuggestedOrders(data) {
             <button onclick="exportOrdersToCSV()" class="btn" style="background: #3498db;">
                 Exportar CSV
             </button>
-            <button onclick="window.print()" class="btn" style="background: #95a5a6;">
-                Imprimir
-            </button>
         </div>
     `;
 
