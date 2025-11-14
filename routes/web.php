@@ -27,15 +27,6 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-// Apartado Mesero
-Route::get('/mesero', [App\Http\Controllers\MeseroController::class, 'index'])->name('mesero.index');
-Route::post('/mesero/orders', [App\Http\Controllers\MeseroController::class, 'store'])->name('mesero.orders.store');
-Route::delete('/mesero/orders/{order}', [App\Http\Controllers\MeseroController::class, 'destroy'])->name('mesero.orders.destroy');
-
-// Apartado Cocina
-Route::get('/cocina', [App\Http\Controllers\CocinaController::class, 'index'])->name('cocina.index');
-Route::post('/cocina/{order}/{item}/complete', [App\Http\Controllers\CocinaController::class, 'complete'])->name('cocina.complete');
-
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -47,6 +38,15 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Apartado Mesero
+    Route::get('/mesero', [App\Http\Controllers\MeseroController::class, 'index'])->name('mesero.index');
+    Route::post('/mesero/orders', [App\Http\Controllers\MeseroController::class, 'store'])->name('mesero.orders.store');
+    Route::delete('/mesero/orders/{order}', [App\Http\Controllers\MeseroController::class, 'destroy'])->name('mesero.orders.destroy');
+
+    // Apartado Cocina
+    Route::get('/cocina', [App\Http\Controllers\CocinaController::class, 'index'])->name('cocina.index');
+    Route::post('/cocina/{order}/{item}/complete', [App\Http\Controllers\CocinaController::class, 'complete'])->name('cocina.complete');
 
     // Rutas de inventario
     Route::resource('inventory', InventoryController::class);
